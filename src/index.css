@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --font-headline: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-label: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: #005bbf;
+  --color-primary-container: #1a73e8;
+  --color-secondary: #855300;
+  --color-secondary-container: #fea619;
+  --color-tertiary: #515e64;
+  --color-surface: #f3faff;
+  --color-surface-dim: #c7dde9;
+  --color-surface-bright: #f3faff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #e6f6ff;
+  --color-surface-container: #dbf1fe;
+  --color-surface-container-high: #d5ecf8;
+  --color-surface-container-highest: #cfe6f2;
+  --color-on-surface: #071e27;
+  --color-on-surface-variant: #414754;
+  --color-outline: #727785;
+  --color-outline-variant: #c1c6d6;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+
+  --radius-xl: 0.5rem;
+  --radius-full: 0.75rem;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-body antialiased;
+  }
+  
+  h1, h2, h3, h4 {
+    @apply font-headline;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-xl dark:bg-[#071e27]/80;
+  }
+  
+  .kinetic-shadow {
+    box-shadow: 0 24px 40px -4px rgba(7, 30, 39, 0.06);
+  }
+
+  .gradient-btn {
+    @apply bg-gradient-to-br from-primary to-primary-container text-white shadow-lg shadow-primary/20 transition-all active:scale-95;
+  }
+}
+
+/* Custom scrollbar for data-heavy views */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-outline-variant/30 rounded-full hover:bg-outline-variant/50;
+}
