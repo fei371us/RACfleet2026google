@@ -185,6 +185,22 @@ export default function JobDetail() {
 
             {/* Inspection Direct Link */}
             <Link 
+              to={`/driver/job/${id}/vehicle-exterior`}
+              className="flex items-center justify-between bg-surface-container-high p-6 rounded-[2rem] group hover:bg-surface-container transition-all"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm">
+                  <Truck size={20} />
+                </div>
+                <div>
+                  <h4 className="font-headline font-bold text-sm">Vehicle Exterior</h4>
+                  <p className="text-[10px] font-bold text-on-surface-variant/60 uppercase">Pin Damage On Diagram</p>
+                </div>
+              </div>
+              <ChevronRight className="text-on-surface-variant/40 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+            </Link>
+
+            <Link 
               to={`/driver/inspection/${id}`}
               className="flex items-center justify-between bg-surface-container-high p-6 rounded-[2rem] group hover:bg-surface-container transition-all"
             >

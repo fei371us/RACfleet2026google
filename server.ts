@@ -133,11 +133,52 @@ if (jobCount.count === 0) {
   );
 }
 
+// Ensure sample vehicles and driver-assigned jobs always exist (idempotent seed)
+const ensureVehicle = db.prepare(`
+  INSERT OR IGNORE INTO vehicles (id, name, plate, last_inspection, status, lat, lng)
+  VALUES (?, ?, ?, ?, ?, ?, ?)
+`);
+
+ensureVehicle.run('V-402', 'Freight-liner M2 106', 'KF-992-TX', '2026-04-20', 'active', 29.7604, -95.3698);
+ensureVehicle.run('V-118', 'Sprinter Van 419', 'KF-884-TX', '2026-04-22', 'active', 29.8000, -95.4000);
+ensureVehicle.run('V-089', 'Peterbilt 579', 'KNC-2938', '2026-04-24', 'active', 29.7200, -95.3500);
+
+const ensureJob = db.prepare(`
+  INSERT OR IGNORE INTO jobs (
+    id, type, status, priority, vehicle_id, driver_name, location, pickup_time, destination, instructions, eta, driver_note,
+    job_date, job_scope, vehicle_number_out, vehicle_number_in, job_time, company, requester, contact_person, contact_number, address, remarks
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`);
+
+ensureJob.run(
+  'KF-1401', 'Delivery', 'pending', 'high', 'V-402', 'Alex Rivera',
+  'North Cargo Gate, Zone 7', '08:45 AM', 'Central Distribution Center', 'Deliver sealed cargo; verify pallet count at drop-off.',
+  '10:05 AM', 'Ready for pickup at Gate 3',
+  '2026-04-26', 'Morning cargo delivery with chain-of-custody handoff.', 'KF-992-TX', null, '08:45 AM',
+  'Atlas Logistics', 'Ops Desk', 'Maya Chen', '555-0180', '17 Harbor Drive', 'Carry barcode scanner for receiving confirmation.'
+);
+
+ensureJob.run(
+  'KF-1402', 'Workshop', 'in_transit', 'standard', 'V-118', 'Alex Rivera',
+  'Fleet Yard B', '11:15 AM', 'Main Workshop Bay 2', 'Bring vehicle for brake noise diagnosis.',
+  '11:50 AM', 'On route, traffic moderate',
+  '2026-04-26', 'Workshop diagnostic and preventive maintenance intake.', 'KF-884-TX', null, '11:15 AM',
+  'Internal Fleet', 'Fleet Control', 'Ravi Kumar', '555-0181', '2 Service Lane', 'Provide latest driver feedback to adviser.'
+);
+
+ensureJob.run(
+  'KF-1403', 'Refill', 'pending', 'critical', 'V-089', 'Alex Rivera',
+  'East Transit Hub, Pump 4', '02:30 PM', 'Route 12 standby lot', 'Emergency refill and pressure check before night shift.',
+  '03:10 PM', '',
+  '2026-04-26', 'Priority fuel refill and safety pressure check.', 'KNC-2938', null, '02:30 PM',
+  'Thorne Transports', 'Night Ops', 'Lena Park', '555-0182', '88 Transit Road', 'Dispatch requested immediate completion.'
+);
+
 async function startServer() {
   const app = express();
   const httpServer = createServer(app);
   const io = new Server(httpServer);
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT || 3000);
 
   app.use(express.json());
 
@@ -244,6 +285,37 @@ async function startServer() {
     const insert = db.prepare('INSERT INTO inspection_pins (job_id, vehicle_id, x, y, type, note, photo_url) VALUES (?, ?, ?, ?, ?, ?, ?)');
     const result = insert.run(job_id, vehicle_id, x, y, type, note, photo_url);
     res.status(201).json({ id: result.lastInsertRowid });
+  });
+
+  app.patch('/api/inspection/pins/:id', (req, res) => {
+    const { type, note, photo_url } = req.body;
+    const existing = db.prepare('SELECT id FROM inspection_pins WHERE id = ?').get(req.params.id) as { id: number } | undefined;
+    if (!existing) {
+      res.status(404).json({ error: 'Pin not found' });
+      return;
+    }
+
+    if (type !== undefined) {
+      db.prepare('UPDATE inspection_pins SET type = ? WHERE id = ?').run(type, req.params.id);
+    }
+    if (note !== undefined) {
+      db.prepare('UPDATE inspection_pins SET note = ? WHERE id = ?').run(note, req.params.id);
+    }
+    if (photo_url !== undefined) {
+      db.prepare('UPDATE inspection_pins SET photo_url = ? WHERE id = ?').run(photo_url, req.params.id);
+    }
+
+    const updated = db.prepare('SELECT * FROM inspection_pins WHERE id = ?').get(req.params.id);
+    res.json(updated);
+  });
+
+  app.delete('/api/inspection/pins/:id', (req, res) => {
+    const result = db.prepare('DELETE FROM inspection_pins WHERE id = ?').run(req.params.id);
+    if (result.changes === 0) {
+      res.status(404).json({ error: 'Pin not found' });
+      return;
+    }
+    res.json({ success: true });
   });
 
   // Vite middleware for development

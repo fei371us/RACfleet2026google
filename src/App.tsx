@@ -10,6 +10,7 @@ import DriverHome from './pages/DriverHome';
 import CreateJob from './pages/CreateJob';
 import JobDetail from './pages/JobDetail';
 import VehicleInspection from './pages/VehicleInspection';
+import VehicleExterior from './pages/VehicleExterior';
 import RequesterHome from './pages/RequesterHome';
 import FleetControl from './pages/FleetControl';
 import WorkshopAdviserDashboard from './pages/WorkshopAdviserDashboard';
@@ -90,6 +91,7 @@ export default function App() {
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/driver" element={<DriverHome />} />
                 <Route path="/driver/job/:id" element={<JobDetail />} />
+                <Route path="/driver/job/:id/vehicle-exterior" element={<VehicleExterior />} />
                 <Route path="/driver/inspection/:id" element={<VehicleInspection />} />
                 <Route path="/jobs/new" element={<CreateJob />} />
               </Routes>
