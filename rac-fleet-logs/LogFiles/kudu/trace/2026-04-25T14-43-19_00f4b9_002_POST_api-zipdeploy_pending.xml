@@ -1,0 +1,20 @@
+<step title="Incoming Request" date="2026-04-25T14:43:19.706" instance="00f4b9" url="/api/zipdeploy?isAsync=true" method="POST" type="request" pid="831,1,23" Accept="*/*" Host="rac-fleet-2026.scm.azurewebsites.net" User-Agent="AZURECLI/2.84.0 (MSI)" Accept-Encoding="gzip, deflate" Authorization="Bea..." Cache-Control="no-cache" Content-Type="application/octet-stream" Content-Length="392624" x-ms-client-request-id="13abee8c-40b5-11f1-a2da-7ced8dd0d025" x-ms-artifact-checksum="5b324d07a4417169fe5938d9aa4e9285b61091dc86c7d40ab7464955270eeca0" X-ARR-LOG-ID="13abee8c-40b5-11f1-a2da-7ced8dd0d025" CLIENT-IP="20.53.229.171:1024" X-SITE-DEPLOYMENT-ID="rac-fleet-2026" WAS-DEFAULT-HOSTNAME="rac-fleet-2026.scm.azurewebsites.net" X-Forwarded-Proto="https" X-AppService-Proto="https" X-Forwarded-TlsVersion="1.3" X-WAWS-Unencoded-URL="/api/zipdeploy?isAsync=true" X-Client-IP="20.53.229.171" X-Client-Port="1024" >
+  <step title="Cleanup Xml Logs" date="2026-04-25T14:43:19.713" /><!-- duration: 8ms -->
+  <step title="ZipPushDeploy" date="2026-04-25T14:43:19.842" >
+    <step title="ZipDeploy. Extract zip." date="2026-04-25T14:43:19.854" /><!-- duration: 4ms -->
+    <step title="None repository commit" date="2026-04-25T14:43:19.871" >
+      <step title="Commit id: 8e8923f0-317e-4d94-879a-9ffbf2b236a8" date="2026-04-25T14:43:19.875" Message="N/A" AuthorName="N/A" AuthorEmail="N/A" /><!-- duration: 4ms -->
+    </step><!-- duration: 13ms -->
+    <step title="Starting PushDeployAsync" date="2026-04-25T14:43:19.888" /><!-- duration: 4ms -->
+    <step title="Removing _del_node_modules symlink" date="2026-04-25T14:43:19.935" >
+      <step title="Writing artifact to /tmp/zipdeploy/c0562c69-815e-4358-9883-6df98e1020b5.zip" date="2026-04-25T14:43:19.997" >
+        <step title="Writing multipart request body to /tmp/zipdeploy/c0562c69-815e-4358-9883-6df98e1020b5.zip" date="2026-04-25T14:43:20.001" /><!-- duration: 8ms -->
+      </step><!-- duration: 56ms -->
+      <step title="Removing previous build artifact&apos;s manifest file" date="2026-04-25T14:43:20.060" >
+        <step title="Start deployment in the background" date="2026-04-25T14:43:20.075" >
+          <step title="Acquiring Deployment Lock" date="2026-04-25T14:43:20.089" /><!-- duration: 4ms -->
+          <step title="Acquired Deployment Lock" date="2026-04-25T14:43:20.154" /><!-- duration: 4ms -->
+        </step><!-- duration: 180ms -->
+      </step><!-- duration: 210ms -->
+      <step title="Outgoing response" date="2026-04-25T14:43:20.278" type="response" statusCode="202" statusText="Accepted" /><!-- duration: 4ms -->
+    </step><!-- duration: 350ms -->

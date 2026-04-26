@@ -1,0 +1,9 @@
+<step title="Incoming Request" date="2026-04-25T14:43:24.500" instance="00f4b9" url="/api/deployments/latest" method="GET" type="request" pid="831,1,26" Accept="*/*" Host="rac-fleet-2026.scm.azurewebsites.net" User-Agent="AZURECLI/2.84.0 (MSI)" Accept-Encoding="gzip, deflate" Authorization="Bea..." x-ms-client-request-id="13abee8c-40b5-11f1-a2da-7ced8dd0d025" X-ARR-LOG-ID="13abee8c-40b5-11f1-a2da-7ced8dd0d025" CLIENT-IP="20.53.229.171:1025" X-SITE-DEPLOYMENT-ID="rac-fleet-2026" WAS-DEFAULT-HOSTNAME="rac-fleet-2026.scm.azurewebsites.net" X-Forwarded-Proto="https" X-AppService-Proto="https" X-Forwarded-TlsVersion="1.3" X-WAWS-Unencoded-URL="/api/deployments/latest" X-Client-IP="20.53.229.171" X-Client-Port="1025" >
+  <step title="Cleanup Xml Logs" date="2026-04-25T14:43:24.506" /><!-- duration: 7ms -->
+  <step title="DeploymentService.GetResult" date="2026-04-25T14:43:24.537" >
+    <step title="DeploymentService.GetLatestDeployment" date="2026-04-25T14:43:24.541" >
+      <step title="DeploymentManager.GetResults" date="2026-04-25T14:43:24.545" /><!-- duration: 241ms -->
+    </step><!-- duration: 255ms -->
+  </step><!-- duration: 263ms -->
+  <step title="Outgoing response" date="2026-04-25T14:43:24.805" type="response" statusCode="202" statusText="Accepted" /><!-- duration: 4ms -->
+</step><!-- duration: 313ms -->

@@ -1,0 +1,564 @@
+2026-04-25T14:17:49.2265611Z State: Starting, Action: EstablishingSiteNetworks, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:17:49.9108075Z State: Starting, Action: StartingSiteContainers, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:17:49.9139307Z Container start method called.
+2026-04-25T14:17:49.9204013Z State: Starting, Action: PullingImage, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pulling image 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:17:49.9230624Z Establishing network.
+2026-04-25T14:17:49.9232768Z Pulling image: appsvc/node:20-lts_20260115.4.tuxprod.
+2026-04-25T14:17:50.2131101Z Container is starting.
+2026-04-25T14:17:50.2145978Z State: Starting, Action: MountingVolumes, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Mounting volumes for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:17:50.2149571Z Establishing user namespace if not established already.
+2026-04-25T14:17:50.2152866Z Establishing network if not established already.
+2026-04-25T14:17:50.2154427Z Mounting volumes.
+2026-04-25T14:17:50.2157434Z Nested mountpoint 
+2026-04-25T14:17:50.2186449Z Nested mountpoint volatile/logs
+2026-04-25T14:17:50.2322890Z Nested mountpoint 
+2026-04-25T14:17:50.2446285Z Nested mountpoint 
+2026-04-25T14:17:50.2506400Z Nested mountpoint 
+2026-04-25T14:17:50.4850246Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Finished pulling container image and mounting volumes for rac-fleet-2026. Allocatinng the rest of the container resources to finish container creation., DetailsLevel: INFO
+2026-04-25T14:17:50.4855570Z Creating container.
+2026-04-25T14:17:50.4872464Z Creating pipes for streaming container io.
+2026-04-25T14:17:50.4885800Z Creating stdout named pipe at /podr/container/pipe/7776b55082fa_rac-fleet-2026/stdout_32d377f2118149e9a18bf09e5412c864.
+2026-04-25T14:17:50.4888161Z Successfully created stdout named pipe at: /podr/container/pipe/7776b55082fa_rac-fleet-2026/stdout_32d377f2118149e9a18bf09e5412c864.
+2026-04-25T14:17:50.4889372Z Opening named pipe /podr/container/pipe/7776b55082fa_rac-fleet-2026/stdout_32d377f2118149e9a18bf09e5412c864 for reading in non-blocking mode.
+2026-04-25T14:17:50.4890723Z Successfully opened named pipe: /podr/container/pipe/7776b55082fa_rac-fleet-2026/stdout_32d377f2118149e9a18bf09e5412c864.
+2026-04-25T14:17:50.4891929Z Successfully removed non-blocking flag from /podr/container/pipe/7776b55082fa_rac-fleet-2026/stdout_32d377f2118149e9a18bf09e5412c864.
+2026-04-25T14:17:50.4893731Z Creating stderr named pipe at /podr/container/pipe/7776b55082fa_rac-fleet-2026/stderr_112192b72cdf4046a24226daefbdfa16.
+2026-04-25T14:17:50.4895433Z Successfully created stderr named pipe at: /podr/container/pipe/7776b55082fa_rac-fleet-2026/stderr_112192b72cdf4046a24226daefbdfa16.
+2026-04-25T14:17:50.4896621Z Opening named pipe /podr/container/pipe/7776b55082fa_rac-fleet-2026/stderr_112192b72cdf4046a24226daefbdfa16 for reading in non-blocking mode.
+2026-04-25T14:17:50.4897941Z Successfully opened named pipe: /podr/container/pipe/7776b55082fa_rac-fleet-2026/stderr_112192b72cdf4046a24226daefbdfa16.
+2026-04-25T14:17:50.4899134Z Successfully removed non-blocking flag from /podr/container/pipe/7776b55082fa_rac-fleet-2026/stderr_112192b72cdf4046a24226daefbdfa16.
+2026-04-25T14:17:50.4900762Z Creating container with image: appsvc/node:20-lts_20260115.4.tuxprod from registry: 10.1.0.6:13209 and fully qualified image name: 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod
+2026-04-25T14:17:51.1000268Z Starting container: 7776b55082fa_rac-fleet-2026.
+2026-04-25T14:17:51.1280909Z Starting watchers and probes.
+2026-04-25T14:17:51.1286088Z Starting metrics collection.
+2026-04-25T14:17:51.1313732Z Container is running.
+2026-04-25T14:17:51.1315355Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:17:51.1721141Z Container start method finished after 1258 ms.
+2026-04-25T14:17:51.1737136Z State: Starting, Action: InitiatingSiteWarmUpProbe, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:17:51.1806315Z State: Starting, Action: WaitingForSiteWarmUpProbeSuccess, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pinging warmup path to ensure container is ready to receive requests., DetailsLevel: INFO
+2026-04-25T14:18:01.2427584Z Site startup probe succeeded after 10.0395328 seconds.
+2026-04-25T14:18:01.3183415Z State: Starting, Action: WarmUpProbeSucceeded, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site startup probe succeeded after 10.0395328 seconds., DetailsLevel: INFO
+2026-04-25T14:18:01.5302740Z Site started.
+2026-04-25T14:18:01.5304412Z State: Started, Action: None, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:18:01 (UTC), DetailsLevel: INFO
+2026-04-25T14:18:01.5498520Z Site is running with patch version NODE 20.20.0
+2026-04-25T14:26:55.5435621Z State: Starting, Action: EstablishingSiteNetworks, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:26:56.4759898Z State: Starting, Action: StartingSiteContainers, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:26:56.4768112Z Container start method called.
+2026-04-25T14:26:56.4774457Z State: Starting, Action: PullingImage, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pulling image 10.1.0.5:13209/appsvc/node:20-lts_20260115.4.tuxprod for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:26:56.4800527Z Establishing network.
+2026-04-25T14:26:56.4819189Z Pulling image: appsvc/node:20-lts_20260115.4.tuxprod.
+2026-04-25T14:27:16.9308327Z Container is starting.
+2026-04-25T14:27:16.9330900Z State: Starting, Action: MountingVolumes, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Mounting volumes for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:27:16.9332422Z Establishing user namespace if not established already.
+2026-04-25T14:27:16.9333835Z Establishing network if not established already.
+2026-04-25T14:27:16.9335455Z Mounting volumes.
+2026-04-25T14:27:16.9338411Z Nested mountpoint 
+2026-04-25T14:27:16.9451291Z Nested mountpoint volatile/logs
+2026-04-25T14:27:16.9581938Z Nested mountpoint 
+2026-04-25T14:27:16.9615773Z Nested mountpoint 
+2026-04-25T14:27:16.9642706Z Nested mountpoint 
+2026-04-25T14:27:17.2700664Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Finished pulling container image and mounting volumes for rac-fleet-2026. Allocatinng the rest of the container resources to finish container creation., DetailsLevel: INFO
+2026-04-25T14:27:17.2704840Z Creating container.
+2026-04-25T14:27:17.2706312Z Creating pipes for streaming container io.
+2026-04-25T14:27:17.2708549Z Creating stdout named pipe at /podr/container/pipe/bb8fc08e01ff_rac-fleet-2026/stdout_012a9b8ed4654c368e4c16ce04cda966.
+2026-04-25T14:27:17.2879388Z Successfully created stdout named pipe at: /podr/container/pipe/bb8fc08e01ff_rac-fleet-2026/stdout_012a9b8ed4654c368e4c16ce04cda966.
+2026-04-25T14:27:17.2881216Z Opening named pipe /podr/container/pipe/bb8fc08e01ff_rac-fleet-2026/stdout_012a9b8ed4654c368e4c16ce04cda966 for reading in non-blocking mode.
+2026-04-25T14:27:17.2882824Z Successfully opened named pipe: /podr/container/pipe/bb8fc08e01ff_rac-fleet-2026/stdout_012a9b8ed4654c368e4c16ce04cda966.
+2026-04-25T14:27:17.2884352Z Successfully removed non-blocking flag from /podr/container/pipe/bb8fc08e01ff_rac-fleet-2026/stdout_012a9b8ed4654c368e4c16ce04cda966.
+2026-04-25T14:27:17.2890464Z Creating stderr named pipe at /podr/container/pipe/bb8fc08e01ff_rac-fleet-2026/stderr_1f917a2b425d472e9830407ed7fda717.
+2026-04-25T14:27:17.2892393Z Successfully created stderr named pipe at: /podr/container/pipe/bb8fc08e01ff_rac-fleet-2026/stderr_1f917a2b425d472e9830407ed7fda717.
+2026-04-25T14:27:17.2893597Z Opening named pipe /podr/container/pipe/bb8fc08e01ff_rac-fleet-2026/stderr_1f917a2b425d472e9830407ed7fda717 for reading in non-blocking mode.
+2026-04-25T14:27:17.2895197Z Successfully opened named pipe: /podr/container/pipe/bb8fc08e01ff_rac-fleet-2026/stderr_1f917a2b425d472e9830407ed7fda717.
+2026-04-25T14:27:17.2896296Z Successfully removed non-blocking flag from /podr/container/pipe/bb8fc08e01ff_rac-fleet-2026/stderr_1f917a2b425d472e9830407ed7fda717.
+2026-04-25T14:27:17.2898661Z Creating container with image: appsvc/node:20-lts_20260115.4.tuxprod from registry: 10.1.0.6:13209 and fully qualified image name: 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod
+2026-04-25T14:27:17.7054055Z Starting container: bb8fc08e01ff_rac-fleet-2026.
+2026-04-25T14:27:17.7413203Z Starting watchers and probes.
+2026-04-25T14:27:17.7433819Z Starting metrics collection.
+2026-04-25T14:27:17.7438315Z Container is running.
+2026-04-25T14:27:17.7450255Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:27:17.7656783Z Container start method finished after 21288 ms.
+2026-04-25T14:27:17.7678355Z State: Starting, Action: InitiatingSiteWarmUpProbe, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:27:17.7678820Z State: Starting, Action: WaitingForSiteWarmUpProbeSuccess, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pinging warmup path to ensure container is ready to receive requests., DetailsLevel: INFO
+2026-04-25T14:27:26.7992356Z Site startup probe succeeded after 9.030544 seconds.
+2026-04-25T14:27:26.8517766Z State: Starting, Action: WarmUpProbeSucceeded, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site startup probe succeeded after 9.030544 seconds., DetailsLevel: INFO
+2026-04-25T14:27:26.9260472Z Site started.
+2026-04-25T14:27:26.9267920Z State: Started, Action: None, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:27:26 (UTC), DetailsLevel: INFO
+2026-04-25T14:27:26.9337758Z Site is running with patch version NODE 20.20.0
+2026-04-25T14:27:46.9538247Z State: Stopping, Action: StoppingSite, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:18:01 (UTC), DetailsLevel: INFO
+2026-04-25T14:27:46.9580037Z State: Stopping, Action: StoppingSiteContainers, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:18:01 (UTC), DetailsLevel: INFO
+2026-04-25T14:27:46.9590401Z Container is terminating. Grace period: 5 seconds.
+2026-04-25T14:27:46.9659953Z Stop and delete container. Retry count = 0
+2026-04-25T14:27:46.9663184Z Stopping container: 7776b55082fa_rac-fleet-2026.
+2026-04-25T14:27:52.0215368Z Deleting container: 7776b55082fa_rac-fleet-2026. Retry count = 0
+2026-04-25T14:27:52.1672938Z Container spec TerminationMessagePolicy  path 
+2026-04-25T14:27:52.1674901Z Container is terminated. Total time elapsed: 5208 ms.
+2026-04-25T14:27:52.1751799Z Site: rac-fleet-2026 stopped.
+2026-04-25T14:28:56.9138444Z State: Starting, Action: EstablishingSiteNetworks, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:28:57.6403216Z State: Starting, Action: StartingSiteContainers, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:28:57.6405041Z Container start method called.
+2026-04-25T14:28:57.6405681Z State: Starting, Action: PullingImage, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pulling image 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:28:57.6406963Z Establishing network.
+2026-04-25T14:28:57.6408433Z Pulling image: appsvc/node:20-lts_20260115.4.tuxprod.
+2026-04-25T14:28:57.8409799Z Container is starting.
+2026-04-25T14:28:57.8410832Z State: Starting, Action: MountingVolumes, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Mounting volumes for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:28:57.8414198Z Establishing user namespace if not established already.
+2026-04-25T14:28:57.8416365Z Establishing network if not established already.
+2026-04-25T14:28:57.8418156Z Mounting volumes.
+2026-04-25T14:28:57.8420405Z Nested mountpoint 
+2026-04-25T14:28:57.8680689Z Nested mountpoint volatile/logs
+2026-04-25T14:28:57.8789729Z Nested mountpoint 
+2026-04-25T14:28:57.8811877Z Nested mountpoint 
+2026-04-25T14:28:57.8836980Z Nested mountpoint 
+2026-04-25T14:28:58.0375093Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Finished pulling container image and mounting volumes for rac-fleet-2026. Allocatinng the rest of the container resources to finish container creation., DetailsLevel: INFO
+2026-04-25T14:28:58.0376522Z Creating container.
+2026-04-25T14:28:58.0388408Z Creating pipes for streaming container io.
+2026-04-25T14:28:58.0396186Z Creating stdout named pipe at /podr/container/pipe/b346cddeb67a_rac-fleet-2026/stdout_06aae91ad2804e8cbb14ccb332c2d08c.
+2026-04-25T14:28:58.0410167Z Successfully created stdout named pipe at: /podr/container/pipe/b346cddeb67a_rac-fleet-2026/stdout_06aae91ad2804e8cbb14ccb332c2d08c.
+2026-04-25T14:28:58.0412524Z Opening named pipe /podr/container/pipe/b346cddeb67a_rac-fleet-2026/stdout_06aae91ad2804e8cbb14ccb332c2d08c for reading in non-blocking mode.
+2026-04-25T14:28:58.0414587Z Successfully opened named pipe: /podr/container/pipe/b346cddeb67a_rac-fleet-2026/stdout_06aae91ad2804e8cbb14ccb332c2d08c.
+2026-04-25T14:28:58.0415804Z Successfully removed non-blocking flag from /podr/container/pipe/b346cddeb67a_rac-fleet-2026/stdout_06aae91ad2804e8cbb14ccb332c2d08c.
+2026-04-25T14:28:58.0418443Z Creating stderr named pipe at /podr/container/pipe/b346cddeb67a_rac-fleet-2026/stderr_f6d36597b2a54be2a668e316427b6d29.
+2026-04-25T14:28:58.0420085Z Successfully created stderr named pipe at: /podr/container/pipe/b346cddeb67a_rac-fleet-2026/stderr_f6d36597b2a54be2a668e316427b6d29.
+2026-04-25T14:28:58.0421304Z Opening named pipe /podr/container/pipe/b346cddeb67a_rac-fleet-2026/stderr_f6d36597b2a54be2a668e316427b6d29 for reading in non-blocking mode.
+2026-04-25T14:28:58.0422672Z Successfully opened named pipe: /podr/container/pipe/b346cddeb67a_rac-fleet-2026/stderr_f6d36597b2a54be2a668e316427b6d29.
+2026-04-25T14:28:58.0423745Z Successfully removed non-blocking flag from /podr/container/pipe/b346cddeb67a_rac-fleet-2026/stderr_f6d36597b2a54be2a668e316427b6d29.
+2026-04-25T14:28:58.0427313Z Creating container with image: appsvc/node:20-lts_20260115.4.tuxprod from registry: 10.1.0.6:13209 and fully qualified image name: 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod
+2026-04-25T14:28:58.3525258Z Starting container: b346cddeb67a_rac-fleet-2026.
+2026-04-25T14:28:58.3796324Z Starting watchers and probes.
+2026-04-25T14:28:58.3798917Z Starting metrics collection.
+2026-04-25T14:28:58.3805763Z Container is running.
+2026-04-25T14:28:58.3808613Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:28:58.3967689Z Container start method finished after 756 ms.
+2026-04-25T14:28:58.3969752Z State: Starting, Action: InitiatingSiteWarmUpProbe, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:28:58.3970122Z State: Starting, Action: WaitingForSiteWarmUpProbeSuccess, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pinging warmup path to ensure container is ready to receive requests., DetailsLevel: INFO
+2026-04-25T14:29:11.4311298Z Site startup probe succeeded after 13.0335916 seconds.
+2026-04-25T14:29:11.5036980Z State: Starting, Action: WarmUpProbeSucceeded, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site startup probe succeeded after 13.0335916 seconds., DetailsLevel: INFO
+2026-04-25T14:29:11.7246690Z Site is running with deployment version: 36e22071-b65f-420b-a8e1-f3a459eb61ce
+2026-04-25T14:29:11.7267911Z Site started.
+2026-04-25T14:29:11.7268889Z State: Started, Action: None, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:29:11 (UTC), DetailsLevel: INFO
+2026-04-25T14:29:11.7279910Z Site is running with patch version NODE 20.20.0
+2026-04-25T14:29:31.7332877Z State: Stopping, Action: StoppingSite, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:27:26 (UTC), DetailsLevel: INFO
+2026-04-25T14:29:31.7342610Z State: Stopping, Action: StoppingSiteContainers, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:27:26 (UTC), DetailsLevel: INFO
+2026-04-25T14:29:31.7344596Z Container is terminating. Grace period: 5 seconds.
+2026-04-25T14:29:31.7454880Z Stop and delete container. Retry count = 0
+2026-04-25T14:29:31.7456148Z Stopping container: bb8fc08e01ff_rac-fleet-2026.
+2026-04-25T14:29:36.7855659Z Deleting container: bb8fc08e01ff_rac-fleet-2026. Retry count = 0
+2026-04-25T14:29:36.9994134Z Container spec TerminationMessagePolicy  path 
+2026-04-25T14:29:36.9996690Z Container is terminated. Total time elapsed: 5265 ms.
+2026-04-25T14:29:36.9997904Z Site: rac-fleet-2026 stopped.
+2026-04-25T14:29:39.7407533Z State: Starting, Action: EstablishingSiteNetworks, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:29:40.2519875Z State: Starting, Action: StartingSiteContainers, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:29:40.2521777Z Container start method called.
+2026-04-25T14:29:40.2522703Z State: Starting, Action: PullingImage, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pulling image 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:29:40.2524318Z Establishing network.
+2026-04-25T14:29:40.2526009Z Pulling image: appsvc/node:20-lts_20260115.4.tuxprod.
+2026-04-25T14:29:40.4428012Z Container is starting.
+2026-04-25T14:29:40.4428884Z State: Starting, Action: MountingVolumes, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Mounting volumes for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:29:40.4525831Z Establishing user namespace if not established already.
+2026-04-25T14:29:40.4533204Z Establishing network if not established already.
+2026-04-25T14:29:40.4534798Z Mounting volumes.
+2026-04-25T14:29:40.4538769Z Nested mountpoint 
+2026-04-25T14:29:40.4622793Z Nested mountpoint volatile/logs
+2026-04-25T14:29:40.4698029Z Nested mountpoint 
+2026-04-25T14:29:40.4704571Z Nested mountpoint 
+2026-04-25T14:29:40.4748980Z Nested mountpoint 
+2026-04-25T14:29:40.6009054Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Finished pulling container image and mounting volumes for rac-fleet-2026. Allocatinng the rest of the container resources to finish container creation., DetailsLevel: INFO
+2026-04-25T14:29:40.6012275Z Creating container.
+2026-04-25T14:29:40.6025454Z Creating pipes for streaming container io.
+2026-04-25T14:29:40.6026915Z Creating stdout named pipe at /podr/container/pipe/c9d257eb7935_rac-fleet-2026/stdout_6e3c678c27e941ca94b255605d866fb3.
+2026-04-25T14:29:40.6029026Z Successfully created stdout named pipe at: /podr/container/pipe/c9d257eb7935_rac-fleet-2026/stdout_6e3c678c27e941ca94b255605d866fb3.
+2026-04-25T14:29:40.6032848Z Opening named pipe /podr/container/pipe/c9d257eb7935_rac-fleet-2026/stdout_6e3c678c27e941ca94b255605d866fb3 for reading in non-blocking mode.
+2026-04-25T14:29:40.6049051Z Successfully opened named pipe: /podr/container/pipe/c9d257eb7935_rac-fleet-2026/stdout_6e3c678c27e941ca94b255605d866fb3.
+2026-04-25T14:29:40.6054672Z Successfully removed non-blocking flag from /podr/container/pipe/c9d257eb7935_rac-fleet-2026/stdout_6e3c678c27e941ca94b255605d866fb3.
+2026-04-25T14:29:40.6069535Z Creating stderr named pipe at /podr/container/pipe/c9d257eb7935_rac-fleet-2026/stderr_be2757da5e9d406eb5aae5d0bdcd7e70.
+2026-04-25T14:29:40.6079917Z Successfully created stderr named pipe at: /podr/container/pipe/c9d257eb7935_rac-fleet-2026/stderr_be2757da5e9d406eb5aae5d0bdcd7e70.
+2026-04-25T14:29:40.6088427Z Opening named pipe /podr/container/pipe/c9d257eb7935_rac-fleet-2026/stderr_be2757da5e9d406eb5aae5d0bdcd7e70 for reading in non-blocking mode.
+2026-04-25T14:29:40.6093880Z Successfully opened named pipe: /podr/container/pipe/c9d257eb7935_rac-fleet-2026/stderr_be2757da5e9d406eb5aae5d0bdcd7e70.
+2026-04-25T14:29:40.6104203Z Successfully removed non-blocking flag from /podr/container/pipe/c9d257eb7935_rac-fleet-2026/stderr_be2757da5e9d406eb5aae5d0bdcd7e70.
+2026-04-25T14:29:40.6117553Z Creating container with image: appsvc/node:20-lts_20260115.4.tuxprod from registry: 10.1.0.6:13209 and fully qualified image name: 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod
+2026-04-25T14:29:41.0170150Z Starting container: c9d257eb7935_rac-fleet-2026.
+2026-04-25T14:29:41.0462784Z Starting watchers and probes.
+2026-04-25T14:29:41.0465319Z Starting metrics collection.
+2026-04-25T14:29:41.0468184Z Container is running.
+2026-04-25T14:29:41.0468968Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:29:41.0935927Z Container start method finished after 841 ms.
+2026-04-25T14:29:41.0938180Z State: Starting, Action: InitiatingSiteWarmUpProbe, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:29:41.0938452Z State: Starting, Action: WaitingForSiteWarmUpProbeSuccess, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pinging warmup path to ensure container is ready to receive requests., DetailsLevel: INFO
+2026-04-25T14:30:01.1497486Z Site startup probe succeeded after 20.0553803 seconds.
+2026-04-25T14:30:01.3636203Z State: Starting, Action: WarmUpProbeSucceeded, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site startup probe succeeded after 20.0553803 seconds., DetailsLevel: INFO
+2026-04-25T14:30:01.7408364Z Site is running with deployment version: 36e22071-b65f-420b-a8e1-f3a459eb61ce
+2026-04-25T14:30:01.7440952Z Site started.
+2026-04-25T14:30:01.7443931Z State: Started, Action: None, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:30:01 (UTC), DetailsLevel: INFO
+2026-04-25T14:30:01.7620324Z Site is running with patch version NODE 20.20.0
+2026-04-25T14:30:21.7890310Z State: Stopping, Action: StoppingSite, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:29:11 (UTC), DetailsLevel: INFO
+2026-04-25T14:30:21.7893608Z State: Stopping, Action: StoppingSiteContainers, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:29:11 (UTC), DetailsLevel: INFO
+2026-04-25T14:30:21.7896265Z Container is terminating. Grace period: 5 seconds.
+2026-04-25T14:30:21.7929163Z Stop and delete container. Retry count = 0
+2026-04-25T14:30:21.7930731Z Stopping container: b346cddeb67a_rac-fleet-2026.
+2026-04-25T14:30:26.8297051Z Deleting container: b346cddeb67a_rac-fleet-2026. Retry count = 0
+2026-04-25T14:30:28.2091749Z Container spec TerminationMessagePolicy  path 
+2026-04-25T14:30:28.2094293Z Container is terminated. Total time elapsed: 6419 ms.
+2026-04-25T14:30:28.2095474Z Site: rac-fleet-2026 stopped.
+2026-04-25T14:43:30.6316037Z State: Starting, Action: EstablishingSiteNetworks, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:43:31.7299515Z State: Starting, Action: StartingSiteContainers, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:43:31.7301421Z Container start method called.
+2026-04-25T14:43:31.7333371Z State: Starting, Action: PullingImage, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pulling image 10.1.0.5:13209/appsvc/node:20-lts_20260115.4.tuxprod for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:43:31.7334987Z Establishing network.
+2026-04-25T14:43:31.7353704Z Pulling image: appsvc/node:20-lts_20260115.4.tuxprod.
+2026-04-25T14:43:31.9999444Z Image appsvc/node:20-lts_20260115.4.tuxprod is pulled from registry 10.1.0.5:13209
+2026-04-25T14:43:32.0000592Z Container is starting.
+2026-04-25T14:43:32.0001191Z State: Starting, Action: MountingVolumes, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Mounting volumes for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:43:32.0002093Z Establishing user namespace if not established already.
+2026-04-25T14:43:32.0003142Z Establishing network if not established already.
+2026-04-25T14:43:32.0004265Z Mounting volumes.
+2026-04-25T14:43:32.0006189Z Nested mountpoint 
+2026-04-25T14:43:32.0084769Z Nested mountpoint volatile/logs
+2026-04-25T14:43:32.0149053Z Nested mountpoint 
+2026-04-25T14:43:32.0158161Z Nested mountpoint 
+2026-04-25T14:43:32.0166172Z Nested mountpoint 
+2026-04-25T14:43:32.1298024Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Finished pulling container image and mounting volumes for rac-fleet-2026. Allocatinng the rest of the container resources to finish container creation., DetailsLevel: INFO
+2026-04-25T14:43:32.1299425Z Creating container.
+2026-04-25T14:43:32.1303332Z Creating pipes for streaming container io.
+2026-04-25T14:43:32.1304955Z Creating stdout named pipe at /podr/container/pipe/ad8e7fc4a197_rac-fleet-2026/stdout_a0c9e565cc864fa597e9be5c6df15d7c.
+2026-04-25T14:43:32.1317465Z Successfully created stdout named pipe at: /podr/container/pipe/ad8e7fc4a197_rac-fleet-2026/stdout_a0c9e565cc864fa597e9be5c6df15d7c.
+2026-04-25T14:43:32.1322567Z Opening named pipe /podr/container/pipe/ad8e7fc4a197_rac-fleet-2026/stdout_a0c9e565cc864fa597e9be5c6df15d7c for reading in non-blocking mode.
+2026-04-25T14:43:32.1324927Z Successfully opened named pipe: /podr/container/pipe/ad8e7fc4a197_rac-fleet-2026/stdout_a0c9e565cc864fa597e9be5c6df15d7c.
+2026-04-25T14:43:32.1326306Z Successfully removed non-blocking flag from /podr/container/pipe/ad8e7fc4a197_rac-fleet-2026/stdout_a0c9e565cc864fa597e9be5c6df15d7c.
+2026-04-25T14:43:32.1334976Z Creating stderr named pipe at /podr/container/pipe/ad8e7fc4a197_rac-fleet-2026/stderr_20d54f1245fe4928a8a7c7aaee9e5ba9.
+2026-04-25T14:43:32.1339625Z Successfully created stderr named pipe at: /podr/container/pipe/ad8e7fc4a197_rac-fleet-2026/stderr_20d54f1245fe4928a8a7c7aaee9e5ba9.
+2026-04-25T14:43:32.1344599Z Opening named pipe /podr/container/pipe/ad8e7fc4a197_rac-fleet-2026/stderr_20d54f1245fe4928a8a7c7aaee9e5ba9 for reading in non-blocking mode.
+2026-04-25T14:43:32.1346308Z Successfully opened named pipe: /podr/container/pipe/ad8e7fc4a197_rac-fleet-2026/stderr_20d54f1245fe4928a8a7c7aaee9e5ba9.
+2026-04-25T14:43:32.1357852Z Successfully removed non-blocking flag from /podr/container/pipe/ad8e7fc4a197_rac-fleet-2026/stderr_20d54f1245fe4928a8a7c7aaee9e5ba9.
+2026-04-25T14:43:32.1361412Z Creating container with image: appsvc/node:20-lts_20260115.4.tuxprod from registry: 10.1.0.5:13209 and fully qualified image name: 10.1.0.5:13209/appsvc/node:20-lts_20260115.4.tuxprod
+2026-04-25T14:43:32.4888351Z Starting container: ad8e7fc4a197_rac-fleet-2026.
+2026-04-25T14:43:32.5173989Z Starting watchers and probes.
+2026-04-25T14:43:32.5180895Z Starting metrics collection.
+2026-04-25T14:43:32.5182272Z Container is running.
+2026-04-25T14:43:32.5183323Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:43:32.5340998Z Container start method finished after 803 ms.
+2026-04-25T14:43:32.5356271Z State: Starting, Action: InitiatingSiteWarmUpProbe, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:43:32.5356593Z State: Starting, Action: WaitingForSiteWarmUpProbeSuccess, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pinging warmup path to ensure container is ready to receive requests., DetailsLevel: INFO
+2026-04-25T14:43:42.5724614Z Site startup probe succeeded after 10.0343982 seconds.
+2026-04-25T14:43:42.6281364Z State: Starting, Action: WarmUpProbeSucceeded, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site startup probe succeeded after 10.0343982 seconds., DetailsLevel: INFO
+2026-04-25T14:43:42.7539516Z Site is running with deployment version: 8e8923f0-317e-4d94-879a-9ffbf2b236a8
+2026-04-25T14:43:42.7541761Z Site started.
+2026-04-25T14:43:42.7542313Z State: Started, Action: None, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:43:42 (UTC), DetailsLevel: INFO
+2026-04-25T14:43:42.7544246Z Site is running with patch version NODE 20.20.0
+2026-04-25T14:44:02.7850649Z State: Stopping, Action: StoppingSite, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:30:01 (UTC), DetailsLevel: INFO
+2026-04-25T14:44:02.7854105Z State: Stopping, Action: StoppingSiteContainers, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:30:01 (UTC), DetailsLevel: INFO
+2026-04-25T14:44:02.7864642Z Container is terminating. Grace period: 5 seconds.
+2026-04-25T14:44:02.7910524Z Stop and delete container. Retry count = 0
+2026-04-25T14:44:02.7911877Z Stopping container: c9d257eb7935_rac-fleet-2026.
+2026-04-25T14:44:08.3596209Z Deleting container: c9d257eb7935_rac-fleet-2026. Retry count = 0
+2026-04-25T14:44:09.5956198Z Container spec TerminationMessagePolicy  path 
+2026-04-25T14:44:09.5958122Z Container is terminated. Total time elapsed: 6809 ms.
+2026-04-25T14:44:09.5959364Z Site: rac-fleet-2026 stopped.
+2026-04-25T14:47:31.7716141Z State: Starting, Action: EstablishingSiteNetworks, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:47:32.2300362Z State: Starting, Action: StartingSiteContainers, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: , DetailsLevel: INFO
+2026-04-25T14:47:32.2302002Z Container start method called.
+2026-04-25T14:47:32.2302528Z State: Starting, Action: PullingImage, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pulling image 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:47:32.2307075Z Establishing network.
+2026-04-25T14:47:32.2350888Z Pulling image: appsvc/node:20-lts_20260115.4.tuxprod.
+2026-04-25T14:47:32.4359923Z Container is starting.
+2026-04-25T14:47:32.4369393Z State: Starting, Action: MountingVolumes, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Mounting volumes for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:47:32.4374535Z Establishing user namespace if not established already.
+2026-04-25T14:47:32.4381441Z Establishing network if not established already.
+2026-04-25T14:47:32.4387145Z Mounting volumes.
+2026-04-25T14:47:32.4389820Z Nested mountpoint 
+2026-04-25T14:47:32.4431210Z Nested mountpoint volatile/logs
+2026-04-25T14:47:32.4530821Z Nested mountpoint 
+2026-04-25T14:47:32.4538221Z Nested mountpoint 
+2026-04-25T14:47:32.4557137Z Nested mountpoint 
+2026-04-25T14:47:32.6116234Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Finished pulling container image and mounting volumes for rac-fleet-2026. Allocatinng the rest of the container resources to finish container creation., DetailsLevel: INFO
+2026-04-25T14:47:32.6118091Z Creating container.
+2026-04-25T14:47:32.6127761Z Creating pipes for streaming container io.
+2026-04-25T14:47:32.6129397Z Creating stdout named pipe at /podr/container/pipe/1f0d97df0576_rac-fleet-2026/stdout_f71f15a10a8a45b0b8a3f0ed20ae643e.
+2026-04-25T14:47:32.6137183Z Successfully created stdout named pipe at: /podr/container/pipe/1f0d97df0576_rac-fleet-2026/stdout_f71f15a10a8a45b0b8a3f0ed20ae643e.
+2026-04-25T14:47:32.6139031Z Opening named pipe /podr/container/pipe/1f0d97df0576_rac-fleet-2026/stdout_f71f15a10a8a45b0b8a3f0ed20ae643e for reading in non-blocking mode.
+2026-04-25T14:47:32.6141085Z Successfully opened named pipe: /podr/container/pipe/1f0d97df0576_rac-fleet-2026/stdout_f71f15a10a8a45b0b8a3f0ed20ae643e.
+2026-04-25T14:47:32.6142455Z Successfully removed non-blocking flag from /podr/container/pipe/1f0d97df0576_rac-fleet-2026/stdout_f71f15a10a8a45b0b8a3f0ed20ae643e.
+2026-04-25T14:47:32.6144240Z Creating stderr named pipe at /podr/container/pipe/1f0d97df0576_rac-fleet-2026/stderr_72fb7dce63ee46728543e8d49216e7f6.
+2026-04-25T14:47:32.6145999Z Successfully created stderr named pipe at: /podr/container/pipe/1f0d97df0576_rac-fleet-2026/stderr_72fb7dce63ee46728543e8d49216e7f6.
+2026-04-25T14:47:32.6147480Z Opening named pipe /podr/container/pipe/1f0d97df0576_rac-fleet-2026/stderr_72fb7dce63ee46728543e8d49216e7f6 for reading in non-blocking mode.
+2026-04-25T14:47:32.6149143Z Successfully opened named pipe: /podr/container/pipe/1f0d97df0576_rac-fleet-2026/stderr_72fb7dce63ee46728543e8d49216e7f6.
+2026-04-25T14:47:32.6184668Z Successfully removed non-blocking flag from /podr/container/pipe/1f0d97df0576_rac-fleet-2026/stderr_72fb7dce63ee46728543e8d49216e7f6.
+2026-04-25T14:47:32.6187121Z Creating container with image: appsvc/node:20-lts_20260115.4.tuxprod from registry: 10.1.0.6:13209 and fully qualified image name: 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod
+2026-04-25T14:47:32.8337551Z Starting container: 1f0d97df0576_rac-fleet-2026.
+2026-04-25T14:47:32.8623528Z Starting watchers and probes.
+2026-04-25T14:47:32.8643999Z Starting metrics collection.
+2026-04-25T14:47:32.8648204Z Container is running.
+2026-04-25T14:47:32.8656669Z State: Starting, Action: CreatingContainer, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:47:32.8861422Z Container start method finished after 655 ms.
+2026-04-25T14:47:32.8863224Z State: Starting, Action: InitiatingSiteWarmUpProbe, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:47:32.8863477Z State: Starting, Action: WaitingForSiteWarmUpProbeSuccess, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Pinging warmup path to ensure container is ready to receive requests., DetailsLevel: INFO
+2026-04-25T14:47:42.1701832Z Container has finished running with exit code: 127.
+2026-04-25T14:47:42.1703800Z Container is terminating. Grace period: 5 seconds.
+2026-04-25T14:47:42.1708484Z Stop and delete container. Retry count = 0
+2026-04-25T14:47:42.1709747Z Stopping container: 1f0d97df0576_rac-fleet-2026.
+2026-04-25T14:47:42.1998652Z Deleting container: 1f0d97df0576_rac-fleet-2026. Retry count = 0
+2026-04-25T14:47:42.2868353Z Container spec TerminationMessagePolicy  path 
+2026-04-25T14:47:42.2879432Z Container is terminated. Total time elapsed: 117 ms.
+2026-04-25T14:47:42.2880818Z Site container: rac-fleet-2026 terminated during site startup.
+2026-04-25T14:47:42.2939440Z State: Stopping, Action: CancellingStartup, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:47:42.3133779Z Site startup probe failed after 9.426612 seconds.
+2026-04-25T14:47:42.3801275Z State: Stopping, Action: CancellingStartup, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:47:42.3860214Z Failed to start site. Revert by stopping site.
+2026-04-25T14:47:42.3861394Z State: Stopping, Action: StoppingSite, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:47:42.3863688Z State: Stopping, Action: StoppingSiteContainers, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:47:42.3863852Z Site: rac-fleet-2026 stopped.
+2026-04-25T14:48:02.5647527Z State: Stopping, Action: StoppingSite, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:43:42 (UTC), DetailsLevel: INFO
+2026-04-25T14:48:02.5659122Z State: Stopping, Action: StoppingSiteContainers, LastError: , LastErrorTimestamp: 01/01/0001 00:00:00, LastErrorDetails: , Details: Site started at 04/25/2026 14:43:42 (UTC), DetailsLevel: INFO
+2026-04-25T14:48:02.5661502Z Container is terminating. Grace period: 5 seconds.
+2026-04-25T14:48:02.5704533Z Stop and delete container. Retry count = 0
+2026-04-25T14:48:02.5705687Z Stopping container: ad8e7fc4a197_rac-fleet-2026.
+2026-04-25T14:48:07.6218778Z Deleting container: ad8e7fc4a197_rac-fleet-2026. Retry count = 0
+2026-04-25T14:48:07.7100417Z Container spec TerminationMessagePolicy  path 
+2026-04-25T14:48:07.7102463Z Container is terminated. Total time elapsed: 5143 ms.
+2026-04-25T14:48:07.7190595Z Site: rac-fleet-2026 stopped.
+2026-04-25T14:47:42.3925386Z State: Stopping, Action: UnmountingVolumes, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:47:42.4699685Z State: Stopping, Action: StoppingSiteNetworks, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:47:42.5376040Z State: Stopped, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site stopped at 04/25/2026 14:47:42 (UTC), DetailsLevel: ERR
+2026-04-25T14:47:42.5393109Z State: Stopped, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site stopped at 04/25/2026 14:47:42 (UTC), DetailsLevel: ERR
+2026-04-25T14:53:21.4334530Z State: Starting, Action: EstablishingSiteNetworks, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site stopped at 04/25/2026 14:47:42 (UTC), DetailsLevel: ERR
+2026-04-25T14:53:21.8448648Z State: Starting, Action: StartingSiteContainers, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site stopped at 04/25/2026 14:47:42 (UTC), DetailsLevel: ERR
+2026-04-25T14:53:21.8452776Z Container start method called.
+2026-04-25T14:53:21.8453490Z State: Starting, Action: PullingImage, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Pulling image 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:53:21.8454734Z Establishing network.
+2026-04-25T14:53:21.8456003Z Pulling image: appsvc/node:20-lts_20260115.4.tuxprod.
+2026-04-25T14:53:22.0610433Z Container is starting.
+2026-04-25T14:53:22.0611253Z State: Starting, Action: MountingVolumes, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Mounting volumes for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:53:22.0612574Z Establishing user namespace if not established already.
+2026-04-25T14:53:22.0613924Z Establishing network if not established already.
+2026-04-25T14:53:22.0614821Z Mounting volumes.
+2026-04-25T14:53:22.0615974Z Nested mountpoint 
+2026-04-25T14:53:22.0626503Z Nested mountpoint volatile/logs
+2026-04-25T14:53:22.0763104Z Nested mountpoint 
+2026-04-25T14:53:22.0770271Z Nested mountpoint 
+2026-04-25T14:53:22.0829135Z Nested mountpoint 
+2026-04-25T14:53:22.2072256Z State: Starting, Action: CreatingContainer, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Finished pulling container image and mounting volumes for rac-fleet-2026. Allocatinng the rest of the container resources to finish container creation., DetailsLevel: INFO
+2026-04-25T14:53:22.2077892Z Creating container.
+2026-04-25T14:53:22.2079555Z Creating pipes for streaming container io.
+2026-04-25T14:53:22.2081376Z Creating stdout named pipe at /podr/container/pipe/1779cea1cdbe_rac-fleet-2026/stdout_1346f1d9af91472a92ace565bf4eb28c.
+2026-04-25T14:53:22.2083775Z Successfully created stdout named pipe at: /podr/container/pipe/1779cea1cdbe_rac-fleet-2026/stdout_1346f1d9af91472a92ace565bf4eb28c.
+2026-04-25T14:53:22.2086891Z Opening named pipe /podr/container/pipe/1779cea1cdbe_rac-fleet-2026/stdout_1346f1d9af91472a92ace565bf4eb28c for reading in non-blocking mode.
+2026-04-25T14:53:22.2088643Z Successfully opened named pipe: /podr/container/pipe/1779cea1cdbe_rac-fleet-2026/stdout_1346f1d9af91472a92ace565bf4eb28c.
+2026-04-25T14:53:22.2090083Z Successfully removed non-blocking flag from /podr/container/pipe/1779cea1cdbe_rac-fleet-2026/stdout_1346f1d9af91472a92ace565bf4eb28c.
+2026-04-25T14:53:22.2093097Z Creating stderr named pipe at /podr/container/pipe/1779cea1cdbe_rac-fleet-2026/stderr_0af788c69ca8412e826f7320b957716e.
+2026-04-25T14:53:22.2130254Z Successfully created stderr named pipe at: /podr/container/pipe/1779cea1cdbe_rac-fleet-2026/stderr_0af788c69ca8412e826f7320b957716e.
+2026-04-25T14:53:22.2131852Z Opening named pipe /podr/container/pipe/1779cea1cdbe_rac-fleet-2026/stderr_0af788c69ca8412e826f7320b957716e for reading in non-blocking mode.
+2026-04-25T14:53:22.2133700Z Successfully opened named pipe: /podr/container/pipe/1779cea1cdbe_rac-fleet-2026/stderr_0af788c69ca8412e826f7320b957716e.
+2026-04-25T14:53:22.2134979Z Successfully removed non-blocking flag from /podr/container/pipe/1779cea1cdbe_rac-fleet-2026/stderr_0af788c69ca8412e826f7320b957716e.
+2026-04-25T14:53:22.2136830Z Creating container with image: appsvc/node:20-lts_20260115.4.tuxprod from registry: 10.1.0.6:13209 and fully qualified image name: 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod
+2026-04-25T14:53:22.4011183Z Starting container: 1779cea1cdbe_rac-fleet-2026.
+2026-04-25T14:53:22.4206118Z Starting watchers and probes.
+2026-04-25T14:53:22.4210019Z Starting metrics collection.
+2026-04-25T14:53:22.4212147Z Container is running.
+2026-04-25T14:53:22.4212927Z State: Starting, Action: CreatingContainer, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:53:22.4399249Z Container start method finished after 594 ms.
+2026-04-25T14:53:22.4403126Z State: Starting, Action: InitiatingSiteWarmUpProbe, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:53:22.4403776Z State: Starting, Action: WaitingForSiteWarmUpProbeSuccess, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Pinging warmup path to ensure container is ready to receive requests., DetailsLevel: INFO
+2026-04-25T14:53:30.9897591Z Container has finished running with exit code: 127.
+2026-04-25T14:53:30.9899023Z Container is terminating. Grace period: 5 seconds.
+2026-04-25T14:53:30.9922372Z Stop and delete container. Retry count = 0
+2026-04-25T14:53:30.9923722Z Stopping container: 1779cea1cdbe_rac-fleet-2026.
+2026-04-25T14:53:31.0491792Z Deleting container: 1779cea1cdbe_rac-fleet-2026. Retry count = 0
+2026-04-25T14:53:31.1147644Z Container spec TerminationMessagePolicy  path 
+2026-04-25T14:53:31.1149607Z Container is terminated. Total time elapsed: 124 ms.
+2026-04-25T14:53:31.1160668Z Site container: rac-fleet-2026 terminated during site startup.
+2026-04-25T14:53:31.1162294Z State: Stopping, Action: CancellingStartup, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:47:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:53:31.1199337Z Site startup probe failed after 8.6790229 seconds.
+2026-04-25T14:53:31.1776933Z State: Stopping, Action: CancellingStartup, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:53:31.1788552Z Failed to start site. Revert by stopping site.
+2026-04-25T14:53:31.1789429Z State: Stopping, Action: StoppingSite, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:53:31.1795845Z State: Stopping, Action: StoppingSiteContainers, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:53:31.1796058Z Site: rac-fleet-2026 stopped.
+2026-04-25T14:53:31.1821354Z State: Stopping, Action: UnmountingVolumes, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:53:31.2599511Z State: Stopping, Action: StoppingSiteNetworks, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:53:31.3246752Z Site: rac-fleet-2026 will be blocked for 1 minutes till 04/25/2026 14:54:31
+2026-04-25T14:53:31.3255378Z State: Blocked, Action: StoppingSiteNetworks, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site: rac-fleet-2026 will be blocked for 1 minutes till 04/25/2026 14:54:31, DetailsLevel: WARN
+2026-04-25T14:53:31.3335015Z State: Stopped, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site stopped at 04/25/2026 14:53:31 (UTC), DetailsLevel: WARN
+2026-04-25T14:53:31.3602720Z State: Stopped, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site stopped at 04/25/2026 14:53:31 (UTC), DetailsLevel: WARN
+2026-04-25T14:53:32.9195979Z State: Blocked, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site is blocked due to multiple, consecutive cold start failures. Site scheduled to be unblocked at 04/25/2026 14:54:31, DetailsLevel: WARN
+2026-04-25T14:53:32.9196326Z Start site prohibitted because the site is being blocked.
+2026-04-25T14:53:36.3835707Z State: Blocked, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site is blocked due to multiple, consecutive cold start failures. Site scheduled to be unblocked at 04/25/2026 14:54:31, DetailsLevel: WARN
+2026-04-25T14:53:36.3836006Z Start site prohibitted because the site is being blocked.
+2026-04-25T14:53:36.4894953Z State: Blocked, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site is blocked due to multiple, consecutive cold start failures. Site scheduled to be unblocked at 04/25/2026 14:54:31, DetailsLevel: WARN
+2026-04-25T14:53:36.4895379Z Start site prohibitted because the site is being blocked.
+2026-04-25T14:54:31.3254740Z Site: rac-fleet-2026 is unblocked.
+2026-04-25T14:55:55.0610892Z State: Starting, Action: EstablishingSiteNetworks, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site is blocked due to multiple, consecutive cold start failures. Site scheduled to be unblocked at 04/25/2026 14:54:31, DetailsLevel: WARN
+2026-04-25T14:55:55.4365282Z State: Starting, Action: StartingSiteContainers, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site is blocked due to multiple, consecutive cold start failures. Site scheduled to be unblocked at 04/25/2026 14:54:31, DetailsLevel: WARN
+2026-04-25T14:55:55.4367735Z Container start method called.
+2026-04-25T14:55:55.4369166Z State: Starting, Action: PullingImage, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Pulling image 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:55:55.4371098Z Establishing network.
+2026-04-25T14:55:55.4469117Z Pulling image: appsvc/node:20-lts_20260115.4.tuxprod.
+2026-04-25T14:55:55.5655057Z Container is starting.
+2026-04-25T14:55:55.5656829Z State: Starting, Action: MountingVolumes, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Mounting volumes for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:55:55.5660306Z Establishing user namespace if not established already.
+2026-04-25T14:55:55.5662339Z Establishing network if not established already.
+2026-04-25T14:55:55.5665097Z Mounting volumes.
+2026-04-25T14:55:55.5668947Z Nested mountpoint 
+2026-04-25T14:55:55.5680441Z Nested mountpoint volatile/logs
+2026-04-25T14:55:55.5692566Z Nested mountpoint 
+2026-04-25T14:55:55.5707389Z Nested mountpoint 
+2026-04-25T14:55:55.5810087Z Nested mountpoint 
+2026-04-25T14:55:55.7275294Z State: Starting, Action: CreatingContainer, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Finished pulling container image and mounting volumes for rac-fleet-2026. Allocatinng the rest of the container resources to finish container creation., DetailsLevel: INFO
+2026-04-25T14:55:55.7276563Z Creating container.
+2026-04-25T14:55:55.7277697Z Creating pipes for streaming container io.
+2026-04-25T14:55:55.7278760Z Creating stdout named pipe at /podr/container/pipe/2a8a7dc9e208_rac-fleet-2026/stdout_6ef2d146ab684e01b659cdfdd428f7e3.
+2026-04-25T14:55:55.7280859Z Successfully created stdout named pipe at: /podr/container/pipe/2a8a7dc9e208_rac-fleet-2026/stdout_6ef2d146ab684e01b659cdfdd428f7e3.
+2026-04-25T14:55:55.7281932Z Opening named pipe /podr/container/pipe/2a8a7dc9e208_rac-fleet-2026/stdout_6ef2d146ab684e01b659cdfdd428f7e3 for reading in non-blocking mode.
+2026-04-25T14:55:55.7283025Z Successfully opened named pipe: /podr/container/pipe/2a8a7dc9e208_rac-fleet-2026/stdout_6ef2d146ab684e01b659cdfdd428f7e3.
+2026-04-25T14:55:55.7283976Z Successfully removed non-blocking flag from /podr/container/pipe/2a8a7dc9e208_rac-fleet-2026/stdout_6ef2d146ab684e01b659cdfdd428f7e3.
+2026-04-25T14:55:55.7285457Z Creating stderr named pipe at /podr/container/pipe/2a8a7dc9e208_rac-fleet-2026/stderr_2e0dc8dffe0840b1a59f6a21e50ea347.
+2026-04-25T14:55:55.7286996Z Successfully created stderr named pipe at: /podr/container/pipe/2a8a7dc9e208_rac-fleet-2026/stderr_2e0dc8dffe0840b1a59f6a21e50ea347.
+2026-04-25T14:55:55.7288074Z Opening named pipe /podr/container/pipe/2a8a7dc9e208_rac-fleet-2026/stderr_2e0dc8dffe0840b1a59f6a21e50ea347 for reading in non-blocking mode.
+2026-04-25T14:55:55.7289235Z Successfully opened named pipe: /podr/container/pipe/2a8a7dc9e208_rac-fleet-2026/stderr_2e0dc8dffe0840b1a59f6a21e50ea347.
+2026-04-25T14:55:55.7290186Z Successfully removed non-blocking flag from /podr/container/pipe/2a8a7dc9e208_rac-fleet-2026/stderr_2e0dc8dffe0840b1a59f6a21e50ea347.
+2026-04-25T14:55:55.7291637Z Creating container with image: appsvc/node:20-lts_20260115.4.tuxprod from registry: 10.1.0.6:13209 and fully qualified image name: 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod
+2026-04-25T14:55:55.9653945Z Starting container: 2a8a7dc9e208_rac-fleet-2026.
+2026-04-25T14:55:55.9852399Z Starting watchers and probes.
+2026-04-25T14:55:55.9855085Z Starting metrics collection.
+2026-04-25T14:55:55.9856765Z Container is running.
+2026-04-25T14:55:55.9857801Z State: Starting, Action: CreatingContainer, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:55:56.0115107Z Container start method finished after 574 ms.
+2026-04-25T14:55:56.0126670Z State: Starting, Action: InitiatingSiteWarmUpProbe, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:55:56.0127001Z State: Starting, Action: WaitingForSiteWarmUpProbeSuccess, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Pinging warmup path to ensure container is ready to receive requests., DetailsLevel: INFO
+2026-04-25T14:56:03.2783515Z Container has finished running with exit code: 127.
+2026-04-25T14:56:03.2784911Z Container is terminating. Grace period: 5 seconds.
+2026-04-25T14:56:03.2811774Z Stop and delete container. Retry count = 0
+2026-04-25T14:56:03.2813245Z Stopping container: 2a8a7dc9e208_rac-fleet-2026.
+2026-04-25T14:56:03.3016490Z Deleting container: 2a8a7dc9e208_rac-fleet-2026. Retry count = 0
+2026-04-25T14:56:03.3720280Z Container spec TerminationMessagePolicy  path 
+2026-04-25T14:56:03.3725893Z Container is terminated. Total time elapsed: 93 ms.
+2026-04-25T14:56:03.3739685Z Site container: rac-fleet-2026 terminated during site startup.
+2026-04-25T14:56:03.3741359Z State: Stopping, Action: CancellingStartup, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:53:31, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:56:03.3760062Z Site startup probe failed after 7.3626716 seconds.
+2026-04-25T14:56:03.4410329Z State: Stopping, Action: CancellingStartup, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:56:03.4424007Z Failed to start site. Revert by stopping site.
+2026-04-25T14:56:03.4424908Z State: Stopping, Action: StoppingSite, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:56:03.4427033Z State: Stopping, Action: StoppingSiteContainers, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:56:03.4427190Z Site: rac-fleet-2026 stopped.
+2026-04-25T14:56:03.4494707Z State: Stopping, Action: UnmountingVolumes, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:56:03.5747007Z State: Stopping, Action: StoppingSiteNetworks, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:56:03.6281672Z Site: rac-fleet-2026 will be blocked for 1 minutes till 04/25/2026 14:57:03
+2026-04-25T14:56:03.6291132Z State: Blocked, Action: StoppingSiteNetworks, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site: rac-fleet-2026 will be blocked for 1 minutes till 04/25/2026 14:57:03, DetailsLevel: WARN
+2026-04-25T14:56:03.6294787Z State: Stopped, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site stopped at 04/25/2026 14:56:03 (UTC), DetailsLevel: WARN
+2026-04-25T14:56:03.6577450Z State: Stopped, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site stopped at 04/25/2026 14:56:03 (UTC), DetailsLevel: WARN
+2026-04-25T14:56:03.9389122Z State: Blocked, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site is blocked due to multiple, consecutive cold start failures. Site scheduled to be unblocked at 04/25/2026 14:57:03, DetailsLevel: WARN
+2026-04-25T14:56:03.9389499Z Start site prohibitted because the site is being blocked.
+2026-04-25T14:57:03.6284339Z Site: rac-fleet-2026 is unblocked.
+2026-04-25T14:57:17.1834238Z State: Starting, Action: EstablishingSiteNetworks, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site is blocked due to multiple, consecutive cold start failures. Site scheduled to be unblocked at 04/25/2026 14:57:03, DetailsLevel: WARN
+2026-04-25T14:57:17.4970519Z State: Starting, Action: StartingSiteContainers, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site is blocked due to multiple, consecutive cold start failures. Site scheduled to be unblocked at 04/25/2026 14:57:03, DetailsLevel: WARN
+2026-04-25T14:57:17.4976771Z Container start method called.
+2026-04-25T14:57:17.4977818Z State: Starting, Action: PullingImage, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Pulling image 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:57:17.4979224Z Establishing network.
+2026-04-25T14:57:17.4980799Z Pulling image: appsvc/node:20-lts_20260115.4.tuxprod.
+2026-04-25T14:57:17.6151706Z Container is starting.
+2026-04-25T14:57:17.6152587Z State: Starting, Action: MountingVolumes, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Mounting volumes for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:57:17.6153854Z Establishing user namespace if not established already.
+2026-04-25T14:57:17.6155107Z Establishing network if not established already.
+2026-04-25T14:57:17.6156531Z Mounting volumes.
+2026-04-25T14:57:17.6158311Z Nested mountpoint 
+2026-04-25T14:57:17.6177664Z Nested mountpoint volatile/logs
+2026-04-25T14:57:17.6237976Z Nested mountpoint 
+2026-04-25T14:57:17.6245982Z Nested mountpoint 
+2026-04-25T14:57:17.6255274Z Nested mountpoint 
+2026-04-25T14:57:17.7480385Z State: Starting, Action: CreatingContainer, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Finished pulling container image and mounting volumes for rac-fleet-2026. Allocatinng the rest of the container resources to finish container creation., DetailsLevel: INFO
+2026-04-25T14:57:17.7489844Z Creating container.
+2026-04-25T14:57:17.7491581Z Creating pipes for streaming container io.
+2026-04-25T14:57:17.7493410Z Creating stdout named pipe at /podr/container/pipe/981112774437_rac-fleet-2026/stdout_2742a4000c5f4de08de1c5da945956bb.
+2026-04-25T14:57:17.7495905Z Successfully created stdout named pipe at: /podr/container/pipe/981112774437_rac-fleet-2026/stdout_2742a4000c5f4de08de1c5da945956bb.
+2026-04-25T14:57:17.7497391Z Opening named pipe /podr/container/pipe/981112774437_rac-fleet-2026/stdout_2742a4000c5f4de08de1c5da945956bb for reading in non-blocking mode.
+2026-04-25T14:57:17.7499037Z Successfully opened named pipe: /podr/container/pipe/981112774437_rac-fleet-2026/stdout_2742a4000c5f4de08de1c5da945956bb.
+2026-04-25T14:57:17.7500534Z Successfully removed non-blocking flag from /podr/container/pipe/981112774437_rac-fleet-2026/stdout_2742a4000c5f4de08de1c5da945956bb.
+2026-04-25T14:57:17.7534045Z Creating stderr named pipe at /podr/container/pipe/981112774437_rac-fleet-2026/stderr_fbd9220458de4a2399727d16ccb6a2ed.
+2026-04-25T14:57:17.7536159Z Successfully created stderr named pipe at: /podr/container/pipe/981112774437_rac-fleet-2026/stderr_fbd9220458de4a2399727d16ccb6a2ed.
+2026-04-25T14:57:17.7537392Z Opening named pipe /podr/container/pipe/981112774437_rac-fleet-2026/stderr_fbd9220458de4a2399727d16ccb6a2ed for reading in non-blocking mode.
+2026-04-25T14:57:17.7538829Z Successfully opened named pipe: /podr/container/pipe/981112774437_rac-fleet-2026/stderr_fbd9220458de4a2399727d16ccb6a2ed.
+2026-04-25T14:57:17.7540195Z Successfully removed non-blocking flag from /podr/container/pipe/981112774437_rac-fleet-2026/stderr_fbd9220458de4a2399727d16ccb6a2ed.
+2026-04-25T14:57:17.7549502Z Creating container with image: appsvc/node:20-lts_20260115.4.tuxprod from registry: 10.1.0.6:13209 and fully qualified image name: 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod
+2026-04-25T14:57:17.9996097Z Starting container: 981112774437_rac-fleet-2026.
+2026-04-25T14:57:18.0250273Z Starting watchers and probes.
+2026-04-25T14:57:18.0252835Z Starting metrics collection.
+2026-04-25T14:57:18.0263147Z Container is running.
+2026-04-25T14:57:18.0268922Z State: Starting, Action: CreatingContainer, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:57:18.0516998Z Container start method finished after 553 ms.
+2026-04-25T14:57:18.0529633Z State: Starting, Action: InitiatingSiteWarmUpProbe, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:57:18.0541591Z State: Starting, Action: WaitingForSiteWarmUpProbeSuccess, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Pinging warmup path to ensure container is ready to receive requests., DetailsLevel: INFO
+2026-04-25T14:57:25.7201838Z Container has finished running with exit code: 127.
+2026-04-25T14:57:25.7203904Z Container is terminating. Grace period: 5 seconds.
+2026-04-25T14:57:25.7207490Z Stop and delete container. Retry count = 0
+2026-04-25T14:57:25.7208699Z Stopping container: 981112774437_rac-fleet-2026.
+2026-04-25T14:57:25.7430617Z Deleting container: 981112774437_rac-fleet-2026. Retry count = 0
+2026-04-25T14:57:25.8107763Z Container spec TerminationMessagePolicy  path 
+2026-04-25T14:57:25.8123166Z Container is terminated. Total time elapsed: 91 ms.
+2026-04-25T14:57:25.8124763Z Site container: rac-fleet-2026 terminated during site startup.
+2026-04-25T14:57:25.8125513Z State: Stopping, Action: CancellingStartup, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:56:03, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:57:25.8176580Z Site startup probe failed after 7.7627326 seconds.
+2026-04-25T14:57:25.8858688Z State: Stopping, Action: CancellingStartup, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:57:25.8907863Z Failed to start site. Revert by stopping site.
+2026-04-25T14:57:25.8909249Z State: Stopping, Action: StoppingSite, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:57:25.8912571Z State: Stopping, Action: StoppingSiteContainers, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:57:25.8912787Z Site: rac-fleet-2026 stopped.
+2026-04-25T14:57:25.8930768Z State: Stopping, Action: UnmountingVolumes, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:57:25.9612212Z State: Stopping, Action: StoppingSiteNetworks, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:57:26.0109356Z Site: rac-fleet-2026 will be blocked for 2 minutes till 04/25/2026 14:59:26
+2026-04-25T14:57:26.0122541Z State: Blocked, Action: StoppingSiteNetworks, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site: rac-fleet-2026 will be blocked for 2 minutes till 04/25/2026 14:59:26, DetailsLevel: WARN
+2026-04-25T14:57:26.0135704Z State: Stopped, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site stopped at 04/25/2026 14:57:26 (UTC), DetailsLevel: WARN
+2026-04-25T14:57:26.0558454Z State: Stopped, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site stopped at 04/25/2026 14:57:26 (UTC), DetailsLevel: WARN
+2026-04-25T14:57:26.2302067Z State: Blocked, Action: None, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site is blocked due to multiple, consecutive cold start failures. Site scheduled to be unblocked at 04/25/2026 14:59:26, DetailsLevel: WARN
+2026-04-25T14:57:26.2302346Z Start site prohibitted because the site is being blocked.
+2026-04-25T14:59:26.0125684Z Site: rac-fleet-2026 is unblocked.
+2026-04-25T14:59:32.4602617Z State: Starting, Action: EstablishingSiteNetworks, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site is blocked due to multiple, consecutive cold start failures. Site scheduled to be unblocked at 04/25/2026 14:59:26, DetailsLevel: WARN
+2026-04-25T14:59:32.9840090Z State: Starting, Action: StartingSiteContainers, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site is blocked due to multiple, consecutive cold start failures. Site scheduled to be unblocked at 04/25/2026 14:59:26, DetailsLevel: WARN
+2026-04-25T14:59:32.9841382Z Container start method called.
+2026-04-25T14:59:32.9841839Z State: Starting, Action: PullingImage, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Pulling image 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:59:32.9842926Z Establishing network.
+2026-04-25T14:59:32.9844217Z Pulling image: appsvc/node:20-lts_20260115.4.tuxprod.
+2026-04-25T14:59:33.1764533Z Container is starting.
+2026-04-25T14:59:33.1765805Z State: Starting, Action: MountingVolumes, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Mounting volumes for rac-fleet-2026., DetailsLevel: INFO
+2026-04-25T14:59:33.1767188Z Establishing user namespace if not established already.
+2026-04-25T14:59:33.1768581Z Establishing network if not established already.
+2026-04-25T14:59:33.1770530Z Mounting volumes.
+2026-04-25T14:59:33.1828839Z Nested mountpoint 
+2026-04-25T14:59:33.1840061Z Nested mountpoint volatile/logs
+2026-04-25T14:59:33.1951388Z Nested mountpoint 
+2026-04-25T14:59:33.1957659Z Nested mountpoint 
+2026-04-25T14:59:33.1970826Z Nested mountpoint 
+2026-04-25T14:59:33.3200602Z State: Starting, Action: CreatingContainer, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Finished pulling container image and mounting volumes for rac-fleet-2026. Allocatinng the rest of the container resources to finish container creation., DetailsLevel: INFO
+2026-04-25T14:59:33.3205978Z Creating container.
+2026-04-25T14:59:33.3212107Z Creating pipes for streaming container io.
+2026-04-25T14:59:33.3214790Z Creating stdout named pipe at /podr/container/pipe/f474340f3fb2_rac-fleet-2026/stdout_4b7b495cbc404a779bfca919e345d203.
+2026-04-25T14:59:33.3219174Z Successfully created stdout named pipe at: /podr/container/pipe/f474340f3fb2_rac-fleet-2026/stdout_4b7b495cbc404a779bfca919e345d203.
+2026-04-25T14:59:33.3220735Z Opening named pipe /podr/container/pipe/f474340f3fb2_rac-fleet-2026/stdout_4b7b495cbc404a779bfca919e345d203 for reading in non-blocking mode.
+2026-04-25T14:59:33.3222632Z Successfully opened named pipe: /podr/container/pipe/f474340f3fb2_rac-fleet-2026/stdout_4b7b495cbc404a779bfca919e345d203.
+2026-04-25T14:59:33.3224287Z Successfully removed non-blocking flag from /podr/container/pipe/f474340f3fb2_rac-fleet-2026/stdout_4b7b495cbc404a779bfca919e345d203.
+2026-04-25T14:59:33.3232606Z Creating stderr named pipe at /podr/container/pipe/f474340f3fb2_rac-fleet-2026/stderr_3874f022d4f749a3bf63d72aab1f37f9.
+2026-04-25T14:59:33.3237754Z Successfully created stderr named pipe at: /podr/container/pipe/f474340f3fb2_rac-fleet-2026/stderr_3874f022d4f749a3bf63d72aab1f37f9.
+2026-04-25T14:59:33.3241647Z Opening named pipe /podr/container/pipe/f474340f3fb2_rac-fleet-2026/stderr_3874f022d4f749a3bf63d72aab1f37f9 for reading in non-blocking mode.
+2026-04-25T14:59:33.3244857Z Successfully opened named pipe: /podr/container/pipe/f474340f3fb2_rac-fleet-2026/stderr_3874f022d4f749a3bf63d72aab1f37f9.
+2026-04-25T14:59:33.3246794Z Successfully removed non-blocking flag from /podr/container/pipe/f474340f3fb2_rac-fleet-2026/stderr_3874f022d4f749a3bf63d72aab1f37f9.
+2026-04-25T14:59:33.3250689Z Creating container with image: appsvc/node:20-lts_20260115.4.tuxprod from registry: 10.1.0.6:13209 and fully qualified image name: 10.1.0.6:13209/appsvc/node:20-lts_20260115.4.tuxprod
+2026-04-25T14:59:33.5089073Z Starting container: f474340f3fb2_rac-fleet-2026.
+2026-04-25T14:59:33.5569868Z Starting watchers and probes.
+2026-04-25T14:59:33.5572499Z Starting metrics collection.
+2026-04-25T14:59:33.5609170Z Container is running.
+2026-04-25T14:59:33.5611390Z State: Starting, Action: CreatingContainer, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:59:33.5959237Z Container start method finished after 611 ms.
+2026-04-25T14:59:33.5962001Z State: Starting, Action: InitiatingSiteWarmUpProbe, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Container rac-fleet-2026 successfully created and is running., DetailsLevel: INFO
+2026-04-25T14:59:33.5962524Z State: Starting, Action: WaitingForSiteWarmUpProbeSuccess, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Pinging warmup path to ensure container is ready to receive requests., DetailsLevel: INFO
+2026-04-25T14:59:42.0299541Z Container has finished running with exit code: 127.
+2026-04-25T14:59:42.0300881Z Container is terminating. Grace period: 5 seconds.
+2026-04-25T14:59:42.0305774Z Stop and delete container. Retry count = 0
+2026-04-25T14:59:42.0307111Z Stopping container: f474340f3fb2_rac-fleet-2026.
+2026-04-25T14:59:42.0486915Z Deleting container: f474340f3fb2_rac-fleet-2026. Retry count = 0
+2026-04-25T14:59:42.1527744Z Container spec TerminationMessagePolicy  path 
+2026-04-25T14:59:42.1531873Z Container is terminated. Total time elapsed: 122 ms.
+2026-04-25T14:59:42.1537181Z Site container: rac-fleet-2026 terminated during site startup.
+2026-04-25T14:59:42.1538267Z State: Stopping, Action: CancellingStartup, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:57:25, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:59:42.1713363Z Site startup probe failed after 8.5742136 seconds.
+2026-04-25T14:59:42.2663229Z State: Stopping, Action: CancellingStartup, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:59:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:59:42.2694657Z Failed to start site. Revert by stopping site.
+2026-04-25T14:59:42.2695919Z State: Stopping, Action: StoppingSite, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:59:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:59:42.2700076Z State: Stopping, Action: StoppingSiteContainers, LastError: ContainerTimeout, LastErrorTimestamp: 04/25/2026 14:59:42, LastErrorDetails: Container did not start within expected time limit of 230s. Please inspect your container logs for more details., Details: Site container: rac-fleet-2026 terminated during site startup. Cancelling site startup., DetailsLevel: ERR
+2026-04-25T14:59:42.2700258Z Site: rac-fleet-2026 stopped.
