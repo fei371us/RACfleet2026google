@@ -2,17 +2,15 @@ import { useState, FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { Shield, Lock, User, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-interface LoginPageProps {
-  onLoginSuccess: (user: any) => void;
-}
-
-export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
+export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
@@ -20,22 +18,10 @@ export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
     setError('');
 
     try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-
-      if (res.ok) {
-        const user = await res.json();
-        localStorage.setItem('fleet_user', JSON.stringify(user));
-        onLoginSuccess(user);
-        navigate('/');
-      } else {
-        setError('Authorization Failed. Invalid Credentials.');
-      }
-    } catch (err) {
-      setError('Communication Interrupted. Check Uplink.');
+      await login(username, password);
+      navigate('/');
+    } catch {
+      setError('Authorization Failed. Invalid Credentials.');
     } finally {
       setLoading(false);
     }

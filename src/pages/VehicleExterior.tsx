@@ -58,7 +58,7 @@ export default function VehicleExterior() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           job_id: id,
-          vehicle_id: job.vehicle_id,
+          vehicle_id: job.vehicleId,
           x,
           y,
           type: pinType,
@@ -203,7 +203,7 @@ export default function VehicleExterior() {
                   <Truck className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-primary uppercase tracking-tighter">Unit #{job?.vehicle_id}</div>
+                  <div className="text-xs font-bold text-primary uppercase tracking-tighter">Unit #{job?.vehicleId}</div>
                   <div className="font-headline font-bold text-on-surface">{job?.vehicle_name}</div>
                 </div>
               </div>

@@ -1,60 +1,59 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
-import { Truck, MapPin, Calendar, Clock, ChevronRight, X, ArrowRight, Settings, Fuel, Verified, Navigation } from 'lucide-react';
+import { useState } from 'react';
+import { Truck, MapPin, Calendar, X, ArrowRight, Settings, Navigation } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { JobType, Vehicle } from '../types';
 import { cn } from '../lib/utils';
+import { api } from '../lib/api';
+import { useVehicles } from '../hooks/useVehicles';
+
+const FIELD = "w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium";
 
 export default function CreateJob() {
   const navigate = useNavigate();
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [formData, setFormData] = useState({
-    id: `KF-${Math.floor(Math.random() * 9000) + 1000}`,
-    type: JobType.DELIVERY,
-    vehicle_id: '',
-    priority: 'standard',
-    location: '',
-    destination: '',
-    pickup_time: '',
-    instructions: '',
-    // New fields
-    job_date: new Date().toISOString().split('T')[0],
-    job_scope: '',
-    vehicle_number_out: '',
-    vehicle_number_in: '',
-    job_time: '',
-    company: '',
-    requester: '',
+  const { vehicles } = useVehicles();
+  const [jobType, setJobType] = useState<'SHUTTLER' | 'WORKSHOP'>('SHUTTLER');
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    priority:       'STANDARD',
+    vehicle_id:     '',
+    company:        '',
     contact_person: '',
     contact_number: '',
-    address: '',
-    remarks: ''
+    address:        '',
+    job_date:       new Date().toISOString().split('T')[0],
+    job_time:       '',
+    location:       '',
+    destination:    '',
+    job_scope:      '',
+    remarks:        '',
   });
 
-  useEffect(() => {
-    fetch('/api/vehicles')
-      .then(res => res.json())
-      .then(data => setVehicles(data));
-  }, []);
-
-  useEffect(() => {
-    if (formData.vehicle_id) {
-      const v = vehicles.find(v => v.id === formData.vehicle_id);
-      if (v) {
-        setFormData(prev => ({ ...prev, vehicle_number_out: v.plate }));
-      }
-    }
-  }, [formData.vehicle_id, vehicles]);
+  const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
+  const vehiclePlate = vehicles.find(v => v.id === form.vehicle_id)?.plate ?? '';
 
   const handleSubmit = async () => {
-    if (!formData.vehicle_id || !formData.company) return;
-    
-    await fetch('/api/jobs', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    });
-    navigate('/');
+    if (!form.vehicle_id || !form.company) return;
+    setSubmitting(true);
+    try {
+      await api.post('/api/jobs', {
+        type:               jobType,
+        priority:           form.priority,
+        vehicle_id:         form.vehicle_id,
+        company:            form.company,
+        contact_person:     form.contact_person,
+        contact_number:     form.contact_number,
+        address:            form.address,
+        job_date:           form.job_date,
+        job_time:           form.job_time,
+        location:           jobType === 'SHUTTLER' ? form.location    : undefined,
+        destination:        jobType === 'SHUTTLER' ? form.destination : undefined,
+        job_scope:          jobType === 'WORKSHOP'  ? form.job_scope  : undefined,
+        vehicle_number_out: vehiclePlate,
+        remarks:            form.remarks,
+      });
+      navigate('/requester');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -64,218 +63,183 @@ export default function CreateJob() {
           <button onClick={() => navigate(-1)} className="p-2 hover:bg-surface-container-high rounded-xl text-primary">
             <X size={24} />
           </button>
-          <h1 className="font-headline font-black text-lg tracking-tighter text-on-surface uppercase">kinetic fleet</h1>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="font-headline font-bold tracking-tight text-xs uppercase text-primary">New Job Request</span>
-          <div className="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden border-2 border-primary/20">
-            <img src="https://i.pravatar.cc/100?u=dispatcher" alt="Profile" />
-          </div>
+          <h1 className="font-headline font-black text-lg tracking-tighter text-on-surface uppercase">New Job Request</h1>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 pt-12 space-y-12 pb-24">
-        {/* Progress Stepper */}
-        <div className="flex items-end gap-2 mb-12">
-          <div className="flex flex-col gap-1">
-            <span className="text-primary font-headline font-extrabold text-4xl tracking-tighter">01</span>
-            <div className="h-1.5 w-12 bg-primary rounded-full"></div>
+      <main className="max-w-4xl mx-auto px-4 pt-8 space-y-10 pb-24">
+
+        {/* Job Type Toggle */}
+        <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-4">
+          <h2 className="font-headline font-bold text-2xl flex items-center gap-3">
+            <Truck className="text-primary" />
+            Job Type
+          </h2>
+          <div className="grid grid-cols-2 gap-4">
+            {(['SHUTTLER', 'WORKSHOP'] as const).map(t => (
+              <button
+                key={t}
+                onClick={() => setJobType(t)}
+                className={cn(
+                  "flex items-center justify-center gap-3 py-6 rounded-[2rem] font-black text-sm uppercase tracking-widest border-2 transition-all",
+                  jobType === t
+                    ? "bg-primary text-white border-primary shadow-lg shadow-primary/20"
+                    : "bg-surface-container border-outline-variant/20 text-on-surface-variant hover:border-primary/30"
+                )}
+              >
+                {t === 'SHUTTLER' ? <Truck size={20} /> : <Settings size={20} />}
+                {t}
+              </button>
+            ))}
           </div>
-          <div className="flex flex-col gap-1 opacity-20">
-            <span className="text-on-surface font-headline font-extrabold text-2xl tracking-tighter">02</span>
-            <div className="h-1.5 w-8 bg-on-surface rounded-full"></div>
-          </div>
-          <div className="ml-auto text-right">
-            <p className="text-on-surface-variant font-label text-[10px] uppercase tracking-[0.2em] font-bold">Current Phase</p>
-            <p className="font-headline font-bold text-xl text-on-surface">Data Entry</p>
-          </div>
-        </div>
+        </section>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Form */}
           <div className="lg:col-span-8 space-y-8">
-            
-            {/* Core Job Info */}
+
+            {/* Schedule */}
             <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
               <h2 className="font-headline font-bold text-2xl flex items-center gap-3">
                 <Calendar className="text-primary" />
-                Job Basics
+                Schedule &amp; Priority
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Date</label>
-                  <input 
-                    type="date"
-                    value={formData.job_date}
-                    onChange={(e) => setFormData({...formData, job_date: e.target.value})}
-                    className="w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium"
-                  />
+                  <input type="date" value={form.job_date} onChange={e => set('job_date', e.target.value)} className={FIELD} />
                 </div>
                 <div className="space-y-2">
                   <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Time</label>
-                  <input 
-                    type="time"
-                    value={formData.job_time}
-                    onChange={(e) => setFormData({...formData, job_time: e.target.value})}
-                    className="w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium"
-                  />
+                  <input type="time" value={form.job_time} onChange={e => set('job_time', e.target.value)} className={FIELD} />
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Job Scope</label>
-                <textarea 
-                  value={formData.job_scope}
-                  onChange={(e) => setFormData({...formData, job_scope: e.target.value})}
-                  placeholder="Summarize the work to be performed..."
-                  className="w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium h-24"
-                />
+                <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Priority</label>
+                <select value={form.priority} onChange={e => set('priority', e.target.value)} className={cn(FIELD, "appearance-none font-bold")}>
+                  {['LOW', 'STANDARD', 'HIGH', 'CRITICAL'].map(p => <option key={p} value={p}>{p}</option>)}
+                </select>
               </div>
             </section>
 
-            {/* Client Intelligence */}
+            {/* Company */}
             <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
               <h2 className="font-headline font-bold text-2xl flex items-center gap-3">
                 <Navigation className="text-primary" />
                 Company Details
               </h2>
               <div className="space-y-4">
-                 <div className="space-y-2">
-                    <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Company Name</label>
-                    <input 
-                      value={formData.company}
-                      onChange={(e) => setFormData({...formData, company: e.target.value})}
-                      placeholder="Enter company name..."
-                      className="w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium"
-                    />
-                 </div>
-                 <div className="space-y-2">
-                    <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Requester</label>
-                    <input 
-                      value={formData.requester}
-                      onChange={(e) => setFormData({...formData, requester: e.target.value})}
-                      placeholder="Who is requesting this job?"
-                      className="w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium"
-                    />
-                 </div>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Contact Person</label>
-                      <input 
-                        value={formData.contact_person}
-                        onChange={(e) => setFormData({...formData, contact_person: e.target.value})}
-                        className="w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Contact Number</label>
-                      <input 
-                        value={formData.contact_number}
-                        onChange={(e) => setFormData({...formData, contact_number: e.target.value})}
-                        className="w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium"
-                      />
-                    </div>
-                 </div>
-                 <div className="space-y-2">
+                <div className="space-y-2">
+                  <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Company Name</label>
+                  <input value={form.company} onChange={e => set('company', e.target.value)} placeholder="Enter company name..." className={FIELD} />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Contact Person</label>
+                    <input value={form.contact_person} onChange={e => set('contact_person', e.target.value)} className={FIELD} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Contact Number</label>
+                    <input value={form.contact_number} onChange={e => set('contact_number', e.target.value)} className={FIELD} />
+                  </div>
+                </div>
+                <div className="space-y-2">
                   <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Address</label>
-                  <input 
-                    value={formData.address}
-                    onChange={(e) => setFormData({...formData, address: e.target.value})}
-                    placeholder="Physical address..."
-                    className="w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium"
-                  />
+                  <input value={form.address} onChange={e => set('address', e.target.value)} placeholder="Physical address..." className={FIELD} />
                 </div>
               </div>
             </section>
 
-            {/* Vehicle Intelligence */}
-            <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Truck size={140} />
-              </div>
-              <div className="relative z-10">
-                <h2 className="font-headline font-bold text-2xl mb-6 flex items-center gap-3">
-                  <Truck className="text-primary" />
-                  Vehicle Intelligence
+            {/* Vehicle */}
+            <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none"><Truck size={140} /></div>
+              <h2 className="font-headline font-bold text-2xl flex items-center gap-3 relative z-10">
+                <Truck className="text-primary" />
+                Vehicle
+              </h2>
+              <select value={form.vehicle_id} onChange={e => set('vehicle_id', e.target.value)} className={cn(FIELD, "appearance-none font-headline font-bold text-lg relative z-10")}>
+                <option value="">Choose Vehicle...</option>
+                {vehicles.map(v => <option key={v.id} value={v.id}>{v.name} ({v.plate})</option>)}
+              </select>
+            </section>
+
+            {/* Shuttler route fields */}
+            {jobType === 'SHUTTLER' && (
+              <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
+                <h2 className="font-headline font-bold text-2xl flex items-center gap-3">
+                  <MapPin className="text-primary" />
+                  Route Details
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
                   <div className="space-y-2">
-                    <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Select Unit</label>
-                    <select 
-                      value={formData.vehicle_id}
-                      onChange={(e) => setFormData({...formData, vehicle_id: e.target.value})}
-                      className="w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 focus:bg-white focus:ring-2 focus:ring-primary/20 transition-all font-headline font-bold text-lg appearance-none"
-                    >
-                      <option value="">Choose Vehicle...</option>
-                      {vehicles.map(v => (
-                        <option key={v.id} value={v.id}>{v.name} ({v.plate})</option>
-                      ))}
-                    </select>
+                    <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Pickup Location</label>
+                    <input value={form.location} onChange={e => set('location', e.target.value)} placeholder="e.g. North Cargo Gate, Zone 7" className={FIELD} />
                   </div>
                   <div className="space-y-2">
-                    <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Vehicle Out</label>
-                    <input 
-                      value={formData.vehicle_number_out}
-                      onChange={(e) => setFormData({...formData, vehicle_number_out: e.target.value})}
-                      placeholder="Plate number out..."
-                      className="w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-headline font-bold"
-                    />
+                    <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Destination</label>
+                    <input value={form.destination} onChange={e => set('destination', e.target.value)} placeholder="e.g. Central Distribution Center" className={FIELD} />
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            )}
+
+            {/* Workshop scope fields */}
+            {jobType === 'WORKSHOP' && (
+              <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
+                <h2 className="font-headline font-bold text-2xl flex items-center gap-3">
+                  <Settings className="text-primary" />
+                  Workshop Scope
+                </h2>
+                <div className="space-y-2">
+                  <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Work Scope</label>
+                  <textarea value={form.job_scope} onChange={e => set('job_scope', e.target.value)} placeholder="Describe the maintenance or repair work required..." className={cn(FIELD, "h-32")} />
+                </div>
+              </section>
+            )}
 
             {/* Remarks */}
             <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-2">
-               <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Final Remarks</label>
-               <textarea 
-                  value={formData.remarks}
-                  onChange={(e) => setFormData({...formData, remarks: e.target.value})}
-                  placeholder="Additional notes, special instructions, or observations..."
-                  className="w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium h-32"
-                />
+              <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Remarks</label>
+              <textarea value={form.remarks} onChange={e => set('remarks', e.target.value)} placeholder="Additional notes or instructions..." className={cn(FIELD, "h-28")} />
             </section>
           </div>
 
-          {/* Right Column: Summary Card */}
-          <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-28">
+          {/* Preview card */}
+          <aside className="lg:col-span-4 lg:sticky lg:top-28">
             <div className="bg-primary text-white rounded-[2.5rem] p-8 shadow-xl overflow-hidden relative">
-              <div className="absolute -right-10 -bottom-10 opacity-10">
-                <Verified size={200} />
-              </div>
-              <p className="font-label text-[10px] uppercase tracking-[0.2em] font-bold opacity-60 mb-6">Request Preview</p>
-              <div className="space-y-6">
-                <div className="flex justify-between items-end border-b border-white/10 pb-3">
-                  <span className="text-[10px] uppercase font-bold opacity-70">Company</span>
-                  <span className="font-headline font-bold text-sm truncate max-w-[120px]">
-                    {formData.company || '---'}
-                  </span>
-                </div>
-                <div className="flex justify-between items-end border-b border-white/10 pb-3">
-                  <span className="text-[10px] uppercase font-bold opacity-70">Date</span>
-                  <span className="font-headline font-bold text-sm">{formData.job_date || '---'}</span>
-                </div>
-                <div className="flex justify-between items-end border-b border-white/10 pb-3">
-                   <span className="text-[10px] uppercase font-bold opacity-70">Ref</span>
-                   <span className="font-headline font-bold text-sm">{formData.id}</span>
-                </div>
+              <div className="absolute -right-10 -bottom-10 opacity-10 pointer-events-none"><Truck size={200} /></div>
+              <p className="font-label text-[10px] uppercase tracking-[0.2em] font-bold opacity-60 mb-6">Preview</p>
+              <div className="space-y-4">
+                {[
+                  { label: 'Type',     value: jobType },
+                  { label: 'Company',  value: form.company || '---' },
+                  { label: 'Date',     value: form.job_date || '---' },
+                  { label: 'Vehicle',  value: vehiclePlate || '---' },
+                  { label: 'Priority', value: form.priority },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex justify-between items-end border-b border-white/10 pb-3">
+                    <span className="text-[10px] uppercase font-bold opacity-70">{label}</span>
+                    <span className="font-headline font-bold text-sm truncate max-w-[130px]">{value}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </aside>
         </div>
       </main>
 
-      <div className="fixed bottom-0 left-0 w-full glass-panel border-t border-outline-variant/15 z-40 px-6 py-6 ring-1 ring-black/5">
+      <div className="fixed bottom-0 left-0 w-full glass-panel border-t border-outline-variant/15 z-40 px-6 py-6">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-6">
-           <button onClick={() => navigate(-1)} className="text-on-surface-variant font-label font-bold uppercase text-[10px] tracking-[0.2em] hover:text-primary transition-colors">
-             Discard Request
-           </button>
-           <button 
-             onClick={handleSubmit}
-             className="flex-1 max-w-md gradient-btn py-5 rounded-2xl flex items-center justify-center gap-3"
-           >
-              <span className="font-label font-black uppercase tracking-[0.2em] text-sm">Create Job</span>
-              <ArrowRight size={20} />
-           </button>
+          <button onClick={() => navigate(-1)} className="text-on-surface-variant font-label font-bold uppercase text-[10px] tracking-[0.2em] hover:text-primary transition-colors">
+            Discard
+          </button>
+          <button
+            disabled={!form.vehicle_id || !form.company || submitting}
+            onClick={handleSubmit}
+            className="flex-1 max-w-md gradient-btn py-5 rounded-2xl flex items-center justify-center gap-3 disabled:opacity-50"
+          >
+            <span className="font-label font-black uppercase tracking-[0.2em] text-sm">{submitting ? 'Creating...' : 'Create Job'}</span>
+            <ArrowRight size={20} />
+          </button>
         </div>
       </div>
     </div>

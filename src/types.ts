@@ -1,82 +1,117 @@
 export enum JobType {
-  DELIVERY = 'Delivery',
-  WORKSHOP = 'Workshop',
-  REFILL = 'Refill'
+  SHUTTLER = 'SHUTTLER',
+  WORKSHOP = 'WORKSHOP',
 }
 
 export enum JobStatus {
-  PENDING = 'pending',
-  IN_TRANSIT = 'in_transit',
-  DELIVERED = 'delivered',
-  DELAYED = 'delayed',
-  COMPLETED = 'completed'
+  PENDING     = 'PENDING',
+  ASSIGNED    = 'ASSIGNED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED   = 'COMPLETED',
+  CANCELLED   = 'CANCELLED',
+}
+
+export enum JobPriority {
+  LOW      = 'LOW',
+  STANDARD = 'STANDARD',
+  HIGH     = 'HIGH',
+  CRITICAL = 'CRITICAL',
 }
 
 export enum UserRole {
-  REQUESTER = 'requester',
-  FLEET_CONTROL = 'fleet_control',
+  REQUESTER                = 'requester',
+  FLEET_CONTROL            = 'fleet_control',
   FLEET_CONTROL_SUPERVISOR = 'fleet_control_supervisor',
-  WORKSHOP_ADVISER = 'workshop_adviser',
-  ADMIN = 'admin',
-  DRIVER = 'driver'
+  WORKSHOP_ADVISER         = 'workshop_adviser',
+  ADMIN                    = 'admin',
+  DRIVER                   = 'driver',
 }
 
 export interface User {
   id: string;
   username: string;
-  password?: string;
-  role: UserRole;
+  role: string;
   name: string;
-  created_at: string;
+  createdAt?: string;
+}
+
+export interface ChecklistItem {
+  id: number;
+  task: string;
+  verified: boolean;
 }
 
 export interface Job {
-  id: string;
-  type: JobType;
-  status: JobStatus;
-  priority: 'low' | 'standard' | 'high' | 'critical';
-  vehicle_id: string;
+  id: string;           // = reference (e.g. KF-1401), surfaced by flattenJob
+  reference: string;
+  type: string;         // 'SHUTTLER' | 'WORKSHOP'
+  status: string;       // 'PENDING' | 'ASSIGNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'
+  priority: string;     // 'LOW' | 'STANDARD' | 'HIGH' | 'CRITICAL'
+  vehicleId?: string;
+  driverId?: string;
+  requesterId?: string;
+  workshopAdviserId?: string;
+
+  // snake_case aliases surfaced by flattenJob
   vehicle_name?: string;
   vehicle_plate?: string;
-  driver_name: string;
-  location: string;
-  pickup_time: string;
-  destination: string;
-  instructions: string;
-  eta: string;
+  driver_name?: string;
   driver_note?: string;
-  created_at: string;
-  // New fields
-  job_date: string;
-  job_scope: string;
-  vehicle_number_out: string;
+  job_date?: string;
+  job_scope?: string;
+  vehicle_number_out?: string;
   vehicle_number_in?: string;
-  job_time: string;
-  company: string;
-  requester: string;
-  contact_person: string;
-  contact_number: string;
-  address: string;
-  remarks: string;
+  job_time?: string;
+  contact_person?: string;
+  contact_number?: string;
+  created_at?: string;
+
+  // Direct fields
+  company?: string;
+  address?: string;
+  location?: string;
+  destination?: string;
+  instructions?: string;
+  remarks?: string;
+  workPerformed?: string;
+  checklist?: ChecklistItem[];
+
+  // Legacy / display aliases
+  pickup_time?: string;
+  requester?: string;
+  eta?: string;
 }
 
 export interface Vehicle {
   id: string;
   name: string;
   plate: string;
-  last_inspection: string;
+  lastInspection?: string;
+  last_inspection?: string;
   status: string;
   lat: number;
   lng: number;
 }
 
+export interface WorkshopBay {
+  id: string;
+  name: string;
+  category: string;
+  status: string;
+  currentJobId?: string;
+  technician?: string;
+}
+
 export interface InspectionPin {
   id?: number;
-  job_id: string;
-  vehicle_id: string;
+  jobId?: string;
+  job_id?: string;
+  vehicleId?: string;
+  vehicle_id?: string;
   x: number;
   y: number;
-  type: 'critical' | 'cosmetic' | 'preexisting';
-  note: string;
+  type: string;
+  note?: string;
+  photoUrl?: string;
   photo_url?: string;
 }

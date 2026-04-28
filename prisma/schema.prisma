@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  role         String   // admin|requester|fleet_control|fleet_control_supervisor|workshop_adviser|driver
+  name         String
+  createdAt    DateTime @default(now())
+
+  driverJobs          Job[] @relation("DriverJobs")
+  workshopAdviserJobs Job[] @relation("AdviserJobs")
+  requesterJobs       Job[] @relation("RequesterJobs")
+}
+
+model Vehicle {
+  id             String    @id @default(cuid())
+  name           String
+  plate          String    @unique
+  lastInspection DateTime?
+  status         String    @default("active")
+  lat            Float     @default(0)
+  lng            Float     @default(0)
+
+  jobs Job[]
+  pins InspectionPin[]
+}
+
+model Job {
+  id        String @id @default(cuid())
+  reference String @unique
+  type      String // SHUTTLER | WORKSHOP
+  status    String @default("PENDING") // PENDING|ASSIGNED|IN_PROGRESS|COMPLETED|CANCELLED
+  priority  String @default("STANDARD") // LOW|STANDARD|HIGH|CRITICAL
+
+  vehicleId String
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+
+  driverId String?
+  driver   User?   @relation("DriverJobs", fields: [driverId], references: [id])
+
+  workshopAdviserId String?
+  workshopAdviser   User?   @relation("AdviserJobs", fields: [workshopAdviserId], references: [id])
+
+  requesterId String
+  requester   User   @relation("RequesterJobs", fields: [requesterId], references: [id])
+
+  jobDate    DateTime?
+  jobTime    String?
+  pickupTime String?
+  eta        String?
+
+  location    String?
+  destination String?
+
+  workScope     String?
+  workPerformed String?
+  bayId         String?
+
+  vehicleNumberOut String?
+  vehicleNumberIn  String?
+
+  company       String?
+  contactPerson String?
+  contactNumber String?
+  address       String?
+
+  instructions String?
+  driverNote   String?
+  remarks      String?
+
+  checklist String? // JSON string: [{id,task,verified,verifiedAt}]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  pins InspectionPin[]
+
+  @@index([status])
+  @@index([type])
+  @@index([driverId])
+  @@index([workshopAdviserId])
+  @@index([requesterId])
+}
+
+model InspectionPin {
+  id        Int     @id @default(autoincrement())
+  jobId     String
+  job       Job     @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  vehicleId String
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+
+  x        Float
+  y        Float
+  type     String  // CRITICAL | COSMETIC | PREEXISTING
+  note     String?
+  photoUrl String?
+
+  createdAt DateTime @default(now())
+}
+
+model WorkshopBay {
+  id           String  @id @default(cuid())
+  name         String  @unique
+  category     String  // heavy_duty | routine | quick_ops | special
+  status       String  @default("available") // available | occupied | maintenance
+  currentJobId String?
+  technician   String?
+}
