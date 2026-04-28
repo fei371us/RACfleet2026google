@@ -1,11 +1,10 @@
 import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
+import { getDb, sql } from './sql.js';
 import { hashPassword } from '../utils/password.js';
-
-const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌱 Seeding database...');
+  const db = await getDb();
 
   const users = [
     { username: 'admin',      password: 'admin123',  role: 'admin',                    name: 'System Admin' },
@@ -16,21 +15,34 @@ async function main() {
     { username: 'driver',     password: 'drive123',  role: 'driver',                   name: 'Alex Rivera' },
   ];
   for (const u of users) {
-    await prisma.user.upsert({
-      where: { username: u.username },
-      update: {},
-      create: { username: u.username, passwordHash: await hashPassword(u.password), role: u.role, name: u.name },
-    });
+    const id = crypto.randomUUID();
+    const hash = await hashPassword(u.password);
+    await db.request()
+      .input('id',   sql.NVarChar, id)
+      .input('un',   sql.NVarChar, u.username)
+      .input('hash', sql.NVarChar, hash)
+      .input('role', sql.NVarChar, u.role)
+      .input('name', sql.NVarChar, u.name)
+      .query(`MERGE Users AS t USING (SELECT @un AS username) AS s ON t.username = s.username
+              WHEN NOT MATCHED THEN INSERT (id, username, passwordHash, role, name) VALUES (@id, @un, @hash, @role, @name);`);
   }
   console.log(`✅ ${users.length} users seeded`);
 
   const vehicles = [
-    { id: 'V-402', name: 'Freight-liner M2 106', plate: 'KF-992-TX', status: 'active', lat: 29.7604, lng: -95.3698, lastInspection: new Date('2026-04-20') },
-    { id: 'V-118', name: 'Sprinter Van 419',     plate: 'KF-884-TX', status: 'active', lat: 29.8000, lng: -95.4000, lastInspection: new Date('2026-04-22') },
-    { id: 'V-089', name: 'Peterbilt 579',        plate: 'KNC-2938',  status: 'active', lat: 29.7200, lng: -95.3500, lastInspection: new Date('2026-04-24') },
+    { id: 'V-402', name: 'Freight-liner M2 106', plate: 'KF-992-TX', lat: 29.7604, lng: -95.3698, lastInspection: new Date('2026-04-20') },
+    { id: 'V-118', name: 'Sprinter Van 419',     plate: 'KF-884-TX', lat: 29.8000, lng: -95.4000, lastInspection: new Date('2026-04-22') },
+    { id: 'V-089', name: 'Peterbilt 579',        plate: 'KNC-2938',  lat: 29.7200, lng: -95.3500, lastInspection: new Date('2026-04-24') },
   ];
   for (const v of vehicles) {
-    await prisma.vehicle.upsert({ where: { plate: v.plate }, update: {}, create: v });
+    await db.request()
+      .input('id',   sql.NVarChar,  v.id)
+      .input('name', sql.NVarChar,  v.name)
+      .input('plate',sql.NVarChar,  v.plate)
+      .input('lat',  sql.Float,     v.lat)
+      .input('lng',  sql.Float,     v.lng)
+      .input('ins',  sql.DateTime2, v.lastInspection)
+      .query(`MERGE Vehicles AS t USING (SELECT @plate AS plate) AS s ON t.plate = s.plate
+              WHEN NOT MATCHED THEN INSERT (id, name, plate, status, lat, lng, lastInspection) VALUES (@id, @name, @plate, 'active', @lat, @lng, @ins);`);
   }
   console.log(`✅ ${vehicles.length} vehicles seeded`);
 
@@ -41,31 +53,52 @@ async function main() {
     { name: 'Bay 04 - Special',    category: 'special',    status: 'maintenance' },
   ];
   for (const b of bays) {
-    await prisma.workshopBay.upsert({ where: { name: b.name }, update: {}, create: b });
+    const id = crypto.randomUUID();
+    await db.request()
+      .input('id',  sql.NVarChar, id)
+      .input('name',sql.NVarChar, b.name)
+      .input('cat', sql.NVarChar, b.category)
+      .input('st',  sql.NVarChar, b.status)
+      .query(`MERGE WorkshopBays AS t USING (SELECT @name AS name) AS s ON t.name = s.name
+              WHEN NOT MATCHED THEN INSERT (id, name, category, status) VALUES (@id, @name, @cat, @st);`);
   }
   console.log(`✅ ${bays.length} workshop bays seeded`);
 
-  const requesterUser = await prisma.user.findUnique({ where: { username: 'requester' } });
-  const driverUser    = await prisma.user.findUnique({ where: { username: 'driver' } });
-  const v402 = await prisma.vehicle.findUnique({ where: { plate: 'KF-992-TX' } });
-  const v118 = await prisma.vehicle.findUnique({ where: { plate: 'KF-884-TX' } });
-  const v089 = await prisma.vehicle.findUnique({ where: { plate: 'KNC-2938' } });
+  const reqRow = await db.request().input('u', sql.NVarChar, 'requester').query('SELECT id FROM Users WHERE username = @u');
+  const drvRow = await db.request().input('u', sql.NVarChar, 'driver').query('SELECT id FROM Users WHERE username = @u');
+  const requesterId = reqRow.recordset[0]?.id;
+  const driverId    = drvRow.recordset[0]?.id ?? null;
 
-  if (requesterUser && v402 && v118 && v089) {
+  if (requesterId) {
     const sampleJobs = [
-      { reference: 'KF-1401', type: 'SHUTTLER', status: 'PENDING',  priority: 'HIGH',     vehicleId: v402.id, location: 'North Cargo Gate, Zone 7',  destination: 'Central Distribution Center', company: 'Atlas Logistics',   jobDate: new Date('2026-04-28') },
-      { reference: 'KF-1402', type: 'WORKSHOP', status: 'ASSIGNED', priority: 'STANDARD', vehicleId: v118.id, workScope: 'Brake noise diagnosis',     company: 'Internal Fleet',    driverId: driverUser?.id, jobDate: new Date('2026-04-28') },
-      { reference: 'KF-1403', type: 'SHUTTLER', status: 'PENDING',  priority: 'CRITICAL', vehicleId: v089.id, location: 'East Transit Hub, Pump 4',   destination: 'Route 12 standby lot',        company: 'Thorne Transports', jobDate: new Date('2026-04-28') },
+      { ref: 'KF-1401', type: 'SHUTTLER', status: 'PENDING',  priority: 'HIGH',     vid: 'V-402', driverId: null,     company: 'Atlas Logistics',   location: 'North Cargo Gate, Zone 7', destination: 'Central Distribution Center', workScope: null,                   jobDate: new Date('2026-04-28') },
+      { ref: 'KF-1402', type: 'WORKSHOP', status: 'ASSIGNED', priority: 'STANDARD', vid: 'V-118', driverId: driverId, company: 'Internal Fleet',    location: null,                       destination: null,                          workScope: 'Brake noise diagnosis', jobDate: new Date('2026-04-28') },
+      { ref: 'KF-1403', type: 'SHUTTLER', status: 'PENDING',  priority: 'CRITICAL', vid: 'V-089', driverId: null,     company: 'Thorne Transports', location: 'East Transit Hub, Pump 4', destination: 'Route 12 standby lot',        workScope: null,                   jobDate: new Date('2026-04-28') },
     ];
     for (const j of sampleJobs) {
-      await prisma.job.upsert({ where: { reference: j.reference }, update: {}, create: { ...j, requesterId: requesterUser.id } });
+      const id = crypto.randomUUID();
+      await db.request()
+        .input('id',  sql.NVarChar,  id)
+        .input('ref', sql.NVarChar,  j.ref)
+        .input('type',sql.NVarChar,  j.type)
+        .input('st',  sql.NVarChar,  j.status)
+        .input('pri', sql.NVarChar,  j.priority)
+        .input('vid', sql.NVarChar,  j.vid)
+        .input('rid', sql.NVarChar,  requesterId)
+        .input('did', sql.NVarChar,  j.driverId)
+        .input('co',  sql.NVarChar,  j.company ?? null)
+        .input('loc', sql.NVarChar,  j.location ?? null)
+        .input('dst', sql.NVarChar,  j.destination ?? null)
+        .input('ws',  sql.NVarChar,  j.workScope ?? null)
+        .input('jd',  sql.DateTime2, j.jobDate)
+        .query(`MERGE Jobs AS t USING (SELECT @ref AS reference) AS s ON t.reference = s.reference
+                WHEN NOT MATCHED THEN INSERT (id, reference, type, status, priority, vehicleId, requesterId, driverId, company, location, destination, workScope, jobDate)
+                VALUES (@id, @ref, @type, @st, @pri, @vid, @rid, @did, @co, @loc, @dst, @ws, @jd);`);
     }
-    console.log(`✅ 3 sample jobs seeded`);
+    console.log('✅ 3 sample jobs seeded');
   }
 
   console.log('✅ Seed complete');
 }
 
-main()
-  .catch(e => { console.error(e); process.exit(1); })
-  .finally(() => prisma.$disconnect());
+main().catch(e => { console.error(e); process.exit(1); });

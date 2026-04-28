@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import { prisma } from '../db/prisma.js';
+import { getDb, sql } from '../db/sql.js';
 import { verifyPassword } from '../utils/password.js';
 import { signToken } from '../utils/jwt.js';
 import { requireAuth, AuthedRequest } from '../middleware/auth.js';
@@ -17,7 +17,12 @@ router.post('/login', async (req: Request, res: Response) => {
   const body = validate(loginSchema, req.body, res);
   if (!body) return;
 
-  const user = await prisma.user.findUnique({ where: { username: body.username } });
+  const db = await getDb();
+  const result = await db.request()
+    .input('username', sql.NVarChar, body.username)
+    .query('SELECT id, username, passwordHash, role, name, createdAt FROM Users WHERE username = @username');
+
+  const user = result.recordset[0];
   if (!user) { res.status(401).json({ error: 'Invalid credentials' }); return; }
 
   const valid = await verifyPassword(body.password, user.passwordHash);
