@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Read(//c/Users/fei/.claude/plans/**)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(gh pr *)"
     ]
   }
 }
