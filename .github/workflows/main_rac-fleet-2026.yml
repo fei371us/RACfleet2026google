@@ -29,14 +29,6 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
-      - name: Generate Prisma client
-        run: npx prisma generate
-
-      - name: Run DB migrations
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npx prisma migrate deploy
-
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:

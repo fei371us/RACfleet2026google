@@ -3,7 +3,6 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import path from 'path';
 import { config } from './config.js';
-import { prisma } from './db/prisma.js';
 import { initTelemetry } from './realtime/telemetry.js';
 import { errorHandler } from './middleware/error.js';
 import authRouter from './routes/auth.js';
@@ -46,7 +45,7 @@ async function startServer() {
     app.get('*', (_req, res) => res.sendFile(path.join(distPath, 'index.html')));
   }
 
-  initTelemetry(io, prisma);
+  initTelemetry(io);
 
   httpServer.listen(config.port, '0.0.0.0', () => {
     console.log(`✅ Server running on http://localhost:${config.port}`);

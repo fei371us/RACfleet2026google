@@ -1,0 +1,8 @@
+<step title="Incoming Request" date="2026-04-25T14:28:09.186" instance="00f4b9" url="/api/deployments/latest?deployer=OneDeploy&amp;time=2026-04-25_14-28-08Z" method="GET" type="request" pid="831,1,19" Host="rac-fleet-2026.scm.azurewebsites.net" User-Agent="GITHUBACTIONS_DeployWebAppToAzure_d743d9b37b49b6df46118958ff5691a8a7baecd92a160b9b0bdf6b06702946b1_v3.0.8" Authorization="Bea..." Content-Type="application/json; charset=utf-8" Cookie="ARRAffinity=00f4b9c2bc7bbba7dd3f25ee0118b3064f2c6a0aa49b4cae0902f270f1737d89; ARRAffinitySameSite=00f4b9c2bc7bbba7dd3f25ee0118b3064f2c6a0aa49b4cae0902f270f1737d89" Content-Length="0" X-ARR-LOG-ID="fb2557cb-bf8b-45f5-a6c8-d230924177dc" CLIENT-IP="52.165.213.177:10240" X-SITE-DEPLOYMENT-ID="rac-fleet-2026" WAS-DEFAULT-HOSTNAME="rac-fleet-2026.scm.azurewebsites.net" X-Forwarded-Proto="https" X-AppService-Proto="https" X-Forwarded-TlsVersion="1.3" X-WAWS-Unencoded-URL="/api/deployments/latest?deployer=OneDeploy&amp;time=2026-04-25_14-28-08Z" X-Client-IP="52.165.213.177" X-Client-Port="10240" >
+  <step title="DeploymentService.GetResult" date="2026-04-25T14:28:09.196" >
+    <step title="DeploymentService.GetLatestDeployment" date="2026-04-25T14:28:09.199" >
+      <step title="DeploymentManager.GetResults" date="2026-04-25T14:28:09.205" /><!-- duration: 179ms -->
+    </step><!-- duration: 191ms -->
+  </step><!-- duration: 201ms -->
+  <step title="Outgoing response" date="2026-04-25T14:28:09.412" type="response" statusCode="202" statusText="Accepted" /><!-- duration: 5ms -->
+</step><!-- duration: 235ms -->
