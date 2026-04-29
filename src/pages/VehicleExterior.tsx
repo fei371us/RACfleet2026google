@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft, ChevronRight, Plus, Search, Truck } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Job, InspectionPin } from '../types';
+import { api } from '../lib/api';
 
 type PinType = InspectionPin['type'];
 
@@ -25,8 +26,7 @@ export default function VehicleExterior() {
   const [busyPinId, setBusyPinId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`/api/jobs/${id}`)
-      .then((res) => res.json())
+    api.get<Job>(`/api/jobs/${id}`)
       .then((data) => {
         setJob(data);
         const existingPins: UiPin[] = (data.pins || []).map((p: InspectionPin) => ({

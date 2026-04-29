@@ -4,6 +4,7 @@ import { Truck, Clock, ShieldCheck, Plus, Map as MapIcon, Bell, Filter, MessageS
 import { Link } from 'react-router-dom';
 import { Job, JobStatus } from '../types';
 import { cn } from '../lib/utils';
+import { api } from '../lib/api';
 import FleetMapView from '../components/FleetMapView';
 
 export default function DispatcherDashboard() {
@@ -20,8 +21,7 @@ export default function DispatcherDashboard() {
   });
 
   useEffect(() => {
-    fetch('/api/jobs')
-      .then(res => res.json())
+    api.get<Job[]>('/api/jobs')
       .then(data => {
         setJobs(data);
         setLoading(false);

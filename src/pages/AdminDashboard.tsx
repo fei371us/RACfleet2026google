@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Shield, UserPlus, Trash2, Key, User, ShieldCheck, Mail, ChevronRight, X, AlertCircle } from 'lucide-react';
 import { User as UserType, UserRole } from '../types';
 import { cn } from '../lib/utils';
+import { api } from '../lib/api';
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState<UserType[]>([]);
@@ -16,8 +17,7 @@ export default function AdminDashboard() {
   });
 
   useEffect(() => {
-    fetch('/api/users')
-      .then(res => res.json())
+    api.get<UserType[]>('/api/users')
       .then(data => {
         setUsers(data);
         setLoading(false);
@@ -31,23 +31,24 @@ export default function AdminDashboard() {
       ...formData
     };
 
-    const res = await fetch('/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newUser)
-    });
-
-    if (res.ok) {
+    try {
+      await api.post('/api/users', newUser);
       setUsers([...users, { ...newUser, created_at: new Date().toISOString() }]);
       setIsModalOpen(false);
       setFormData({ username: '', password: '', name: '', role: UserRole.REQUESTER });
+    } catch (error) {
+      console.error('Failed to create user:', error);
     }
   };
 
   const handleDeleteUser = async (id: string) => {
     if (confirm('Are you sure you want to delete this user? Access will be immediately revoked.')) {
-      await fetch(`/api/users/${id}`, { method: 'DELETE' });
-      setUsers(users.filter(u => u.id !== id));
+      try {
+        await api.delete(`/api/users/${id}`);
+        setUsers(users.filter(u => u.id !== id));
+      } catch (error) {
+        console.error('Failed to delete user:', error);
+      }
     }
   };
 

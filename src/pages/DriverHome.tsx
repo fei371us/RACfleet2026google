@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Truck, Clock, Timer, Navigation, Map as MapIcon, MoreVertical, ChevronRight, MapPin, Package, Settings, User, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Job, JobStatus } from '../types';
+import { api } from '../lib/api';
 
 export default function DriverHome() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -12,8 +13,7 @@ export default function DriverHome() {
   const [user, setUser] = useState<{ name: string } | null>(null);
 
   const fetchJobs = () => {
-    fetch('/api/jobs')
-      .then(res => res.json())
+    api.get<Job[]>('/api/jobs')
       .then(data => {
         const savedUser = localStorage.getItem('fleet_user');
         if (savedUser) {
@@ -33,11 +33,7 @@ export default function DriverHome() {
 
   const handleUpdateStatus = async (jobId: string, newStatus: JobStatus) => {
     try {
-      await fetch(`/api/jobs/${jobId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
-      });
+      await api.patch(`/api/jobs/${jobId}`, { status: newStatus });
       fetchJobs();
     } catch (error) {
       console.error('Failed to update status:', error);
