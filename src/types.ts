@@ -3,6 +3,22 @@ export enum JobType {
   WORKSHOP = 'WORKSHOP',
 }
 
+export enum ShuttlerSubType {
+  DELIVERY = 'Delivery / Collection / Transfer Cars (MBS)',
+  SWITCHING = 'Switching & Collection',
+  WASH = 'Wash Car',
+  FETCH_SEND = 'Fetch / Send Shuttler',
+  DISPATCH = 'Dispatch / Mailing / Banking',
+  TRANSFER_PIONEER = 'Transfer Cars (Pioneer Crescent)',
+  CHECK_IN_OUT = 'Check In / Out Vehicle',
+  REFUEL = 'Refuel Petrol / Diesel',
+  LTA_INSPECTION = 'LTA Inspection',
+  BATTERY = 'Change Vehicles Battery',
+  LIGHT_WIPER = 'Change Light Bulb / Wiper / Remote Battery',
+  ERRANDS = 'Errands',
+  OTHERS = 'Others',
+}
+
 export enum JobStatus {
   PENDING     = 'PENDING',
   ASSIGNED    = 'ASSIGNED',
@@ -45,6 +61,7 @@ export interface Job {
   id: string;           // = reference (e.g. KF-1401), surfaced by flattenJob
   reference: string;
   type: string;         // 'SHUTTLER' | 'WORKSHOP'
+  shuttlerSubType?: string; // SHUTTLER job sub-type (Delivery, Washing, etc.)
   status: string;       // 'PENDING' | 'ASSIGNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'
   priority: string;     // 'LOW' | 'STANDARD' | 'HIGH' | 'CRITICAL'
   vehicleId?: string;
@@ -59,6 +76,7 @@ export interface Job {
   driver_note?: string;
   job_date?: string;
   job_scope?: string;
+  shuttler_sub_type?: string;
   vehicle_number_out?: string;
   vehicle_number_in?: string;
   job_time?: string;

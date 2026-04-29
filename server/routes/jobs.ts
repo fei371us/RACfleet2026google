@@ -17,28 +17,30 @@ const JOB_SELECT = `
 function flattenRow(row: any, pins?: any[]) {
   return {
     ...row,
-    id:                 row.reference,
-    vehicle_name:       row.vehicle_name,
-    vehicle_plate:      row.vehicle_plate,
+    id:                  row.reference,
+    vehicle_name:        row.vehicle_name,
+    vehicle_plate:       row.vehicle_plate,
     pins,
-    driver_note:        row.driverNote,
-    job_date:           row.jobDate,
-    job_scope:          row.workScope,
-    vehicle_number_out: row.vehicleNumberOut,
-    vehicle_number_in:  row.vehicleNumberIn,
-    job_time:           row.jobTime,
-    contact_person:     row.contactPerson,
-    contact_number:     row.contactNumber,
-    created_at:         row.createdAt,
+    driver_note:         row.driverNote,
+    job_date:            row.jobDate,
+    job_scope:           row.workScope,
+    shuttler_sub_type:   row.shuttlerSubType,
+    vehicle_number_out:  row.vehicleNumberOut,
+    vehicle_number_in:   row.vehicleNumberIn,
+    job_time:            row.jobTime,
+    contact_person:      row.contactPerson,
+    contact_number:      row.contactNumber,
+    created_at:          row.createdAt,
     checklist: row.checklist
       ? (() => { try { return JSON.parse(row.checklist); } catch { return row.checklist; } })()
       : undefined,
   };
 }
 
-// GET /api/jobs — role-scoped list
+// GET /api/jobs — role-scoped list with optional filtering
 router.get('/', requireAuth, async (req: Request, res: Response) => {
   const { id, role } = (req as AuthedRequest).user;
+  const { shuttlerSubType } = req.query;
   const db = await getDb();
   const request = db.request();
   let where = '';
@@ -52,6 +54,13 @@ router.get('/', requireAuth, async (req: Request, res: Response) => {
   } else if (role === UserRole.WORKSHOP_ADVISER) {
     where = "WHERE (j.workshopAdviserId = @uid OR (j.type = 'WORKSHOP' AND j.workshopAdviserId IS NULL))";
     request.input('uid', sql.NVarChar, id);
+  }
+
+  // Apply optional shuttlerSubType filter
+  if (shuttlerSubType && typeof shuttlerSubType === 'string') {
+    const and = where ? ' AND' : ' WHERE';
+    where += `${and} j.shuttlerSubType = @sst`;
+    request.input('sst', sql.NVarChar, shuttlerSubType);
   }
 
   const result = await request.query(`${JOB_SELECT} ${where} ORDER BY j.createdAt DESC`);
@@ -77,6 +86,7 @@ router.get('/:id', requireAuth, async (req: Request, res: Response) => {
 
 const createSchema = z.object({
   type:             z.enum(['SHUTTLER', 'WORKSHOP']),
+  shuttlerSubType:  z.string().optional(),
   priority:         z.enum(['LOW', 'STANDARD', 'HIGH', 'CRITICAL']).default('STANDARD'),
   vehicleId:        z.string().optional(), vehicle_id:        z.string().optional(),
   company:          z.string().optional(),
@@ -108,6 +118,7 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
     .input('id',   sql.NVarChar,  jobId)
     .input('ref',  sql.NVarChar,  reference)
     .input('type', sql.NVarChar,  body.type)
+    .input('sst',  sql.NVarChar,  body.shuttlerSubType ?? null)
     .input('pri',  sql.NVarChar,  body.priority)
     .input('vid',  sql.NVarChar,  body.vehicleId ?? body.vehicle_id ?? null)
     .input('rid',  sql.NVarChar,  requesterId)
@@ -125,9 +136,9 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
     .input('inst', sql.NVarChar,  body.instructions ?? null)
     .input('rmk',  sql.NVarChar,  body.remarks ?? null)
     .query(`INSERT INTO Jobs
-      (id, reference, type, status, priority, vehicleId, requesterId, company, contactPerson, contactNumber,
+      (id, reference, type, shuttlerSubType, status, priority, vehicleId, requesterId, company, contactPerson, contactNumber,
        address, jobDate, jobTime, pickupTime, location, destination, workScope, vehicleNumberOut, instructions, remarks)
-      VALUES (@id, @ref, @type, 'PENDING', @pri, @vid, @rid, @co, @cp, @cn,
+      VALUES (@id, @ref, @type, @sst, 'PENDING', @pri, @vid, @rid, @co, @cp, @cn,
               @addr, @jd, @jt, @pt, @loc, @dst, @ws, @vno, @inst, @rmk)`);
 
   res.status(201).json({ id: reference, reference });

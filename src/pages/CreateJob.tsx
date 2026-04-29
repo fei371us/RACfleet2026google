@@ -3,6 +3,7 @@ import { Truck, MapPin, Calendar, X, ArrowRight, Settings, Navigation } from 'lu
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { api } from '../lib/api';
+import { ShuttlerSubType } from '../types';
 import { useVehicles } from '../hooks/useVehicles';
 
 const FIELD = "w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium";
@@ -13,18 +14,19 @@ export default function CreateJob() {
   const [jobType, setJobType] = useState<'SHUTTLER' | 'WORKSHOP'>('SHUTTLER');
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
-    priority:       'STANDARD',
-    vehicle_id:     '',
-    company:        '',
-    contact_person: '',
-    contact_number: '',
-    address:        '',
-    job_date:       new Date().toISOString().split('T')[0],
-    job_time:       '',
-    location:       '',
-    destination:    '',
-    job_scope:      '',
-    remarks:        '',
+    priority:          'STANDARD',
+    vehicle_id:        '',
+    company:           '',
+    contact_person:    '',
+    contact_number:    '',
+    address:           '',
+    job_date:          new Date().toISOString().split('T')[0],
+    job_time:          '',
+    location:          '',
+    destination:       '',
+    job_scope:         '',
+    remarks:           '',
+    shuttlerSubType:   '',
   });
 
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
@@ -32,23 +34,25 @@ export default function CreateJob() {
 
   const handleSubmit = async () => {
     if (!form.vehicle_id || !form.company) return;
+    if (jobType === 'SHUTTLER' && !form.shuttlerSubType) return;
     setSubmitting(true);
     try {
       await api.post('/api/jobs', {
-        type:               jobType,
-        priority:           form.priority,
-        vehicle_id:         form.vehicle_id,
-        company:            form.company,
-        contact_person:     form.contact_person,
-        contact_number:     form.contact_number,
-        address:            form.address,
-        job_date:           form.job_date,
-        job_time:           form.job_time,
-        location:           jobType === 'SHUTTLER' ? form.location    : undefined,
-        destination:        jobType === 'SHUTTLER' ? form.destination : undefined,
-        job_scope:          jobType === 'WORKSHOP'  ? form.job_scope  : undefined,
-        vehicle_number_out: vehiclePlate,
-        remarks:            form.remarks,
+        type:                 jobType,
+        shuttlerSubType:      jobType === 'SHUTTLER' ? form.shuttlerSubType : undefined,
+        priority:             form.priority,
+        vehicle_id:           form.vehicle_id,
+        company:              form.company,
+        contact_person:       form.contact_person,
+        contact_number:       form.contact_number,
+        address:              form.address,
+        job_date:             form.job_date,
+        job_time:             form.job_time,
+        location:             jobType === 'SHUTTLER' ? form.location    : undefined,
+        destination:          jobType === 'SHUTTLER' ? form.destination : undefined,
+        job_scope:            jobType === 'WORKSHOP'  ? form.job_scope  : undefined,
+        vehicle_number_out:   vehiclePlate,
+        remarks:              form.remarks,
       });
       navigate('/requester');
     } finally {
@@ -162,6 +166,25 @@ export default function CreateJob() {
               </select>
             </section>
 
+            {/* Shuttler sub-type selection */}
+            {jobType === 'SHUTTLER' && (
+              <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
+                <h2 className="font-headline font-bold text-2xl flex items-center gap-3">
+                  <Truck className="text-primary" />
+                  Service Type
+                </h2>
+                <div className="space-y-2">
+                  <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Shuttler Service</label>
+                  <select value={form.shuttlerSubType} onChange={e => set('shuttlerSubType', e.target.value)} className={cn(FIELD, "appearance-none font-bold")}>
+                    <option value="">Select service type...</option>
+                    {Object.values(ShuttlerSubType).map(subType => (
+                      <option key={subType} value={subType}>{subType}</option>
+                    ))}
+                  </select>
+                </div>
+              </section>
+            )}
+
             {/* Shuttler route fields */}
             {jobType === 'SHUTTLER' && (
               <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
@@ -233,7 +256,7 @@ export default function CreateJob() {
             Discard
           </button>
           <button
-            disabled={!form.vehicle_id || !form.company || submitting}
+            disabled={!form.vehicle_id || !form.company || (jobType === 'SHUTTLER' && !form.shuttlerSubType) || submitting}
             onClick={handleSubmit}
             className="flex-1 max-w-md gradient-btn py-5 rounded-2xl flex items-center justify-center gap-3 disabled:opacity-50"
           >

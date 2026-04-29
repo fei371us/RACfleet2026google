@@ -40,6 +40,7 @@ IF OBJECT_ID('Jobs', 'U') IS NULL
     id                NVARCHAR(36)  NOT NULL PRIMARY KEY,
     reference         NVARCHAR(50)  NOT NULL UNIQUE,
     type              NVARCHAR(20)  NOT NULL,
+    shuttlerSubType   NVARCHAR(100) NULL,
     status            NVARCHAR(20)  NOT NULL DEFAULT 'PENDING',
     priority          NVARCHAR(20)  NOT NULL DEFAULT 'STANDARD',
     vehicleId         NVARCHAR(36)  NULL REFERENCES Vehicles(id),
