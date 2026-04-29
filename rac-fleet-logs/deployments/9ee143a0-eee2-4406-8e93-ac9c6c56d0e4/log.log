@@ -1,0 +1,385 @@
+2026-04-25T14:56:46.2720084Z,Updating submodules.,0be652f2-08e4-4fb7-812b-c9465b6dc464,0
+2026-04-25T14:56:47.3853634Z,Preparing deployment for commit id '9ee143a0-e'.,d75d2266-8658-4c74-8302-0879a00d9b48,0
+2026-04-25T14:56:47.7155888Z,PreDeployment: context.CleanOutputPath False,ca366788-23ab-412c-a439-507d7c67a9c9,0
+2026-04-25T14:56:47.8503098Z,PreDeployment: context.OutputPath /home/site/wwwroot,ab4a15a1-9b59-4707-85f6-6dfaa775f0b5,0
+2026-04-25T14:56:47.9956595Z,Running build. Project type: OneDeploy,aacc5f43-eb66-412b-9068-f762ffc84327,0
+2026-04-25T14:56:48.1295779Z,Copying the manifest,b178c327-3383-4400-af6e-a90a2104e513,0
+2026-04-25T14:56:48.3167356Z,Clean deploying to /home/site/wwwroot,bf8868bf-0c02-4c68-99f7-b922b07b472b,0
+2026-04-25T14:56:48.4584106Z,Generating deployment script.,12d4c6e9-e3bb-45c0-9b3f-5329a9f6b0b2,0
+2026-04-25T14:56:48.5792594Z,Running deployment command...,5ccd2d48-c7b9-4545-a711-d696abefddb1,0
+	2026-04-25T14:56:48.5897198Z,Command: /opt/Kudu/Scripts/parallel_rsync.sh /tmp/zipdeploy/extracted /home/site/wwwroot 8 /tmp/ True False  ,,0
+	2026-04-25T14:56:48.6511603Z,Run rsync from: /tmp/zipdeploy/extracted/ to: /home/site/wwwroot/ in 8 parallel threads,,0
+	2026-04-25T14:56:48.6711818Z,Delete options: clean=True&comma; use manifest=False&comma; directory to ignore=,,0
+	2026-04-25T14:56:48.6884271Z,Prev manifest = /tmp/tmp4UUQGi.tmp and next /tmp/tmp4UUQGi.tmp,,0
+	2026-04-25T14:56:48.7089355Z,Cleaning up /tmp//filelist.txt and /tmp//splits,,0
+	2026-04-25T14:56:48.7232367Z,Creating a list of all files at /tmp//filelist.txt,,0
+	2026-04-25T14:56:48.7432292Z,No directory to exclude.,,0
+	2026-04-25T14:56:48.7573914Z,Created /tmp//filelist.txt. Total number of files to be synced = 29.,,0
+	2026-04-25T14:56:48.7714067Z,Created batches from the list of files. Processing 4 files in each thread,,0
+	2026-04-25T14:56:48.7901948Z,Running rsync for filelist /tmp//splits/split.aa from /tmp/zipdeploy/extracted/ to /home/site/wwwroot/,,0
+	2026-04-25T14:56:48.8125787Z,Running rsync for filelist /tmp//splits/split.ab from /tmp/zipdeploy/extracted/ to /home/site/wwwroot/,,0
+	2026-04-25T14:56:48.8360164Z,Running rsync for filelist /tmp//splits/split.ac from /tmp/zipdeploy/extracted/ to /home/site/wwwroot/,,0
+	2026-04-25T14:56:48.8517060Z,Running rsync for filelist /tmp//splits/split.ad from /tmp/zipdeploy/extracted/ to /home/site/wwwroot/,,0
+	2026-04-25T14:56:48.8654579Z,Running rsync for filelist /tmp//splits/split.ae from /tmp/zipdeploy/extracted/ to /home/site/wwwroot/,,0
+	2026-04-25T14:56:48.8845401Z,Running rsync for filelist /tmp//splits/split.af from /tmp/zipdeploy/extracted/ to /home/site/wwwroot/,,0
+	2026-04-25T14:56:48.8938427Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\lib\utils.ts": Invalid argument (22),,1
+	2026-04-25T14:56:48.9258328Z,Running rsync for filelist /tmp//splits/split.ag from /tmp/zipdeploy/extracted/ to /home/site/wwwroot/,,0
+	2026-04-25T14:56:48.9355620Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\AdminDashboard.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:48.9489422Z,Running rsync for filelist /tmp//splits/split.ah from /tmp/zipdeploy/extracted/ to /home/site/wwwroot/,,0
+	2026-04-25T14:56:48.9632958Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\App.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:48.9865005Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\index.css": Invalid argument (22),,1
+	2026-04-25T14:56:49.0002001Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\RequesterHome.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.0129702Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\DispatcherDashboard.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.0263838Z,,,0
+	2026-04-25T14:56:49.0501385Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\FleetControl.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.0682420Z,Number of files: 1 (reg: 1),,0
+	2026-04-25T14:56:49.0849648Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\assets\index-C4gCVFji.css": Invalid argument (22),,1
+	2026-04-25T14:56:49.0959010Z,Number of created files: 0,,0
+	2026-04-25T14:56:49.1111772Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\index.html": Invalid argument (22),,1
+	2026-04-25T14:56:49.1275116Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\LoginPage.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.1337898Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:49.1574699Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\WorkshopAdviserDashboard.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.1613589Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:49.1857999Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\main.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.2389764Z,Total file size: 175 bytes,,0
+	2026-04-25T14:56:49.2657622Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:49.2707313Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\VehicleInspection.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.2982960Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:49.3170737Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:49.3215946Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\components\FleetMapView.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.3408630Z,File list size: 0,,0
+	2026-04-25T14:56:49.3576114Z,File list generation time: 0.005 seconds,,0
+	2026-04-25T14:56:49.3665262Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\JobDetail.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.3777606Z,,,0
+	2026-04-25T14:56:49.3896720Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\assets\index-G6fgMUiX.js": Invalid argument (22),,1
+	2026-04-25T14:56:49.4013289Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:49.4115202Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\DriverHome.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.4209005Z,Total bytes sent: 114,,0
+	2026-04-25T14:56:49.4342981Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\CreateJob.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.4460601Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:49.4604119Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\types.ts": Invalid argument (22),,1
+	2026-04-25T14:56:49.4741923Z,Total bytes received: 12,,0
+	2026-04-25T14:56:49.4840448Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:49.4976165Z,Number of created files: 0,,0
+	2026-04-25T14:56:49.5143868Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:49.5253738Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:49.5406520Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:49.5507652Z,,,0
+	2026-04-25T14:56:49.5633683Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:49.5712032Z,sent 114 bytes  received 12 bytes  252.00 bytes/sec,,0
+	2026-04-25T14:56:49.5836557Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:49.5917017Z,total size is 175  speedup is 1.39,,0
+	2026-04-25T14:56:49.6041555Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:49.6114383Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:49.6255619Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:49.6348897Z,Total file size: 194.88K bytes,,0
+	2026-04-25T14:56:49.6480773Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:49.6556793Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:49.6667209Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\App.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.6750706Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:49.6871957Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\index.css": Invalid argument (22),,1
+	2026-04-25T14:56:49.6960316Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:49.7053736Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\RequesterHome.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.7165602Z,File list size: 0,,0
+	2026-04-25T14:56:49.7237640Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\LoginPage.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.7431129Z,File list generation time: 0.005 seconds,,0
+	2026-04-25T14:56:49.7531178Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\WorkshopAdviserDashboard.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.7701310Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:49.7829377Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\AdminDashboard.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.7924666Z,Total bytes sent: 190,,0
+	2026-04-25T14:56:49.8025637Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\DispatcherDashboard.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.8144337Z,Total bytes received: 19,,0
+	2026-04-25T14:56:49.8248729Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\FleetControl.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.8343669Z,,,0
+	2026-04-25T14:56:49.8548768Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\CreateJob.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.8636416Z,sent 190 bytes  received 19 bytes  418.00 bytes/sec,,0
+	2026-04-25T14:56:49.8754226Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\types.ts": Invalid argument (22),,1
+	2026-04-25T14:56:49.8889355Z,total size is 194.88K  speedup is 932.42,,0
+	2026-04-25T14:56:49.9013460Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\lib\utils.ts": Invalid argument (22),,1
+	2026-04-25T14:56:49.9153579Z,,,0
+	2026-04-25T14:56:49.9259689Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\assets\index-C4gCVFji.css": Invalid argument (22),,1
+	2026-04-25T14:56:49.9354241Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:49.9448938Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\main.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.9578726Z,Number of created files: 0,,0
+	2026-04-25T14:56:49.9661049Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\VehicleInspection.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:49.9777938Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:49.9892957Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\assets\index-G6fgMUiX.js": Invalid argument (22),,1
+	2026-04-25T14:56:50.0003942Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:50.0077543Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\DriverHome.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:50.0233723Z,Total file size: 42.09K bytes,,0
+	2026-04-25T14:56:50.0364125Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:50.0418488Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\index.html": Invalid argument (22),,1
+	2026-04-25T14:56:50.0556905Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:50.0653298Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\components\FleetMapView.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:50.0830995Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:50.0889659Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\JobDetail.tsx": Invalid argument (22),,1
+	2026-04-25T14:56:50.1132233Z,File list size: 0,,0
+	2026-04-25T14:56:50.1214961Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:50.1334389Z,File list generation time: 0.010 seconds,,0
+	2026-04-25T14:56:50.1442860Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:50.1540706Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:50.1772263Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:50.1872796Z,Total bytes sent: 201,,0
+	2026-04-25T14:56:50.2024785Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:50.2099075Z,Total bytes received: 15,,0
+	2026-04-25T14:56:50.2220273Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:50.2324908Z,,,0
+	2026-04-25T14:56:50.2439524Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:50.2515642Z,sent 201 bytes  received 15 bytes  432.00 bytes/sec,,0
+	2026-04-25T14:56:50.2633226Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:50.2713002Z,total size is 42.09K  speedup is 194.86,,0
+	2026-04-25T14:56:50.2871911Z,rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7],,1
+	2026-04-25T14:56:50.2935764Z,,,0
+	2026-04-25T14:56:50.3121683Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:50.3254207Z,Number of created files: 0,,0
+	2026-04-25T14:56:50.3365968Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:50.3472592Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:50.3660252Z,Total file size: 19.61K bytes,,0
+	2026-04-25T14:56:50.3822203Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:50.3973950Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:50.4081534Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:50.4182715Z,File list size: 0,,0
+	2026-04-25T14:56:50.4327049Z,File list generation time: 0.008 seconds,,0
+	2026-04-25T14:56:50.4434082Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:50.4567931Z,Total bytes sent: 203,,0
+	2026-04-25T14:56:50.4671798Z,Total bytes received: 22,,0
+	2026-04-25T14:56:50.4776168Z,,,0
+	2026-04-25T14:56:50.4907903Z,sent 203 bytes  received 22 bytes  450.00 bytes/sec,,0
+	2026-04-25T14:56:50.5008770Z,total size is 19.61K  speedup is 87.13,,0
+	2026-04-25T14:56:50.5165547Z,Attempt 1: Rsync for filelist /tmp//splits/split.aa completed with exit code 23,,0
+	2026-04-25T14:56:50.5283001Z,Attempt 1: Rsync for filelist /tmp//splits/split.ah completed with exit code 23,,0
+	2026-04-25T14:56:50.5396353Z,,,0
+	2026-04-25T14:56:50.6058458Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:50.6261640Z,Number of created files: 0,,0
+	2026-04-25T14:56:50.6382485Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:50.6566688Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:50.6684602Z,Total file size: 65.68K bytes,,0
+	2026-04-25T14:56:50.6820978Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:50.6976044Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:50.7100114Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:50.7322108Z,File list size: 0,,0
+	2026-04-25T14:56:50.7440965Z,File list generation time: 0.005 seconds,,0
+	2026-04-25T14:56:50.7580251Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:50.7698628Z,Total bytes sent: 205,,0
+	2026-04-25T14:56:50.7867728Z,Total bytes received: 15,,0
+	2026-04-25T14:56:50.8005084Z,,,0
+	2026-04-25T14:56:50.8127677Z,sent 205 bytes  received 15 bytes  440.00 bytes/sec,,0
+	2026-04-25T14:56:50.8260326Z,total size is 65.68K  speedup is 298.54,,0
+	2026-04-25T14:56:50.8396660Z,Attempt 1: Rsync for filelist /tmp//splits/split.ag completed with exit code 23,,0
+	2026-04-25T14:56:50.8524810Z,Attempt 1: Rsync for filelist /tmp//splits/split.af completed with exit code 23,,0
+	2026-04-25T14:56:50.8655403Z,Attempt 1: Rsync for filelist /tmp//splits/split.ad completed with exit code 23,,0
+	2026-04-25T14:56:50.8791085Z,,,0
+	2026-04-25T14:56:50.8890005Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:50.9003537Z,Number of created files: 0,,0
+	2026-04-25T14:56:50.9126818Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:50.9259806Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:50.9500920Z,Total file size: 31.53K bytes,,0
+	2026-04-25T14:56:50.9634439Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:50.9753297Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:50.9865671Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:50.9980225Z,File list size: 0,,0
+	2026-04-25T14:56:51.0115336Z,File list generation time: 0.011 seconds,,0
+	2026-04-25T14:56:51.0216767Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:51.0321864Z,Total bytes sent: 188,,0
+	2026-04-25T14:56:51.0434570Z,Total bytes received: 22,,0
+	2026-04-25T14:56:51.0546236Z,,,0
+	2026-04-25T14:56:51.0730630Z,sent 188 bytes  received 22 bytes  420.00 bytes/sec,,0
+	2026-04-25T14:56:51.0871439Z,total size is 31.53K  speedup is 150.14,,0
+	2026-04-25T14:56:51.0974019Z,Attempt 1: Rsync for filelist /tmp//splits/split.ac completed with exit code 23,,0
+	2026-04-25T14:56:51.1092424Z,,,0
+	2026-04-25T14:56:51.1200149Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:51.1325960Z,Number of created files: 0,,0
+	2026-04-25T14:56:51.1446963Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:51.1561491Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:51.1710932Z,Total file size: 28.49K bytes,,0
+	2026-04-25T14:56:51.1855326Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:51.1996363Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:51.2101035Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:51.2218795Z,File list size: 0,,0
+	2026-04-25T14:56:51.2373917Z,File list generation time: 0.007 seconds,,0
+	2026-04-25T14:56:51.2486966Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:51.2603902Z,Total bytes sent: 204,,0
+	2026-04-25T14:56:51.2726022Z,Total bytes received: 15,,0
+	2026-04-25T14:56:51.3010026Z,,,0
+	2026-04-25T14:56:51.3125975Z,sent 204 bytes  received 15 bytes  438.00 bytes/sec,,0
+	2026-04-25T14:56:51.3249355Z,total size is 28.49K  speedup is 130.11,,0
+	2026-04-25T14:56:51.3394895Z,,,0
+	2026-04-25T14:56:51.3503195Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:51.3644048Z,Number of created files: 0,,0
+	2026-04-25T14:56:51.3819977Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:51.4002394Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:51.4117989Z,Total file size: 560.94K bytes,,0
+	2026-04-25T14:56:51.4267919Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:51.4377494Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:51.4492155Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:51.4619465Z,File list size: 0,,0
+	2026-04-25T14:56:51.4742721Z,File list generation time: 0.007 seconds,,0
+	2026-04-25T14:56:51.4873555Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:51.4981696Z,Total bytes sent: 211,,0
+	2026-04-25T14:56:51.5180696Z,Total bytes received: 22,,0
+	2026-04-25T14:56:51.5325903Z,,,0
+	2026-04-25T14:56:51.5432667Z,sent 211 bytes  received 22 bytes  466.00 bytes/sec,,0
+	2026-04-25T14:56:51.5572539Z,total size is 560.94K  speedup is 2&comma;407.47,,0
+	2026-04-25T14:56:51.5682249Z,Attempt 1: Rsync for filelist /tmp//splits/split.ae completed with exit code 23,,0
+	2026-04-25T14:56:51.5788934Z,Attempt 1: Rsync for filelist /tmp//splits/split.ab completed with exit code 23,,0
+	2026-04-25T14:56:51.5894738Z,,,0
+	2026-04-25T14:56:51.6012835Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:51.6197563Z,Number of created files: 0,,0
+	2026-04-25T14:56:51.6317974Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:51.6489792Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:51.6625142Z,Total file size: 194.88K bytes,,0
+	2026-04-25T14:56:51.6784176Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:51.6930432Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:51.7095812Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:51.7280751Z,File list size: 0,,0
+	2026-04-25T14:56:51.7419264Z,File list generation time: 0.001 seconds,,0
+	2026-04-25T14:56:51.7575816Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:51.7694932Z,Total bytes sent: 190,,0
+	2026-04-25T14:56:51.7853293Z,Total bytes received: 19,,0
+	2026-04-25T14:56:51.7973679Z,,,0
+	2026-04-25T14:56:51.8086532Z,sent 190 bytes  received 19 bytes  418.00 bytes/sec,,0
+	2026-04-25T14:56:51.8207615Z,total size is 194.88K  speedup is 932.42,,0
+	2026-04-25T14:56:51.8356778Z,Attempt 2: Rsync for filelist /tmp//splits/split.ad completed with exit code 23,,0
+	2026-04-25T14:56:51.8481343Z,,,0
+	2026-04-25T14:56:51.8605045Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:51.8756814Z,Number of created files: 0,,0
+	2026-04-25T14:56:51.8882231Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:51.9012840Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:51.9651293Z,Total file size: 19.61K bytes,,0
+	2026-04-25T14:56:51.9790326Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:51.9944443Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:52.0127186Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:52.0261083Z,File list size: 0,,0
+	2026-04-25T14:56:52.0369767Z,File list generation time: 0.001 seconds,,0
+	2026-04-25T14:56:52.0493979Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:52.0625268Z,Total bytes sent: 203,,0
+	2026-04-25T14:56:52.0737477Z,Total bytes received: 22,,0
+	2026-04-25T14:56:52.0862892Z,,,0
+	2026-04-25T14:56:52.0976524Z,sent 203 bytes  received 22 bytes  450.00 bytes/sec,,0
+	2026-04-25T14:56:52.1099343Z,total size is 19.61K  speedup is 87.13,,0
+	2026-04-25T14:56:52.1224026Z,Attempt 2: Rsync for filelist /tmp//splits/split.ag completed with exit code 23,,0
+	2026-04-25T14:56:52.1354862Z,,,0
+	2026-04-25T14:56:52.1461625Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:52.1596165Z,Number of created files: 0,,0
+	2026-04-25T14:56:52.1744268Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:52.1895726Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:52.2023354Z,Total file size: 42.09K bytes,,0
+	2026-04-25T14:56:52.2141813Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:52.2302384Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:52.2585474Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:52.2706164Z,File list size: 0,,0
+	2026-04-25T14:56:52.2877704Z,File list generation time: 0.001 seconds,,0
+	2026-04-25T14:56:52.2984111Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:52.3147699Z,Total bytes sent: 201,,0
+	2026-04-25T14:56:52.3269130Z,Total bytes received: 15,,0
+	2026-04-25T14:56:52.3378809Z,,,0
+	2026-04-25T14:56:52.3556894Z,sent 201 bytes  received 15 bytes  432.00 bytes/sec,,0
+	2026-04-25T14:56:52.3700166Z,total size is 42.09K  speedup is 194.86,,0
+	2026-04-25T14:56:52.3844783Z,,,0
+	2026-04-25T14:56:52.3998556Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:52.4147786Z,Number of created files: 0,,0
+	2026-04-25T14:56:52.4270356Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:52.4397275Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:52.4556527Z,Total file size: 31.53K bytes,,0
+	2026-04-25T14:56:52.4680266Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:52.4818026Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:52.4957566Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:52.5123852Z,File list size: 0,,0
+	2026-04-25T14:56:52.5256146Z,File list generation time: 0.001 seconds,,0
+	2026-04-25T14:56:52.5380834Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:52.5493155Z,Total bytes sent: 184,,0
+	2026-04-25T14:56:52.5609918Z,Total bytes received: 22,,0
+	2026-04-25T14:56:52.5727835Z,,,0
+	2026-04-25T14:56:52.5826812Z,sent 184 bytes  received 22 bytes  412.00 bytes/sec,,0
+	2026-04-25T14:56:52.5978192Z,total size is 31.53K  speedup is 153.06,,0
+	2026-04-25T14:56:52.6175001Z,Attempt 2: Rsync for filelist /tmp//splits/split.aa completed with exit code 23,,0
+	2026-04-25T14:56:52.6282821Z,Attempt 2: Rsync for filelist /tmp//splits/split.ac completed with exit code 23,,0
+	2026-04-25T14:56:52.6423304Z,,,0
+	2026-04-25T14:56:52.6529596Z,Number of files: 1 (reg: 1),,0
+	2026-04-25T14:56:52.6647211Z,Number of created files: 0,,0
+	2026-04-25T14:56:52.6768998Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:52.6876377Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:52.6988237Z,Total file size: 175 bytes,,0
+	2026-04-25T14:56:52.7087172Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:52.7195492Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:52.7385358Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:52.7504323Z,File list size: 0,,0
+	2026-04-25T14:56:52.7632105Z,File list generation time: 0.001 seconds,,0
+	2026-04-25T14:56:52.7753694Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:52.7854496Z,Total bytes sent: 114,,0
+	2026-04-25T14:56:52.7959025Z,Total bytes received: 12,,0
+	2026-04-25T14:56:52.8059884Z,,,0
+	2026-04-25T14:56:52.8159917Z,sent 114 bytes  received 12 bytes  252.00 bytes/sec,,0
+	2026-04-25T14:56:52.8272898Z,total size is 175  speedup is 1.39,,0
+	2026-04-25T14:56:52.8408599Z,Attempt 2: Rsync for filelist /tmp//splits/split.ah completed with exit code 23,,0
+	2026-04-25T14:56:52.8514585Z,,,0
+	2026-04-25T14:56:52.8627658Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:52.8725184Z,Number of created files: 0,,0
+	2026-04-25T14:56:52.8832329Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:52.8942604Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:52.9046726Z,Total file size: 560.94K bytes,,0
+	2026-04-25T14:56:52.9146313Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:52.9275737Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:52.9396801Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:52.9563614Z,File list size: 0,,0
+	2026-04-25T14:56:52.9676692Z,File list generation time: 0.001 seconds,,0
+	2026-04-25T14:56:52.9783928Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:52.9899675Z,Total bytes sent: 207,,0
+	2026-04-25T14:56:53.0022701Z,Total bytes received: 22,,0
+	2026-04-25T14:56:53.0140497Z,,,0
+	2026-04-25T14:56:53.0248754Z,sent 207 bytes  received 22 bytes  458.00 bytes/sec,,0
+	2026-04-25T14:56:53.0359972Z,total size is 560.94K  speedup is 2&comma;449.52,,0
+	2026-04-25T14:56:53.0492763Z,Attempt 2: Rsync for filelist /tmp//splits/split.ae completed with exit code 23,,0
+	2026-04-25T14:56:53.0826038Z,,,0
+	2026-04-25T14:56:53.0995202Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:53.1108733Z,Number of created files: 0,,0
+	2026-04-25T14:56:53.1266799Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:53.1463402Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:53.1594446Z,Total file size: 65.68K bytes,,0
+	2026-04-25T14:56:53.1796253Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:53.1959015Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:53.2063663Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:53.2176407Z,File list size: 0,,0
+	2026-04-25T14:56:53.2289459Z,File list generation time: 0.001 seconds,,0
+	2026-04-25T14:56:53.2432087Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:53.2543279Z,Total bytes sent: 205,,0
+	2026-04-25T14:56:53.2658597Z,Total bytes received: 15,,0
+	2026-04-25T14:56:53.3102695Z,,,0
+	2026-04-25T14:56:53.3210607Z,sent 205 bytes  received 15 bytes  440.00 bytes/sec,,0
+	2026-04-25T14:56:53.3341921Z,total size is 65.68K  speedup is 298.54,,0
+	2026-04-25T14:56:53.3476646Z,Attempt 2: Rsync for filelist /tmp//splits/split.af completed with exit code 23,,0
+	2026-04-25T14:56:53.3622353Z,,,0
+	2026-04-25T14:56:53.3734767Z,Number of files: 4 (reg: 4),,0
+	2026-04-25T14:56:53.3923852Z,Number of created files: 0,,0
+	2026-04-25T14:56:53.4128569Z,Number of deleted files: 0,,0
+	2026-04-25T14:56:53.4249046Z,Number of regular files transferred: 0,,0
+	2026-04-25T14:56:53.4376723Z,Total file size: 28.49K bytes,,0
+	2026-04-25T14:56:53.4501518Z,Total transferred file size: 0 bytes,,0
+	2026-04-25T14:56:53.4606791Z,Literal data: 0 bytes,,0
+	2026-04-25T14:56:53.4734058Z,Matched data: 0 bytes,,0
+	2026-04-25T14:56:53.4858342Z,File list size: 0,,0
+	2026-04-25T14:56:53.5041481Z,File list generation time: 0.001 seconds,,0
+	2026-04-25T14:56:53.5160721Z,File list transfer time: 0.000 seconds,,0
+	2026-04-25T14:56:53.5303031Z,Total bytes sent: 204,,0
+	2026-04-25T14:56:53.5403931Z,Total bytes received: 15,,0
+	2026-04-25T14:56:53.5504600Z,,,0
+	2026-04-25T14:56:53.5607973Z,sent 204 bytes  received 15 bytes  438.00 bytes/sec,,0
+	2026-04-25T14:56:53.5730391Z,total size is 28.49K  speedup is 130.11,,0
+	2026-04-25T14:56:53.5831704Z,Attempt 2: Rsync for filelist /tmp//splits/split.ab completed with exit code 23,,0
+	2026-04-25T14:56:53.5948921Z,An error has occurred during web site deployment.,,0
+	2026-04-25T14:56:53.6123408Z,Rsync failed in 1 seconds,,0
+	2026-04-25T14:56:53.6437756Z,rsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\lib\utils.ts": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\AdminDashboard.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\App.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\index.css": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\RequesterHome.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\DispatcherDashboard.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\FleetControl.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\assets\index-C4gCVFji.css": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\index.html": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\LoginPage.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\WorkshopAdviserDashboard.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\main.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\VehicleInspection.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\components\FleetMapView.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\JobDetail.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\assets\index-G6fgMUiX.js": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\DriverHome.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\CreateJob.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\types.ts": Invalid argument (22)\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\App.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\index.css": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\RequesterHome.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\LoginPage.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\WorkshopAdviserDashboard.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\AdminDashboard.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\DispatcherDashboard.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\FleetControl.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\CreateJob.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\types.ts": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\lib\utils.ts": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\assets\index-C4gCVFji.css": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\main.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\VehicleInspection.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\assets\index-G6fgMUiX.js": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\DriverHome.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/dist\index.html": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\components\FleetMapView.tsx": Invalid argument (22)\nrsync: [generator] recv_generator: failed to stat "/home/site/wwwroot/src\pages\JobDetail.tsx": Invalid argument (22)\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.2.7]\n/opt/Kudu/Scripts/starter.sh /opt/Kudu/Scripts/parallel_rsync.sh /tmp/zipdeploy/extracted /home/site/wwwroot 8 /tmp/ True False  ,,2
+	2026-04-25T14:56:53.7254437Z,Using the following command to generate deployment script: 'azure site deploymentscript -y --no-dot-deployment -r "/tmp/zipdeploy/extracted" -o "/home/site/deployments/tools" --basic --sitePath "/tmp/zipdeploy/extracted"'.,,0
+	2026-04-25T14:56:54.0476272Z,Generating deployment script for Web Site,,0
+	2026-04-25T14:56:54.0867242Z,Generated deployment script files,,0
+2026-04-25T14:56:54.2481102Z,Running deployment command...,27b92687-59a7-4875-a356-9b7b6ba1b948,0
+	2026-04-25T14:56:54.2598676Z,Command: "/home/site/deployments/tools/deploy.sh",,0
+	2026-04-25T14:56:54.5311598Z,Handling Basic Web Site deployment.,,0
+	2026-04-25T14:56:54.6121898Z,Kudu sync from: '/tmp/zipdeploy/extracted' to: '/home/site/wwwroot',,0
+	2026-04-25T14:56:54.6462375Z,Copying file: 'dist\assets\index-C4gCVFji.css',,0
+	2026-04-25T14:56:54.6936467Z,Copying file: 'dist\assets\index-G6fgMUiX.js',,0
+	2026-04-25T14:56:54.7067190Z,Error: EINVAL: invalid argument&comma; open '/home/site/wwwroot/dist\assets\index-C4gCVFji.css',,0
+	2026-04-25T14:56:54.7173546Z,An error has occurred during web site deployment.,,0
+	2026-04-25T14:56:54.7327570Z,Kudu Sync failed,,0
+	2026-04-25T14:56:54.7613200Z,\n/opt/Kudu/Scripts/starter.sh "/home/site/deployments/tools/deploy.sh",,2
+2026-04-25T14:56:55.2472925Z,Deployment Failed. deployer = OneDeploy deploymentPath = OneDeploy,c000e642-dba5-4142-bc0d-7b9a82835f2c,0
