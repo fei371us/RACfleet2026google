@@ -12,11 +12,17 @@ async function initDb() {
 
   const schema = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf-8');
 
+  // Remove comment lines
+  const noComments = schema
+    .split('\n')
+    .filter(line => !line.trim().startsWith('--'))
+    .join('\n');
+
   // Split on semicolons followed by a blank line — one IF/CREATE block per table
-  const statements = schema
+  const statements = noComments
     .split(/;\s*\n\s*\n/)
     .map(s => s.trim())
-    .filter(s => s.length > 0 && !s.startsWith('--'));
+    .filter(s => s.length > 0);
 
   for (const stmt of statements) {
     await db.request().query(stmt);

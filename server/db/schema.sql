@@ -11,6 +11,7 @@ IF OBJECT_ID('Users', 'U') IS NULL
     createdAt    DATETIME2     NOT NULL DEFAULT GETUTCDATE()
   );
 
+
 IF OBJECT_ID('Vehicles', 'U') IS NULL
   CREATE TABLE Vehicles (
     id             NVARCHAR(36)  NOT NULL PRIMARY KEY,
@@ -22,6 +23,7 @@ IF OBJECT_ID('Vehicles', 'U') IS NULL
     lng            FLOAT         NOT NULL DEFAULT 0
   );
 
+
 IF OBJECT_ID('WorkshopBays', 'U') IS NULL
   CREATE TABLE WorkshopBays (
     id           NVARCHAR(36)  NOT NULL PRIMARY KEY,
@@ -31,6 +33,7 @@ IF OBJECT_ID('WorkshopBays', 'U') IS NULL
     currentJobId NVARCHAR(36)  NULL,
     technician   NVARCHAR(255) NULL
   );
+
 
 IF OBJECT_ID('Jobs', 'U') IS NULL
   CREATE TABLE Jobs (
@@ -65,6 +68,7 @@ IF OBJECT_ID('Jobs', 'U') IS NULL
     createdAt         DATETIME2     NOT NULL DEFAULT GETUTCDATE()
   );
 
+
 IF OBJECT_ID('InspectionPins', 'U') IS NULL
   CREATE TABLE InspectionPins (
     id        INT           NOT NULL IDENTITY(1,1) PRIMARY KEY,
@@ -74,5 +78,6 @@ IF OBJECT_ID('InspectionPins', 'U') IS NULL
     y         FLOAT         NOT NULL,
     type      NVARCHAR(50)  NOT NULL,
     note      NVARCHAR(MAX) NULL,
-    photoUrl  NVARCHAR(MAX) NULL
+    photoUrl  NVARCHAR(MAX) NULL,
+    createdAt DATETIME2     NOT NULL DEFAULT GETUTCDATE()
   );

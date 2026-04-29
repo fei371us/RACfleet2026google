@@ -3,7 +3,9 @@
     "allow": [
       "Read(//c/Users/fei/.claude/plans/**)",
       "Bash(npm install *)",
-      "Bash(gh pr *)"
+      "Bash(gh pr *)",
+      "Bash(az --version)",
+      "Bash(az account *)"
     ]
   }
 }
