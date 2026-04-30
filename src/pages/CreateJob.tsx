@@ -27,6 +27,7 @@ export default function CreateJob() {
   const [submitting, setSubmitting] = useState(false);
   const [createdJob, setCreatedJob] = useState<CreatedJob | null>(null);
   const [jobMeta, setJobMeta] = useState<NewJobMeta | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     priority:            'STANDARD',
     vehicle_id:          '',
@@ -68,9 +69,16 @@ export default function CreateJob() {
   }, []);
 
   const handleSubmit = async () => {
-    if (!form.vehicle_id || !form.company) return;
-    if (jobType === 'SHUTTLER' && !form.shuttlerSubType) return;
+    if (!form.vehicle_id || !form.company) {
+      setError('Please select a vehicle and enter a company name');
+      return;
+    }
+    if (jobType === 'SHUTTLER' && !form.shuttlerSubType) {
+      setError('Please select a service type for SHUTTLER jobs');
+      return;
+    }
     setSubmitting(true);
+    setError(null);
     try {
       const response = await api.post<{ id: string; reference: string; createdAt: string }>('/api/jobs', {
         reference:            jobMeta?.reference && jobMeta.reference !== 'AUTO-ON-SUBMIT' ? jobMeta.reference : undefined,
@@ -98,6 +106,9 @@ export default function CreateJob() {
         company: form.company,
         type: jobType,
       });
+    } catch (err) {
+      console.error('Job creation failed:', err);
+      setError(err instanceof Error ? err.message : 'Failed to create job. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -178,6 +189,12 @@ export default function CreateJob() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 pt-8 space-y-10 pb-24">
+        {error && (
+          <div className="bg-error/10 border border-error rounded-2xl p-4 space-y-2">
+            <p className="text-error font-bold text-sm uppercase tracking-wide">⚠ Error</p>
+            <p className="text-error text-sm">{error}</p>
+          </div>
+        )}
 
         {/* Job Type Toggle */}
         <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-4">

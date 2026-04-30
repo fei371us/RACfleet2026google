@@ -140,51 +140,59 @@ const createSchema = z.object({
 
 // POST /api/jobs
 router.post('/', requireAuth, async (req: Request, res: Response) => {
-  const body = validate(createSchema, req.body, res);
-  if (!body) return;
-  const { id: requesterId } = (req as AuthedRequest).user;
-  const jobId = crypto.randomUUID();
-  const parsedCreatedAt = body.createdAt ? new Date(body.createdAt) : new Date();
-  const createdAt = Number.isNaN(parsedCreatedAt.getTime()) ? new Date() : parsedCreatedAt;
-  const rawDate  = body.jobDate ?? body.job_date;
-  const db = await getDb();
-  const generated = body.reference
-    ? { reference: body.reference, createdAt: createdAt.toISOString() }
-    : await getNextJobReferenceAndCreatedAt(db);
-  const reference = generated.reference;
-  const effectiveCreatedAt = body.createdAt ? createdAt : new Date(generated.createdAt);
+  try {
+    const body = validate(createSchema, req.body, res);
+    if (!body) return;
+    const { id: requesterId } = (req as AuthedRequest).user;
+    const jobId = crypto.randomUUID();
+    const parsedCreatedAt = body.createdAt ? new Date(body.createdAt) : new Date();
+    const createdAt = Number.isNaN(parsedCreatedAt.getTime()) ? new Date() : parsedCreatedAt;
+    const rawDate  = body.jobDate ?? body.job_date;
+    console.log('[POST /api/jobs] Creating job:', { jobId, requesterId, company: body.company, type: body.type });
+    const db = await getDb();
+    console.log('[POST /api/jobs] Database connected');
+    const generated = body.reference
+      ? { reference: body.reference, createdAt: createdAt.toISOString() }
+      : await getNextJobReferenceAndCreatedAt(db);
+    const reference = generated.reference;
+    const effectiveCreatedAt = body.createdAt ? createdAt : new Date(generated.createdAt);
 
-  const insertResult = await db.request()
-    .input('id',   sql.NVarChar,  jobId)
-    .input('ref',  sql.NVarChar,  reference)
-    .input('type', sql.NVarChar,  body.type)
-    .input('sst',  sql.NVarChar,  body.shuttlerSubType ?? null)
-    .input('pri',  sql.NVarChar,  body.priority)
-    .input('vid',  sql.NVarChar,  body.vehicleId ?? body.vehicle_id ?? null)
-    .input('rid',  sql.NVarChar,  requesterId)
-    .input('co',   sql.NVarChar,  body.company ?? null)
-    .input('cp',   sql.NVarChar,  body.contactPerson ?? body.contact_person ?? null)
-    .input('cn',   sql.NVarChar,  body.contactNumber ?? body.contact_number ?? null)
-    .input('addr', sql.NVarChar,  body.address ?? null)
-    .input('jd',   sql.DateTime2, rawDate ? new Date(rawDate) : null)
-    .input('jt',   sql.NVarChar,  body.jobTime ?? body.job_time ?? null)
-    .input('pt',   sql.NVarChar,  body.pickupTime ?? body.pickup_time ?? null)
-    .input('loc',  sql.NVarChar,  body.location ?? null)
-    .input('dst',  sql.NVarChar,  body.destination ?? null)
-    .input('ws',   sql.NVarChar,  body.workScope ?? body.job_scope ?? null)
-    .input('vno',  sql.NVarChar,  body.vehicleNumberOut ?? body.vehicle_number_out ?? null)
-    .input('cat',  sql.DateTime2, effectiveCreatedAt)
-    .input('inst', sql.NVarChar,  body.instructions ?? null)
-    .input('rmk',  sql.NVarChar,  body.remarks ?? null)
-    .query(`INSERT INTO Jobs
-      (id, reference, type, shuttlerSubType, status, priority, vehicleId, requesterId, company, contactPerson, contactNumber,
-       address, jobDate, jobTime, pickupTime, location, destination, workScope, vehicleNumberOut, createdAt, instructions, remarks)
-      OUTPUT INSERTED.reference AS reference, INSERTED.createdAt AS createdAt
-      VALUES (@id, @ref, @type, @sst, 'PENDING', @pri, @vid, @rid, @co, @cp, @cn,
-              @addr, @jd, @jt, @pt, @loc, @dst, @ws, @vno, @cat, @inst, @rmk)`);
+    const insertResult = await db.request()
+      .input('id',   sql.NVarChar,  jobId)
+      .input('ref',  sql.NVarChar,  reference)
+      .input('type', sql.NVarChar,  body.type)
+      .input('sst',  sql.NVarChar,  body.shuttlerSubType ?? null)
+      .input('pri',  sql.NVarChar,  body.priority)
+      .input('vid',  sql.NVarChar,  body.vehicleId ?? body.vehicle_id ?? null)
+      .input('rid',  sql.NVarChar,  requesterId)
+      .input('co',   sql.NVarChar,  body.company ?? null)
+      .input('cp',   sql.NVarChar,  body.contactPerson ?? body.contact_person ?? null)
+      .input('cn',   sql.NVarChar,  body.contactNumber ?? body.contact_number ?? null)
+      .input('addr', sql.NVarChar,  body.address ?? null)
+      .input('jd',   sql.DateTime2, rawDate ? new Date(rawDate) : null)
+      .input('jt',   sql.NVarChar,  body.jobTime ?? body.job_time ?? null)
+      .input('pt',   sql.NVarChar,  body.pickupTime ?? body.pickup_time ?? null)
+      .input('loc',  sql.NVarChar,  body.location ?? null)
+      .input('dst',  sql.NVarChar,  body.destination ?? null)
+      .input('ws',   sql.NVarChar,  body.workScope ?? body.job_scope ?? null)
+      .input('vno',  sql.NVarChar,  body.vehicleNumberOut ?? body.vehicle_number_out ?? null)
+      .input('cat',  sql.DateTime2, effectiveCreatedAt)
+      .input('inst', sql.NVarChar,  body.instructions ?? null)
+      .input('rmk',  sql.NVarChar,  body.remarks ?? null)
+      .query(`INSERT INTO Jobs
+        (id, reference, type, shuttlerSubType, status, priority, vehicleId, requesterId, company, contactPerson, contactNumber,
+         address, jobDate, jobTime, pickupTime, location, destination, workScope, vehicleNumberOut, createdAt, instructions, remarks)
+        OUTPUT INSERTED.reference AS reference, INSERTED.createdAt AS createdAt
+        VALUES (@id, @ref, @type, @sst, 'PENDING', @pri, @vid, @rid, @co, @cp, @cn,
+                @addr, @jd, @jt, @pt, @loc, @dst, @ws, @vno, @cat, @inst, @rmk)`);
 
-  const created = insertResult.recordset[0];
-  res.status(201).json({ id: created.reference, reference: created.reference, createdAt: created.createdAt });
+    const created = insertResult.recordset[0];
+    console.log('[POST /api/jobs] Job created successfully:', { reference: created.reference, createdAt: created.createdAt });
+    res.status(201).json({ id: created.reference, reference: created.reference, createdAt: created.createdAt });
+  } catch (error) {
+    console.error('[POST /api/jobs] Error creating job:', error);
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to create job' });
+  }
 });
 
 // PATCH /api/jobs/:id
