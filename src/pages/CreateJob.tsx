@@ -126,6 +126,7 @@ export default function CreateJob() {
               <div className="space-y-2">
                 <h2 className="text-2xl font-black font-headline text-on-surface">Success!</h2>
                 <p className="text-on-surface-variant text-sm">Your job request has been created and is ready for assignment.</p>
+                <p className="text-primary text-xs font-bold uppercase tracking-wider">Saved to Azure SQL Jobs successfully.</p>
               </div>
 
               <div className="bg-surface-container rounded-2xl p-6 space-y-4">
