@@ -14,19 +14,22 @@ export default function CreateJob() {
   const [jobType, setJobType] = useState<'SHUTTLER' | 'WORKSHOP'>('SHUTTLER');
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
-    priority:          'STANDARD',
-    vehicle_id:        '',
-    company:           '',
-    contact_person:    '',
-    contact_number:    '',
-    address:           '',
-    job_date:          new Date().toISOString().split('T')[0],
-    job_time:          '',
-    location:          '',
-    destination:       '',
-    job_scope:         '',
-    remarks:           '',
-    shuttlerSubType:   '',
+    priority:            'STANDARD',
+    vehicle_id:          '',
+    company:             '',
+    contact_person:      '',
+    contact_number:      '',
+    address:             '',
+    job_date:            new Date().toISOString().split('T')[0],
+    job_time:            '',
+    location:            '',
+    destination:         '',
+    job_scope:           '',
+    remarks:             '',
+    shuttlerSubType:     '',
+    vehicle_number_out:  '',
+    vehicle_number_in:   '',
+    sales_person:        '',
   });
 
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
@@ -43,7 +46,7 @@ export default function CreateJob() {
         priority:             form.priority,
         vehicle_id:           form.vehicle_id,
         company:              form.company,
-        contact_person:       form.contact_person,
+        contact_person:       form.sales_person || form.contact_person,
         contact_number:       form.contact_number,
         address:              form.address,
         job_date:             form.job_date,
@@ -51,7 +54,8 @@ export default function CreateJob() {
         location:             jobType === 'SHUTTLER' ? form.location    : undefined,
         destination:          jobType === 'SHUTTLER' ? form.destination : undefined,
         job_scope:            jobType === 'WORKSHOP'  ? form.job_scope  : undefined,
-        vehicle_number_out:   vehiclePlate,
+        vehicle_number_out:   form.vehicle_number_out,
+        vehicle_number_in:    form.vehicle_number_in,
         remarks:              form.remarks,
       });
       navigate('/requester');
@@ -100,6 +104,57 @@ export default function CreateJob() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-8 space-y-8">
+
+            {/* Shuttler sub-type selection - RIGHT AFTER JOB TYPE */}
+            {jobType === 'SHUTTLER' && (
+              <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
+                <h2 className="font-headline font-bold text-2xl flex items-center gap-3">
+                  <Truck className="text-primary" />
+                  Service Type
+                </h2>
+                <div className="space-y-2">
+                  <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Shuttler Service</label>
+                  <select value={form.shuttlerSubType} onChange={e => set('shuttlerSubType', e.target.value)} className={cn(FIELD, "appearance-none font-bold")}>
+                    <option value="">Select service type...</option>
+                    {Object.values(ShuttlerSubType).map(subType => (
+                      <option key={subType} value={subType}>{subType}</option>
+                    ))}
+                  </select>
+                </div>
+              </section>
+            )}
+
+            {/* Vehicle */}
+            <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none"><Truck size={140} /></div>
+              <h2 className="font-headline font-bold text-2xl flex items-center gap-3 relative z-10">
+                <Truck className="text-primary" />
+                Vehicle
+              </h2>
+              <select value={form.vehicle_id} onChange={e => set('vehicle_id', e.target.value)} className={cn(FIELD, "appearance-none font-headline font-bold text-lg relative z-10")}>
+                <option value="">Choose Vehicle...</option>
+                {vehicles.map(v => <option key={v.id} value={v.id}>{v.name} ({v.plate})</option>)}
+              </select>
+            </section>
+
+            {/* Vehicle Numbers & Sales Person */}
+            <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
+              <h2 className="font-headline font-bold text-2xl">Vehicle Details & Staff</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Vehicle No (Out)</label>
+                  <input value={form.vehicle_number_out} onChange={e => set('vehicle_number_out', e.target.value)} placeholder="e.g. ABC-1234" className={FIELD} />
+                </div>
+                <div className="space-y-2">
+                  <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Vehicle No (Return)</label>
+                  <input value={form.vehicle_number_in} onChange={e => set('vehicle_number_in', e.target.value)} placeholder="e.g. ABC-1234" className={FIELD} />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Sales Person/Coordinator</label>
+                <input value={form.sales_person} onChange={e => set('sales_person', e.target.value)} placeholder="Name of sales representative..." className={FIELD} />
+              </div>
+            </section>
 
             {/* Schedule */}
             <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
@@ -153,38 +208,6 @@ export default function CreateJob() {
               </div>
             </section>
 
-            {/* Vehicle */}
-            <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-4 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none"><Truck size={140} /></div>
-              <h2 className="font-headline font-bold text-2xl flex items-center gap-3 relative z-10">
-                <Truck className="text-primary" />
-                Vehicle
-              </h2>
-              <select value={form.vehicle_id} onChange={e => set('vehicle_id', e.target.value)} className={cn(FIELD, "appearance-none font-headline font-bold text-lg relative z-10")}>
-                <option value="">Choose Vehicle...</option>
-                {vehicles.map(v => <option key={v.id} value={v.id}>{v.name} ({v.plate})</option>)}
-              </select>
-            </section>
-
-            {/* Shuttler sub-type selection */}
-            {jobType === 'SHUTTLER' && (
-              <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
-                <h2 className="font-headline font-bold text-2xl flex items-center gap-3">
-                  <Truck className="text-primary" />
-                  Service Type
-                </h2>
-                <div className="space-y-2">
-                  <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Shuttler Service</label>
-                  <select value={form.shuttlerSubType} onChange={e => set('shuttlerSubType', e.target.value)} className={cn(FIELD, "appearance-none font-bold")}>
-                    <option value="">Select service type...</option>
-                    {Object.values(ShuttlerSubType).map(subType => (
-                      <option key={subType} value={subType}>{subType}</option>
-                    ))}
-                  </select>
-                </div>
-              </section>
-            )}
-
             {/* Shuttler route fields */}
             {jobType === 'SHUTTLER' && (
               <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
@@ -223,6 +246,14 @@ export default function CreateJob() {
             <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-2">
               <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Remarks</label>
               <textarea value={form.remarks} onChange={e => set('remarks', e.target.value)} placeholder="Additional notes or instructions..." className={cn(FIELD, "h-28")} />
+            </section>
+
+            {/* Important Note */}
+            <section className="bg-error-container rounded-[2.5rem] p-8 kinetic-shadow border-l-4 border-error space-y-3">
+              <p className="font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-error-container">Important Reminder</p>
+              <p className="text-on-error-container italic leading-relaxed">
+                For switching of car / car return for good, remember to return ALL customer's personal belongings when checking in. Take care to check the vehicle over so nothing is left behind.
+              </p>
             </section>
           </div>
 
