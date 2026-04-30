@@ -70,6 +70,20 @@ IF OBJECT_ID('Jobs', 'U') IS NULL
   );
 
 
+IF OBJECT_ID('dbo.JobReferenceSeq', 'SO') IS NULL
+BEGIN
+  DECLARE @start BIGINT =
+    ISNULL((
+      SELECT MAX(TRY_CAST(SUBSTRING(reference, 4, 32) AS BIGINT))
+      FROM Jobs
+      WHERE reference LIKE 'RA-[0-9]%'
+    ), 0) + 1;
+  DECLARE @sql NVARCHAR(400) =
+    N'CREATE SEQUENCE dbo.JobReferenceSeq AS BIGINT START WITH ' + CAST(@start AS NVARCHAR(30)) + N' INCREMENT BY 1';
+  EXEC(@sql);
+END;
+
+
 IF OBJECT_ID('InspectionPins', 'U') IS NULL
   CREATE TABLE InspectionPins (
     id        INT           NOT NULL IDENTITY(1,1) PRIMARY KEY,

@@ -166,7 +166,7 @@ export default function CreateJob() {
   }
 
   return (
-    <div className="flex-1 pb-64 text-on-surface">
+    <div className="flex-1 pb-44 text-on-surface">
       <header className="sticky top-0 z-50 glass-panel border-b border-outline-variant/10 px-6 py-4 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="p-2 hover:bg-surface-container-high rounded-xl text-primary">
@@ -176,7 +176,7 @@ export default function CreateJob() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 pt-8 space-y-10 pb-36">
+      <main className="max-w-4xl mx-auto px-4 pt-8 space-y-10 pb-24">
 
         {/* Job Type Toggle */}
         <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-4">
@@ -399,7 +399,7 @@ export default function CreateJob() {
         </div>
       </main>
 
-      <div className="fixed bottom-[calc(88px+env(safe-area-inset-bottom))] left-0 w-full glass-panel border-t border-outline-variant/15 z-[60] px-6 py-4 md:py-5">
+      <div className="fixed bottom-0 left-0 w-full glass-panel border-t border-outline-variant/15 z-[70] px-6 py-4 md:py-5 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-6">
           <button onClick={() => navigate(-1)} className="text-on-surface-variant font-label font-bold uppercase text-[10px] tracking-[0.2em] hover:text-primary transition-colors">
             Discard

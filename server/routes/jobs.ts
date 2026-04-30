@@ -4,7 +4,6 @@ import { getDb, sql } from '../db/sql.js';
 import { requireAuth, AuthedRequest } from '../middleware/auth.js';
 import { requireRole, UserRole } from '../middleware/rbac.js';
 import { validate } from '../middleware/validate.js';
-import { generateJobReference } from '../utils/ids.js';
 
 const router = Router();
 
@@ -13,6 +12,33 @@ const JOB_SELECT = `
   FROM Jobs j
   LEFT JOIN Vehicles v ON v.id = j.vehicleId
 `;
+
+async function ensureJobReferenceSequence(db: sql.ConnectionPool) {
+  await db.request().query(`
+    IF OBJECT_ID('dbo.JobReferenceSeq', 'SO') IS NULL
+    BEGIN
+      DECLARE @start BIGINT =
+        ISNULL((
+          SELECT MAX(TRY_CAST(SUBSTRING(reference, 4, 32) AS BIGINT))
+          FROM Jobs
+          WHERE reference LIKE 'RA-[0-9]%'
+        ), 0) + 1;
+      DECLARE @sql NVARCHAR(400) =
+        N'CREATE SEQUENCE dbo.JobReferenceSeq AS BIGINT START WITH ' + CAST(@start AS NVARCHAR(30)) + N' INCREMENT BY 1';
+      EXEC(@sql);
+    END
+  `);
+}
+
+async function getNextJobReferenceAndCreatedAt(db: sql.ConnectionPool) {
+  await ensureJobReferenceSequence(db);
+  const result = await db.request().query(`
+    SELECT
+      CONCAT('RA-', RIGHT(REPLICATE('0', 6) + CAST(NEXT VALUE FOR dbo.JobReferenceSeq AS VARCHAR(20)), 6)) AS reference,
+      SYSUTCDATETIME() AS createdAt
+  `);
+  return result.recordset[0] as { reference: string; createdAt: string };
+}
 
 function flattenRow(row: any, pins?: any[]) {
   return {
@@ -69,10 +95,9 @@ router.get('/', requireAuth, async (req: Request, res: Response) => {
 
 // GET /api/jobs/:id — resolve by reference or id
 router.get('/new/meta', requireAuth, async (_req: Request, res: Response) => {
-  res.json({
-    reference: generateJobReference(),
-    createdAt: new Date().toISOString(),
-  });
+  const db = await getDb();
+  const meta = await getNextJobReferenceAndCreatedAt(db);
+  res.json(meta);
 });
 
 router.get('/:id', requireAuth, async (req: Request, res: Response) => {
@@ -118,12 +143,16 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
   const body = validate(createSchema, req.body, res);
   if (!body) return;
   const { id: requesterId } = (req as AuthedRequest).user;
-  const jobId    = crypto.randomUUID();
-  const reference = body.reference ?? generateJobReference();
+  const jobId = crypto.randomUUID();
   const parsedCreatedAt = body.createdAt ? new Date(body.createdAt) : new Date();
   const createdAt = Number.isNaN(parsedCreatedAt.getTime()) ? new Date() : parsedCreatedAt;
   const rawDate  = body.jobDate ?? body.job_date;
   const db = await getDb();
+  const generated = body.reference
+    ? { reference: body.reference, createdAt: createdAt.toISOString() }
+    : await getNextJobReferenceAndCreatedAt(db);
+  const reference = generated.reference;
+  const effectiveCreatedAt = body.createdAt ? createdAt : new Date(generated.createdAt);
 
   const insertResult = await db.request()
     .input('id',   sql.NVarChar,  jobId)
@@ -144,7 +173,7 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
     .input('dst',  sql.NVarChar,  body.destination ?? null)
     .input('ws',   sql.NVarChar,  body.workScope ?? body.job_scope ?? null)
     .input('vno',  sql.NVarChar,  body.vehicleNumberOut ?? body.vehicle_number_out ?? null)
-    .input('cat',  sql.DateTime2, createdAt)
+    .input('cat',  sql.DateTime2, effectiveCreatedAt)
     .input('inst', sql.NVarChar,  body.instructions ?? null)
     .input('rmk',  sql.NVarChar,  body.remarks ?? null)
     .query(`INSERT INTO Jobs
