@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Truck, MapPin, Calendar, X, ArrowRight, Settings, Navigation } from 'lucide-react';
+import { Truck, MapPin, Calendar, X, ArrowRight, Settings, Navigation, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { api } from '../lib/api';
@@ -8,11 +8,19 @@ import { useVehicles } from '../hooks/useVehicles';
 
 const FIELD = "w-full bg-surface-container-highest border-none rounded-2xl px-4 py-4 font-medium";
 
+interface CreatedJob {
+  reference: string;
+  createdAt: string;
+  company: string;
+  type: string;
+}
+
 export default function CreateJob() {
   const navigate = useNavigate();
   const { vehicles } = useVehicles();
   const [jobType, setJobType] = useState<'SHUTTLER' | 'WORKSHOP'>('SHUTTLER');
   const [submitting, setSubmitting] = useState(false);
+  const [createdJob, setCreatedJob] = useState<CreatedJob | null>(null);
   const [form, setForm] = useState({
     priority:            'STANDARD',
     vehicle_id:          '',
@@ -40,7 +48,7 @@ export default function CreateJob() {
     if (jobType === 'SHUTTLER' && !form.shuttlerSubType) return;
     setSubmitting(true);
     try {
-      await api.post('/api/jobs', {
+      const response = await api.post<{ id: string; reference: string }>('/api/jobs', {
         type:                 jobType,
         shuttlerSubType:      jobType === 'SHUTTLER' ? form.shuttlerSubType : undefined,
         priority:             form.priority,
@@ -58,11 +66,78 @@ export default function CreateJob() {
         vehicle_number_in:    form.vehicle_number_in,
         remarks:              form.remarks,
       });
-      navigate('/requester');
+      setCreatedJob({
+        reference: response.reference,
+        createdAt: new Date().toISOString(),
+        company: form.company,
+        type: jobType,
+      });
     } finally {
       setSubmitting(false);
     }
   };
+
+  const handleConfirm = () => {
+    navigate('/requester');
+  };
+
+  if (createdJob) {
+    return (
+      <div className="flex-1 pb-40 text-on-surface flex flex-col">
+        <header className="sticky top-0 z-50 glass-panel border-b border-outline-variant/10 px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <h1 className="font-headline font-black text-lg tracking-tighter text-on-surface uppercase">Job Created Successfully</h1>
+          </div>
+        </header>
+
+        <main className="flex-1 flex items-center justify-center px-4">
+          <div className="max-w-md w-full space-y-6">
+            <div className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow text-center space-y-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full">
+                <CheckCircle2 className="text-primary" size={40} />
+              </div>
+
+              <div className="space-y-2">
+                <h2 className="text-2xl font-black font-headline text-on-surface">Success!</h2>
+                <p className="text-on-surface-variant text-sm">Your job request has been created and is ready for assignment.</p>
+              </div>
+
+              <div className="bg-surface-container rounded-2xl p-6 space-y-4">
+                <div className="space-y-2">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Job Number</p>
+                  <p className="text-2xl font-black font-headline text-primary">{createdJob.reference}</p>
+                </div>
+                <div className="h-px bg-outline-variant/10"></div>
+                <div className="space-y-2">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Created Date & Time</p>
+                  <p className="text-sm font-bold text-on-surface">{new Date(createdJob.createdAt).toLocaleDateString()}</p>
+                  <p className="text-xs text-on-surface-variant">{new Date(createdJob.createdAt).toLocaleTimeString()}</p>
+                </div>
+                <div className="h-px bg-outline-variant/10"></div>
+                <div className="space-y-2">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Company</p>
+                  <p className="text-sm font-bold text-on-surface">{createdJob.company}</p>
+                </div>
+                <div className="h-px bg-outline-variant/10"></div>
+                <div className="space-y-2">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Job Type</p>
+                  <p className="text-sm font-bold text-on-surface">{createdJob.type}</p>
+                </div>
+              </div>
+
+              <button
+                onClick={handleConfirm}
+                className="w-full gradient-btn py-4 rounded-2xl font-label font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 mt-4"
+              >
+                <CheckCircle2 size={20} />
+                Done
+              </button>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 pb-40 text-on-surface">

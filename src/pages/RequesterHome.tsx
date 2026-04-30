@@ -85,12 +85,16 @@ export default function RequesterHome() {
             ) : filtered.length === 0 ? (
               <div className="h-32 flex items-center justify-center text-outline italic text-sm">No requests found.</div>
             ) : filtered.map((job) => (
-              <motion.div
+              <Link
                 key={job.id}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-surface-container-lowest rounded-3xl p-5 kinetic-shadow flex items-center justify-between group hover:bg-surface-bright transition-all"
+                to={`/driver/job/${job.id}`}
+                className="no-underline"
               >
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-surface-container-lowest rounded-3xl p-5 kinetic-shadow flex items-center justify-between group hover:bg-surface-bright transition-all cursor-pointer"
+                >
                 <div className="flex items-center gap-6">
                   <div className="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary">
                     {job.type === 'WORKSHOP' ? <Settings size={24} /> : <Truck size={24} />}
@@ -128,6 +132,7 @@ export default function RequesterHome() {
                   </Link>
                 </div>
               </motion.div>
+              </Link>
             ))}
           </div>
         </section>

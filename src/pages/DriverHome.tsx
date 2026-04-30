@@ -117,11 +117,15 @@ export default function DriverHome() {
 
           <div className="flex flex-col gap-4">
             {jobs.map((job) => (
-              <motion.div 
+              <Link
                 key={job.id}
-                whileTap={{ scale: 0.98 }}
-                className="bg-surface-container-lowest rounded-[2rem] p-1 group transition-all hover:bg-surface-bright kinetic-shadow"
+                to={`/driver/job/${job.id}`}
+                className="no-underline"
               >
+                <motion.div
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-surface-container-lowest rounded-[2rem] p-1 group transition-all hover:bg-surface-bright kinetic-shadow cursor-pointer"
+                >
                 <div className="flex flex-col p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-2">
@@ -151,28 +155,25 @@ export default function DriverHome() {
 
                   <div className="flex gap-2">
                     {job.status === JobStatus.PENDING ? (
-                      <button 
-                        onClick={() => handleUpdateStatus(job.id, JobStatus.IN_TRANSIT)}
+                      <button
+                        onClick={(e) => { e.preventDefault(); handleUpdateStatus(job.id, JobStatus.IN_TRANSIT); }}
                         className="flex-1 gradient-btn py-3 rounded-xl font-label text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2"
                       >
                         <Navigation size={14} />
                         Start Job
                       </button>
                     ) : job.status === JobStatus.IN_TRANSIT ? (
-                      <button 
-                        onClick={() => handleUpdateStatus(job.id, JobStatus.COMPLETED)}
+                      <button
+                        onClick={(e) => { e.preventDefault(); handleUpdateStatus(job.id, JobStatus.COMPLETED); }}
                         className="flex-1 bg-secondary text-white py-3 rounded-xl font-label text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2"
                       >
                         <CheckCircle size={14} />
                         Complete Job
                       </button>
                     ) : (
-                      <Link 
-                        to={`/driver/job/${job.id}`}
-                        className="flex-1 bg-surface-container-high py-3 rounded-xl font-label text-[10px] font-black uppercase tracking-widest flex items-center justify-center"
-                      >
-                        View Details
-                      </Link>
+                      <div className="flex-1 bg-surface-container-high py-3 rounded-xl font-label text-[10px] font-black uppercase tracking-widest flex items-center justify-center text-on-surface-variant">
+                        View Details →
+                      </div>
                     )}
                     <button 
                       onClick={() => {
@@ -222,6 +223,7 @@ export default function DriverHome() {
                   )}
                 </div>
               </motion.div>
+              </Link>
             ))}
           </div>
 

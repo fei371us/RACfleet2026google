@@ -99,6 +99,10 @@ export default function JobDetail() {
               <div className="bg-surface-container-low rounded-[2rem] p-6 space-y-4">
                 <div className="flex items-center gap-2"><Clock className="text-primary" size={16} /><h3 className="font-black text-[9px] uppercase tracking-[0.2em] text-on-surface-variant">Temporal Data</h3></div>
                 <div>
+                  <p className="text-[10px] font-bold text-outline uppercase mb-1">Created</p>
+                  <p className="font-headline font-bold text-on-surface">{job.created_at ? new Date(job.created_at).toLocaleDateString() : '—'}</p>
+                </div>
+                <div>
                   <p className="text-[10px] font-bold text-outline uppercase mb-1">Job Date</p>
                   <p className="font-headline font-bold text-on-surface">{job.job_date ? new Date(job.job_date).toLocaleDateString() : '—'}</p>
                 </div>

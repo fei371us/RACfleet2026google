@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Truck, Clock, ShieldCheck, Plus, Map as MapIcon, Bell, Filter, MessageSquare, MoreVertical, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Truck, Clock, ShieldCheck, Plus, Map as MapIcon, Bell, Filter, MessageSquare, MoreVertical, TrendingUp, AlertTriangle, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Job, JobStatus } from '../types';
 import { cn } from '../lib/utils';
@@ -240,14 +240,18 @@ export default function DispatcherDashboard() {
                 </button>
               </div>
             ) : filteredJobs.map((job, i) => (
-              <motion.div
+              <Link
                 key={job.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="bg-surface-container-lowest hover:bg-surface-bright transition-all p-6 rounded-[2rem] flex flex-col md:flex-row md:items-center justify-between gap-6 group hover:kinetic-shadow"
+                to={`/driver/job/${job.id}`}
+                className="no-underline"
               >
-                <div className="flex items-center gap-6">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="bg-surface-container-lowest hover:bg-surface-bright transition-all p-6 rounded-[2rem] flex flex-col md:flex-row md:items-center justify-between gap-6 group hover:kinetic-shadow cursor-pointer"
+                >
+                  <div className="flex items-center gap-6">
                   <div className={`w-16 h-16 rounded-xl flex items-center justify-center bg-surface-container-highest ${job.status === 'delayed' ? 'text-error' : 'text-primary'}`}>
                     {job.type === 'Workshop' ? <AlertTriangle /> : <Truck />}
                   </div>
@@ -293,6 +297,7 @@ export default function DispatcherDashboard() {
                   </div>
                 </div>
               </motion.div>
+              </Link>
             ))}
           </div>
         </section>
