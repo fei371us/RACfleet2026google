@@ -68,6 +68,13 @@ router.get('/', requireAuth, async (req: Request, res: Response) => {
 });
 
 // GET /api/jobs/:id — resolve by reference or id
+router.get('/new/meta', requireAuth, async (_req: Request, res: Response) => {
+  res.json({
+    reference: generateJobReference(),
+    createdAt: new Date().toISOString(),
+  });
+});
+
 router.get('/:id', requireAuth, async (req: Request, res: Response) => {
   const db = await getDb();
   const jobResult = await db.request()
@@ -85,6 +92,8 @@ router.get('/:id', requireAuth, async (req: Request, res: Response) => {
 });
 
 const createSchema = z.object({
+  reference:        z.string().optional(),
+  createdAt:        z.string().optional(),
   type:             z.enum(['SHUTTLER', 'WORKSHOP']),
   shuttlerSubType:  z.string().optional(),
   priority:         z.enum(['LOW', 'STANDARD', 'HIGH', 'CRITICAL']).default('STANDARD'),
@@ -110,7 +119,9 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
   if (!body) return;
   const { id: requesterId } = (req as AuthedRequest).user;
   const jobId    = crypto.randomUUID();
-  const reference = generateJobReference();
+  const reference = body.reference ?? generateJobReference();
+  const parsedCreatedAt = body.createdAt ? new Date(body.createdAt) : new Date();
+  const createdAt = Number.isNaN(parsedCreatedAt.getTime()) ? new Date() : parsedCreatedAt;
   const rawDate  = body.jobDate ?? body.job_date;
   const db = await getDb();
 
@@ -133,14 +144,15 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
     .input('dst',  sql.NVarChar,  body.destination ?? null)
     .input('ws',   sql.NVarChar,  body.workScope ?? body.job_scope ?? null)
     .input('vno',  sql.NVarChar,  body.vehicleNumberOut ?? body.vehicle_number_out ?? null)
+    .input('cat',  sql.DateTime2, createdAt)
     .input('inst', sql.NVarChar,  body.instructions ?? null)
     .input('rmk',  sql.NVarChar,  body.remarks ?? null)
     .query(`INSERT INTO Jobs
       (id, reference, type, shuttlerSubType, status, priority, vehicleId, requesterId, company, contactPerson, contactNumber,
-       address, jobDate, jobTime, pickupTime, location, destination, workScope, vehicleNumberOut, instructions, remarks)
+       address, jobDate, jobTime, pickupTime, location, destination, workScope, vehicleNumberOut, createdAt, instructions, remarks)
       OUTPUT INSERTED.reference AS reference, INSERTED.createdAt AS createdAt
       VALUES (@id, @ref, @type, @sst, 'PENDING', @pri, @vid, @rid, @co, @cp, @cn,
-              @addr, @jd, @jt, @pt, @loc, @dst, @ws, @vno, @inst, @rmk)`);
+              @addr, @jd, @jt, @pt, @loc, @dst, @ws, @vno, @cat, @inst, @rmk)`);
 
   const created = insertResult.recordset[0];
   res.status(201).json({ id: created.reference, reference: created.reference, createdAt: created.createdAt });

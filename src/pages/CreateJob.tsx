@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Truck, MapPin, Calendar, X, ArrowRight, Settings, Navigation, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../lib/utils';
@@ -15,12 +15,18 @@ interface CreatedJob {
   type: string;
 }
 
+interface NewJobMeta {
+  reference: string;
+  createdAt: string;
+}
+
 export default function CreateJob() {
   const navigate = useNavigate();
   const { vehicles } = useVehicles();
   const [jobType, setJobType] = useState<'SHUTTLER' | 'WORKSHOP'>('SHUTTLER');
   const [submitting, setSubmitting] = useState(false);
   const [createdJob, setCreatedJob] = useState<CreatedJob | null>(null);
+  const [jobMeta, setJobMeta] = useState<NewJobMeta | null>(null);
   const [form, setForm] = useState({
     priority:            'STANDARD',
     vehicle_id:          '',
@@ -43,12 +49,32 @@ export default function CreateJob() {
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
   const vehiclePlate = vehicles.find(v => v.id === form.vehicle_id)?.plate ?? '';
 
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const meta = await api.get<NewJobMeta>('/api/jobs/new/meta');
+        if (mounted) setJobMeta(meta);
+      } catch {
+        if (mounted) {
+          setJobMeta({
+            reference: 'AUTO-ON-SUBMIT',
+            createdAt: new Date().toISOString(),
+          });
+        }
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
   const handleSubmit = async () => {
     if (!form.vehicle_id || !form.company) return;
     if (jobType === 'SHUTTLER' && !form.shuttlerSubType) return;
     setSubmitting(true);
     try {
       const response = await api.post<{ id: string; reference: string; createdAt: string }>('/api/jobs', {
+        reference:            jobMeta?.reference && jobMeta.reference !== 'AUTO-ON-SUBMIT' ? jobMeta.reference : undefined,
+        createdAt:            jobMeta?.createdAt,
         type:                 jobType,
         shuttlerSubType:      jobType === 'SHUTTLER' ? form.shuttlerSubType : undefined,
         priority:             form.priority,
@@ -140,7 +166,7 @@ export default function CreateJob() {
   }
 
   return (
-    <div className="flex-1 pb-40 text-on-surface">
+    <div className="flex-1 pb-64 text-on-surface">
       <header className="sticky top-0 z-50 glass-panel border-b border-outline-variant/10 px-6 py-4 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="p-2 hover:bg-surface-container-high rounded-xl text-primary">
@@ -150,7 +176,7 @@ export default function CreateJob() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 pt-8 space-y-10 pb-24">
+      <main className="max-w-4xl mx-auto px-4 pt-8 space-y-10 pb-36">
 
         {/* Job Type Toggle */}
         <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-4">
@@ -174,6 +200,21 @@ export default function CreateJob() {
                 {t}
               </button>
             ))}
+          </div>
+        </section>
+
+        <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-4">
+          <h2 className="font-headline font-bold text-2xl">Job Info</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-surface-container rounded-2xl p-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Job Number</p>
+              <p className="text-lg font-black font-headline text-primary">{jobMeta?.reference ?? 'Generating...'}</p>
+            </div>
+            <div className="bg-surface-container rounded-2xl p-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Job Creation Date</p>
+              <p className="text-sm font-bold text-on-surface">{jobMeta ? new Date(jobMeta.createdAt).toLocaleDateString() : 'Generating...'}</p>
+              <p className="text-xs text-on-surface-variant">{jobMeta ? new Date(jobMeta.createdAt).toLocaleTimeString() : ''}</p>
+            </div>
           </div>
         </section>
 
@@ -339,8 +380,8 @@ export default function CreateJob() {
               <p className="font-label text-[10px] uppercase tracking-[0.2em] font-bold opacity-60 mb-6">Preview</p>
               <div className="space-y-4">
                 {[
-                  { label: 'Job Number', value: 'Auto-generated on submit' },
-                  { label: 'Created',  value: 'Auto-set on submit' },
+                  { label: 'Job Number', value: jobMeta?.reference ?? 'Generating...' },
+                  { label: 'Created', value: jobMeta ? new Date(jobMeta.createdAt).toLocaleDateString() : 'Generating...' },
                   { label: 'Type',     value: jobType },
                   { label: 'Company',  value: form.company || '---' },
                   { label: 'Date',     value: form.job_date || '---' },
@@ -358,7 +399,7 @@ export default function CreateJob() {
         </div>
       </main>
 
-      <div className="fixed bottom-0 left-0 w-full glass-panel border-t border-outline-variant/15 z-40 px-6 py-6">
+      <div className="fixed bottom-[calc(88px+env(safe-area-inset-bottom))] left-0 w-full glass-panel border-t border-outline-variant/15 z-[60] px-6 py-4 md:py-5">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-6">
           <button onClick={() => navigate(-1)} className="text-on-surface-variant font-label font-bold uppercase text-[10px] tracking-[0.2em] hover:text-primary transition-colors">
             Discard
