@@ -134,6 +134,7 @@ const createSchema = z.object({
   destination:      z.string().optional(),
   workScope:        z.string().optional(), job_scope:         z.string().optional(),
   vehicleNumberOut: z.string().optional(), vehicle_number_out:z.string().optional(),
+  vehicleNumberIn:  z.string().optional(), vehicle_number_in: z.string().optional(),
   instructions:     z.string().optional(),
   remarks:          z.string().optional(),
 });
@@ -176,15 +177,16 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
       .input('dst',  sql.NVarChar,  body.destination ?? null)
       .input('ws',   sql.NVarChar,  body.workScope ?? body.job_scope ?? null)
       .input('vno',  sql.NVarChar,  body.vehicleNumberOut ?? body.vehicle_number_out ?? null)
+      .input('vni',  sql.NVarChar,  body.vehicleNumberIn ?? body.vehicle_number_in ?? null)
       .input('cat',  sql.DateTime2, effectiveCreatedAt)
       .input('inst', sql.NVarChar,  body.instructions ?? null)
       .input('rmk',  sql.NVarChar,  body.remarks ?? null)
       .query(`INSERT INTO Jobs
         (id, reference, type, shuttlerSubType, status, priority, vehicleId, requesterId, company, contactPerson, contactNumber,
-         address, jobDate, jobTime, pickupTime, location, destination, workScope, vehicleNumberOut, createdAt, instructions, remarks)
+         address, jobDate, jobTime, pickupTime, location, destination, workScope, vehicleNumberOut, vehicleNumberIn, createdAt, instructions, remarks)
         OUTPUT INSERTED.reference AS reference, INSERTED.createdAt AS createdAt
         VALUES (@id, @ref, @type, @sst, 'PENDING', @pri, @vid, @rid, @co, @cp, @cn,
-                @addr, @jd, @jt, @pt, @loc, @dst, @ws, @vno, @cat, @inst, @rmk)`);
+                @addr, @jd, @jt, @pt, @loc, @dst, @ws, @vno, @vni, @cat, @inst, @rmk)`);
 
     const created = insertResult.recordset[0];
     console.log('[POST /api/jobs] Job created successfully:', { reference: created.reference, createdAt: created.createdAt });
