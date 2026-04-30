@@ -114,7 +114,7 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
   const rawDate  = body.jobDate ?? body.job_date;
   const db = await getDb();
 
-  await db.request()
+  const insertResult = await db.request()
     .input('id',   sql.NVarChar,  jobId)
     .input('ref',  sql.NVarChar,  reference)
     .input('type', sql.NVarChar,  body.type)
@@ -138,10 +138,12 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
     .query(`INSERT INTO Jobs
       (id, reference, type, shuttlerSubType, status, priority, vehicleId, requesterId, company, contactPerson, contactNumber,
        address, jobDate, jobTime, pickupTime, location, destination, workScope, vehicleNumberOut, instructions, remarks)
+      OUTPUT INSERTED.reference AS reference, INSERTED.createdAt AS createdAt
       VALUES (@id, @ref, @type, @sst, 'PENDING', @pri, @vid, @rid, @co, @cp, @cn,
               @addr, @jd, @jt, @pt, @loc, @dst, @ws, @vno, @inst, @rmk)`);
 
-  res.status(201).json({ id: reference, reference });
+  const created = insertResult.recordset[0];
+  res.status(201).json({ id: created.reference, reference: created.reference, createdAt: created.createdAt });
 });
 
 // PATCH /api/jobs/:id

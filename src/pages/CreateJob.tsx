@@ -48,7 +48,7 @@ export default function CreateJob() {
     if (jobType === 'SHUTTLER' && !form.shuttlerSubType) return;
     setSubmitting(true);
     try {
-      const response = await api.post<{ id: string; reference: string }>('/api/jobs', {
+      const response = await api.post<{ id: string; reference: string; createdAt: string }>('/api/jobs', {
         type:                 jobType,
         shuttlerSubType:      jobType === 'SHUTTLER' ? form.shuttlerSubType : undefined,
         priority:             form.priority,
@@ -68,7 +68,7 @@ export default function CreateJob() {
       });
       setCreatedJob({
         reference: response.reference,
-        createdAt: new Date().toISOString(),
+        createdAt: response.createdAt,
         company: form.company,
         type: jobType,
       });
@@ -339,6 +339,8 @@ export default function CreateJob() {
               <p className="font-label text-[10px] uppercase tracking-[0.2em] font-bold opacity-60 mb-6">Preview</p>
               <div className="space-y-4">
                 {[
+                  { label: 'Job Number', value: 'Auto-generated on submit' },
+                  { label: 'Created',  value: 'Auto-set on submit' },
                   { label: 'Type',     value: jobType },
                   { label: 'Company',  value: form.company || '---' },
                   { label: 'Date',     value: form.job_date || '---' },
@@ -366,7 +368,7 @@ export default function CreateJob() {
             onClick={handleSubmit}
             className="flex-1 max-w-md gradient-btn py-5 rounded-2xl flex items-center justify-center gap-3 disabled:opacity-50"
           >
-            <span className="font-label font-black uppercase tracking-[0.2em] text-sm">{submitting ? 'Creating...' : 'Create Job'}</span>
+            <span className="font-label font-black uppercase tracking-[0.2em] text-sm">{submitting ? 'Submitting...' : 'Submit'}</span>
             <ArrowRight size={20} />
           </button>
         </div>
