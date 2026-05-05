@@ -60,7 +60,7 @@ export default function DriverHome() {
        <header className="fixed top-0 left-0 w-full z-50 bg-surface/80 backdrop-blur-md flex justify-between items-center px-6 py-4">
         <div className="flex items-center gap-3">
           <Settings size={20} className="text-primary" />
-          <h1 className="font-headline font-black text-lg tracking-tighter text-on-surface uppercase">kinetic fleet</h1>
+          <h1 className="font-headline font-black text-lg tracking-tighter text-on-surface uppercase">C&P Rent-A-Car fleet</h1>
         </div>
         <div className="w-8 h-8 rounded-full overflow-hidden bg-surface-container-highest border border-primary/20">
           <img src="https://i.pravatar.cc/100?u=driver101" alt="Driver" className="w-full h-full object-cover" />

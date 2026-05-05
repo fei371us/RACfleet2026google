@@ -60,7 +60,7 @@ export default function DispatcherDashboard() {
           <button className="p-2 hover:bg-surface-container-high rounded-lg transition-colors text-primary">
             <TrendingUp size={24} />
           </button>
-          <h1 className="font-headline font-black text-lg tracking-tighter text-on-surface lowercase">kinetic fleet.</h1>
+          <h1 className="font-headline font-black text-lg tracking-tighter text-on-surface lowercase">C&P Rent-A-Car fleet.</h1>
         </div>
         <div className="flex items-center gap-6">
           <nav className="hidden md:flex gap-8">

@@ -127,7 +127,7 @@ export default function VehicleExterior() {
           <button onClick={() => navigate(-1)} className="text-primary hover:bg-surface-container-highest transition-colors p-2 rounded-lg">
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="font-headline font-black text-lg tracking-tighter text-on-surface">KINETIC FLEET</h1>
+          <h1 className="font-headline font-black text-lg tracking-tighter text-on-surface">C&P Rent-A-Car FLEET</h1>
         </div>
         <span className="font-headline font-bold tracking-tight text-xs uppercase text-primary">Vehicle Exterior</span>
       </header>
