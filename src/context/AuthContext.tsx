@@ -28,7 +28,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (username: string, password: string) => {
-    const data = await api.post<{ token: string; user: User }>('/api/auth/login', { username, password });
+    const data = await api.post<{ token: string; user: User }>('/api/auth/login', {
+      username: username.trim(),
+      password,
+    });
     localStorage.setItem('fleet_token', data.token);
     localStorage.setItem('fleet_user',  JSON.stringify(data.user));
     setToken(data.token);

@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Shield, Lock, User, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { ApiError } from '../lib/api';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -20,8 +21,16 @@ export default function LoginPage() {
     try {
       await login(username, password);
       navigate('/');
-    } catch {
-      setError('Authorization Failed. Invalid Credentials.');
+    } catch (error) {
+      if (error instanceof ApiError) {
+        if (error.status === 401) {
+          setError('Authorization Failed. Invalid Credentials.');
+        } else {
+          setError(`Authorization Failed. ${error.message}`);
+        }
+      } else {
+        setError('Authorization Failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

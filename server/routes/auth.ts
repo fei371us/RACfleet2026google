@@ -9,7 +9,7 @@ import { validate } from '../middleware/validate.js';
 const router = Router();
 
 const loginSchema = z.object({
-  username: z.string().min(1),
+  username: z.string().trim().min(1),
   password: z.string().min(1),
 });
 
