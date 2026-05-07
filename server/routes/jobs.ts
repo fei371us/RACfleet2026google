@@ -8,9 +8,21 @@ import { validate } from '../middleware/validate.js';
 const router = Router();
 
 const JOB_SELECT = `
-  SELECT j.*, v.name AS vehicle_name, v.plate AS vehicle_plate
+  SELECT
+    j.*,
+    v.name AS vehicle_name,
+    v.plate AS vehicle_plate,
+    d.name AS driver_name,
+    d.username AS driver_username,
+    r.name AS requester_name,
+    r.username AS requester_username,
+    wa.name AS workshop_adviser_name,
+    wa.username AS workshop_adviser_username
   FROM Jobs j
   LEFT JOIN Vehicles v ON v.id = j.vehicleId
+  LEFT JOIN Users d ON d.id = j.driverId
+  LEFT JOIN Users r ON r.id = j.requesterId
+  LEFT JOIN Users wa ON wa.id = j.workshopAdviserId
 `;
 
 async function ensureJobReferenceSequence(db: sql.ConnectionPool) {
@@ -46,6 +58,12 @@ function flattenRow(row: any, pins?: any[]) {
     id:                  row.reference,
     vehicle_name:        row.vehicle_name,
     vehicle_plate:       row.vehicle_plate,
+    driver_name:         row.driver_name,
+    driver_username:     row.driver_username,
+    requester_name:      row.requester_name,
+    requester_username:  row.requester_username,
+    workshop_adviser_name: row.workshop_adviser_name,
+    workshop_adviser_username: row.workshop_adviser_username,
     pins,
     driver_note:         row.driverNote,
     job_date:            row.jobDate,
