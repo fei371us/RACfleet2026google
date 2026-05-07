@@ -19,10 +19,34 @@ export default function RequesterHome() {
       )
     : jobs;
 
+  const countByType = (type: 'SHUTTLER' | 'WORKSHOP', statuses?: JobStatus[]) =>
+    jobs.filter(j => j.type === type && (!statuses || statuses.includes(j.status as JobStatus))).length;
+
   const stats = [
-    { label: 'Total Requests', value: jobs.length, icon: ClipboardList, color: 'text-primary' },
-    { label: 'Active',         value: jobs.filter(j => j.status === JobStatus.ASSIGNED || j.status === JobStatus.IN_PROGRESS).length, icon: Clock, color: 'text-secondary' },
-    { label: 'Completed',      value: jobs.filter(j => j.status === JobStatus.COMPLETED).length, icon: CheckCircle2, color: 'text-green-500' },
+    {
+      label: 'Total Requests',
+      value: jobs.length,
+      shuttler: countByType('SHUTTLER'),
+      workshop: countByType('WORKSHOP'),
+      icon: ClipboardList,
+      color: 'text-primary',
+    },
+    {
+      label: 'Active',
+      value: jobs.filter(j => j.status === JobStatus.ASSIGNED || j.status === JobStatus.IN_PROGRESS).length,
+      shuttler: countByType('SHUTTLER', [JobStatus.ASSIGNED, JobStatus.IN_PROGRESS]),
+      workshop: countByType('WORKSHOP', [JobStatus.ASSIGNED, JobStatus.IN_PROGRESS]),
+      icon: Clock,
+      color: 'text-secondary',
+    },
+    {
+      label: 'Completed',
+      value: jobs.filter(j => j.status === JobStatus.COMPLETED).length,
+      shuttler: countByType('SHUTTLER', [JobStatus.COMPLETED]),
+      workshop: countByType('WORKSHOP', [JobStatus.COMPLETED]),
+      icon: CheckCircle2,
+      color: 'text-green-500',
+    },
   ];
 
   return (
@@ -60,6 +84,9 @@ export default function RequesterHome() {
               <div>
                 <p className="text-[10px] font-black uppercase tracking-widest text-outline">{stat.label}</p>
                 <p className="text-3xl font-black font-headline text-on-surface">{stat.value.toString().padStart(2, '0')}</p>
+                <p className="text-[10px] font-bold text-on-surface-variant mt-1">
+                  SHUTTLER {stat.shuttler} | WORKSHOP {stat.workshop}
+                </p>
               </div>
             </div>
           ))}
