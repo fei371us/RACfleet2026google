@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Truck, Clock, ShieldCheck, Map as MapIcon, Bell, Filter, MessageSquare, MoreVertical, TrendingUp, AlertTriangle, ChevronRight, Search } from 'lucide-react';
+import { Truck, Clock, ShieldCheck, Map as MapIcon, Bell, Filter, MessageSquare, MoreVertical, TrendingUp, AlertTriangle, ChevronRight, Search, Wrench } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Job, UserRole } from '../types';
 import { cn } from '../lib/utils';
@@ -32,10 +32,29 @@ export default function DispatcherDashboard() {
   }, []);
 
   const drivers = users.filter(u => u.role === UserRole.DRIVER);
+  const advisers = users.filter(u => u.role === UserRole.WORKSHOP_ADVISER);
+  const countByType = (type: 'SHUTTLER' | 'WORKSHOP', status: 'ASSIGNED' | 'PENDING') =>
+    jobs.filter(j => j.type === type && (j.status ?? '').toUpperCase() === status).length;
+
   const stats = [
-    { label: 'Active Jobs', value: jobs.filter(j => (j.status ?? '').toUpperCase() === 'ASSIGNED').length, icon: Truck, color: 'text-primary' },
-    { label: 'To Assign Jobs', value: jobs.filter(j => (j.status ?? '').toUpperCase() === 'PENDING').length, icon: Clock, color: 'text-on-surface' },
+    {
+      label: 'Active Jobs',
+      value: jobs.filter(j => (j.status ?? '').toUpperCase() === 'ASSIGNED').length,
+      shuttler: countByType('SHUTTLER', 'ASSIGNED'),
+      workshop: countByType('WORKSHOP', 'ASSIGNED'),
+      icon: Truck,
+      color: 'text-primary',
+    },
+    {
+      label: 'To Assign Jobs',
+      value: jobs.filter(j => (j.status ?? '').toUpperCase() === 'PENDING').length,
+      shuttler: countByType('SHUTTLER', 'PENDING'),
+      workshop: countByType('WORKSHOP', 'PENDING'),
+      icon: Clock,
+      color: 'text-on-surface',
+    },
     { label: 'Drivers Online', value: drivers.length, total: drivers.length, icon: ShieldCheck, pulse: true, color: 'text-on-surface' },
+    { label: 'Workshop Adviser Online', value: advisers.length, total: advisers.length, icon: Wrench, pulse: true, color: 'text-on-surface' },
   ];
 
   const uniqueVehicles = Array.from(new Set(jobs.map(j => j.vehicle_name))).sort();
@@ -89,7 +108,7 @@ export default function DispatcherDashboard() {
 
       <main className="max-w-7xl mx-auto px-6 space-y-8">
         {/* Summary Metrics */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -116,6 +135,11 @@ export default function DispatcherDashboard() {
                   )}
                   {stat.total && <span className="text-xs font-medium text-on-surface-variant">/ {stat.total} Total</span>}
                 </div>
+                {stat.shuttler !== undefined && stat.workshop !== undefined && (
+                  <p className="text-[10px] font-bold text-on-surface-variant mt-1">
+                    SHUTTLER {stat.shuttler} | WORKSHOP {stat.workshop}
+                  </p>
+                )}
               </div>
             </motion.div>
           ))}
