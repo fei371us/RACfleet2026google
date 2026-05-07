@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Truck, Clock, ShieldCheck, Plus, Map as MapIcon, Bell, Filter, MessageSquare, MoreVertical, TrendingUp, AlertTriangle, ChevronRight, Search } from 'lucide-react';
+import { Truck, Clock, ShieldCheck, Map as MapIcon, Bell, Filter, MessageSquare, MoreVertical, TrendingUp, AlertTriangle, ChevronRight, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Job, JobStatus } from '../types';
+import { Job, UserRole } from '../types';
 import { cn } from '../lib/utils';
 import { api } from '../lib/api';
 import FleetMapView from '../components/FleetMapView';
+import { useUsers } from '../hooks/useUsers';
 
 export default function DispatcherDashboard() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -13,6 +14,7 @@ export default function DispatcherDashboard() {
   const [showMap, setShowMap] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const { users } = useUsers();
   const [searchParams, setSearchParams] = useState({
     status: 'all',
     vehicle: 'all',
@@ -29,14 +31,15 @@ export default function DispatcherDashboard() {
       });
   }, []);
 
+  const drivers = users.filter(u => u.role === UserRole.DRIVER);
   const stats = [
-    { label: 'Active Jobs', value: jobs.filter(j => j.status === 'in_transit').length, icon: Truck, trend: '+2', color: 'text-primary' },
-    { label: 'Pending', value: jobs.filter(j => j.status === 'pending').length, icon: Clock, color: 'text-on-surface' },
-    { label: 'Drivers Online', value: 8, total: 12, icon: ShieldCheck, pulse: true, color: 'text-on-surface' },
+    { label: 'Active Jobs', value: jobs.filter(j => (j.status ?? '').toUpperCase() === 'ASSIGNED').length, icon: Truck, color: 'text-primary' },
+    { label: 'To Assign Jobs', value: jobs.filter(j => (j.status ?? '').toUpperCase() === 'PENDING').length, icon: Clock, color: 'text-on-surface' },
+    { label: 'Drivers Online', value: drivers.length, total: drivers.length, icon: ShieldCheck, pulse: true, color: 'text-on-surface' },
   ];
 
   const uniqueVehicles = Array.from(new Set(jobs.map(j => j.vehicle_name))).sort();
-  const uniqueDrivers = Array.from(new Set(jobs.map(j => j.driver_name))).sort();
+  const uniqueDrivers = Array.from(new Set(drivers.map(d => d.name).filter(Boolean))).sort();
 
   const filteredJobs = jobs.filter(job => {
     const q = searchQuery.trim().toLowerCase();
@@ -129,17 +132,6 @@ export default function DispatcherDashboard() {
               className="bg-surface-container-lowest border-none rounded-lg pl-9 pr-4 py-3 text-xs font-bold focus:ring-1 focus:ring-primary w-64"
             />
           </div>
-          <Link to="/jobs/new" className="gradient-btn px-6 py-3 rounded-xl flex items-center gap-2 font-bold text-sm uppercase tracking-wide">
-            <Plus size={18} />
-            New Job
-          </Link>
-          <button 
-            onClick={() => setShowMap(true)}
-            className="bg-surface-container-lowest text-on-surface-variant hover:bg-surface-bright px-6 py-3 rounded-xl flex items-center gap-2 font-bold text-sm uppercase tracking-wide active:scale-95 transition-all shadow-sm"
-          >
-            <MapIcon size={18} />
-            Map View
-          </button>
           <button 
             onClick={() => setShowFilters(!showFilters)}
             className={cn(
