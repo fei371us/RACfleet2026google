@@ -19,6 +19,7 @@ export default function FleetControl() {
 
   const unassigned = jobs.filter(j => j.type === tab && j.status === 'PENDING');
   const active     = jobs.filter(j => j.type === tab && j.status !== 'PENDING' && j.status !== 'COMPLETED' && j.status !== 'CANCELLED');
+  const assignable = jobs.filter(j => j.type === tab);
 
   const busyIds = new Set(
     tab === 'SHUTTLER'
@@ -91,17 +92,17 @@ export default function FleetControl() {
             <div className="absolute top-0 right-0 opacity-5 pointer-events-none"><UserCheck size={280} /></div>
           </section>
 
-          {/* Pending queue */}
+          {/* Assignment queue */}
           <section className="space-y-4">
-            <h3 className="text-xl font-black tracking-tight font-headline uppercase px-4">Pending Assignment</h3>
+            <h3 className="text-xl font-black tracking-tight font-headline uppercase px-4">All Jobs Assignment</h3>
             {loading ? (
               <div className="h-40 flex items-center justify-center font-bold text-outline uppercase tracking-widest animate-pulse italic">Scanning...</div>
-            ) : unassigned.length === 0 ? (
+            ) : assignable.length === 0 ? (
               <div className="h-64 flex flex-col items-center justify-center bg-surface-container-low rounded-[2rem] border-2 border-dashed border-outline-variant/20 gap-4">
                 <CheckCircle2 size={48} className="text-green-500/20" />
-                <p className="font-bold text-sm uppercase tracking-widest text-outline">All {tab} jobs assigned</p>
+                <p className="font-bold text-sm uppercase tracking-widest text-outline">No {tab} jobs found</p>
               </div>
-            ) : unassigned.map((job) => (
+            ) : assignable.map((job) => (
               <motion.div
                 layoutId={job.id}
                 key={job.id}
@@ -122,6 +123,9 @@ export default function FleetControl() {
                         job.priority === 'HIGH'     ? 'bg-secondary/10 text-secondary' :
                         'bg-surface-container text-outline'
                       )}>{job.priority}</span>
+                      <span className="text-[8px] font-black uppercase px-2 py-0.5 rounded bg-surface-container text-outline">
+                        {job.status}
+                      </span>
                     </div>
                     <h4 className="font-black text-on-surface uppercase tracking-tight">{job.company}</h4>
                     <p className="text-[10px] text-on-surface-variant font-medium">
@@ -173,7 +177,7 @@ export default function FleetControl() {
                         <p className="text-[9px] font-bold text-outline uppercase tracking-widest">{busy ? 'On Job' : 'Available'}</p>
                       </div>
                     </div>
-                    {selectedJob && !busy && (
+                    {selectedJob && (
                       <button
                         disabled={assigning}
                         onClick={() => handleAssign(person.id)}
@@ -200,7 +204,7 @@ export default function FleetControl() {
                     <button onClick={() => setSelectedJob(null)} className="text-primary hover:scale-110"><X size={14} /></button>
                   </div>
                   <p className="text-xs font-bold text-on-surface mb-1 truncate">Assigning: {selectedJob.id}</p>
-                  <p className="text-[10px] text-on-surface-variant uppercase tracking-widest italic font-bold">Select available personnel above</p>
+                  <p className="text-[10px] text-on-surface-variant uppercase tracking-widest italic font-bold">Select personnel above</p>
                 </motion.div>
               )}
             </AnimatePresence>

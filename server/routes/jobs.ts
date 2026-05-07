@@ -228,11 +228,18 @@ router.post('/:id/assign', requireAuth,
         .query('SELECT id FROM Users WHERE name = @nm AND role = @role');
       if (r.recordset[0]) resolvedDriverId = r.recordset[0].id;
     }
-    const updates: string[] = ["status = 'ASSIGNED'"];
+    const updates: string[] = [];
     const request = db.request().input('ref', sql.NVarChar, req.params.id);
+    const current = await db.request()
+      .input('ref', sql.NVarChar, req.params.id)
+      .query('SELECT status FROM Jobs WHERE id = @ref OR reference = @ref');
+    const currentStatus = current.recordset[0]?.status as string | undefined;
+    if (!currentStatus) { res.status(404).json({ error: 'Not found' }); return; }
+    if (currentStatus === 'PENDING') updates.push("status = 'ASSIGNED'");
     if (resolvedDriverId)  { updates.push('driverId = @did');           request.input('did',  sql.NVarChar, resolvedDriverId); }
     if (workshopAdviserId) { updates.push('workshopAdviserId = @waid'); request.input('waid', sql.NVarChar, workshopAdviserId); }
     if (vehicleId)         { updates.push('vehicleId = @vid');          request.input('vid',  sql.NVarChar, vehicleId); }
+    if (updates.length === 0) { res.status(400).json({ error: 'No assignment fields provided' }); return; }
     await request.query(`UPDATE Jobs SET ${updates.join(', ')} WHERE id = @ref OR reference = @ref`);
     res.json({ success: true });
   }
