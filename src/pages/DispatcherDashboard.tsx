@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Truck, Clock, ShieldCheck, Plus, Map as MapIcon, Bell, Filter, MessageSquare, MoreVertical, TrendingUp, AlertTriangle, ChevronRight } from 'lucide-react';
+import { Truck, Clock, ShieldCheck, Plus, Map as MapIcon, Bell, Filter, MessageSquare, MoreVertical, TrendingUp, AlertTriangle, ChevronRight, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Job, JobStatus } from '../types';
 import { cn } from '../lib/utils';
@@ -12,6 +12,7 @@ export default function DispatcherDashboard() {
   const [loading, setLoading] = useState(true);
   const [showMap, setShowMap] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [searchParams, setSearchParams] = useState({
     status: 'all',
     vehicle: 'all',
@@ -38,7 +39,16 @@ export default function DispatcherDashboard() {
   const uniqueDrivers = Array.from(new Set(jobs.map(j => j.driver_name))).sort();
 
   const filteredJobs = jobs.filter(job => {
-    const statusMatch = searchParams.status === 'all' || job.status === searchParams.status;
+    const q = searchQuery.trim().toLowerCase();
+    const searchMatch = !q
+      || job.id?.toLowerCase().includes(q)
+      || job.driver_name?.toLowerCase().includes(q);
+    const normalizedStatus = (job.status ?? '').toUpperCase();
+    const statusMatch =
+      searchParams.status === 'all' ||
+      (searchParams.status === 'to_assign' && normalizedStatus === 'PENDING') ||
+      (searchParams.status === 'active' && normalizedStatus === 'ASSIGNED') ||
+      (searchParams.status === 'completed' && normalizedStatus === 'COMPLETED');
     const vehicleMatch = searchParams.vehicle === 'all' || job.vehicle_name === searchParams.vehicle;
     const driverMatch = searchParams.driver === 'all' || job.driver_name === searchParams.driver;
     const priorityMatch = searchParams.priority === 'all' || job.priority === searchParams.priority;
@@ -50,7 +60,7 @@ export default function DispatcherDashboard() {
       dateMatch = job.created_at.startsWith(today);
     }
 
-    return statusMatch && vehicleMatch && driverMatch && priorityMatch && dateMatch;
+    return searchMatch && statusMatch && vehicleMatch && driverMatch && priorityMatch && dateMatch;
   });
 
   return (
@@ -110,6 +120,15 @@ export default function DispatcherDashboard() {
 
         {/* Quick Actions */}
         <section className="bg-surface-container p-2 rounded-xl flex flex-wrap gap-2 items-center">
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-outline" />
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search Job Number / Driver"
+              className="bg-surface-container-lowest border-none rounded-lg pl-9 pr-4 py-3 text-xs font-bold focus:ring-1 focus:ring-primary w-64"
+            />
+          </div>
           <Link to="/jobs/new" className="gradient-btn px-6 py-3 rounded-xl flex items-center gap-2 font-bold text-sm uppercase tracking-wide">
             <Plus size={18} />
             New Job
@@ -132,18 +151,23 @@ export default function DispatcherDashboard() {
             Filters
           </button>
           <div className="ml-auto flex items-center gap-1 bg-surface-container-highest/50 p-1 rounded-lg">
-            {(['all', 'pending', 'in_transit', 'delayed'] as const).map((s) => (
+            {[
+              { value: 'all', label: 'All' },
+              { value: 'to_assign', label: 'To Assign Jobs' },
+              { value: 'active', label: 'Active Jobs' },
+              { value: 'completed', label: 'Completed Jobs' },
+            ].map((s) => (
               <button
-                key={s}
-                onClick={() => setSearchParams({ ...searchParams, status: s })}
+                key={s.value}
+                onClick={() => setSearchParams({ ...searchParams, status: s.value })}
                 className={cn(
                   "px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest transition-all",
-                  searchParams.status === s 
+                  searchParams.status === s.value 
                     ? "bg-primary text-white shadow-sm" 
                     : "text-on-surface-variant/40 hover:text-on-surface hover:bg-surface-container-highest"
                 )}
               >
-                {s.replace('_', ' ')}
+                {s.label}
               </button>
             ))}
           </div>
@@ -208,7 +232,10 @@ export default function DispatcherDashboard() {
               </div>
               <div className="flex justify-end mt-6">
                 <button 
-                  onClick={() => setSearchParams({ status: 'all', vehicle: 'all', driver: 'all', priority: 'all', dateRange: 'all' })}
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSearchParams({ status: 'all', vehicle: 'all', driver: 'all', priority: 'all', dateRange: 'all' });
+                  }}
                   className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline"
                 >
                   Clear All Filters
@@ -233,7 +260,10 @@ export default function DispatcherDashboard() {
                 <Filter size={48} className="opacity-10" />
                 <p className="font-bold text-sm uppercase tracking-widest">No matching jobs found</p>
                 <button 
-                  onClick={() => setSearchParams({ status: 'all', vehicle: 'all', driver: 'all', priority: 'all', dateRange: 'all' })}
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSearchParams({ status: 'all', vehicle: 'all', driver: 'all', priority: 'all', dateRange: 'all' });
+                  }}
                   className="text-primary text-[10px] font-black uppercase tracking-widest hover:underline"
                 >
                   Reset All Filters

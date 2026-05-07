@@ -17,9 +17,12 @@ export default function FleetControl() {
   const drivers  = users.filter(u => u.role === 'driver');
   const advisers = users.filter(u => u.role === 'workshop_adviser');
 
-  const unassigned = jobs.filter(j => j.type === tab && j.status === 'PENDING');
+  const unassigned = jobs.filter(j =>
+    j.type === tab &&
+    (tab === 'SHUTTLER' ? !j.driverId : !j.workshopAdviserId)
+  );
   const active     = jobs.filter(j => j.type === tab && j.status !== 'PENDING' && j.status !== 'COMPLETED' && j.status !== 'CANCELLED');
-  const assignable = jobs.filter(j => j.type === tab);
+  const assignable = unassigned;
 
   const busyIds = new Set(
     tab === 'SHUTTLER'
@@ -94,13 +97,13 @@ export default function FleetControl() {
 
           {/* Assignment queue */}
           <section className="space-y-4">
-            <h3 className="text-xl font-black tracking-tight font-headline uppercase px-4">All Jobs Assignment</h3>
+            <h3 className="text-xl font-black tracking-tight font-headline uppercase px-4">Needs Assignment</h3>
             {loading ? (
               <div className="h-40 flex items-center justify-center font-bold text-outline uppercase tracking-widest animate-pulse italic">Scanning...</div>
             ) : assignable.length === 0 ? (
               <div className="h-64 flex flex-col items-center justify-center bg-surface-container-low rounded-[2rem] border-2 border-dashed border-outline-variant/20 gap-4">
                 <CheckCircle2 size={48} className="text-green-500/20" />
-                <p className="font-bold text-sm uppercase tracking-widest text-outline">No {tab} jobs found</p>
+                <p className="font-bold text-sm uppercase tracking-widest text-outline">All {tab} jobs assigned</p>
               </div>
             ) : assignable.map((job) => (
               <motion.div
