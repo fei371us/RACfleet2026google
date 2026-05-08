@@ -106,9 +106,11 @@ export default function VehicleExterior() {
   };
 
   const handleSavePin = async (pin: UiPin) => {
+    const numericId = Number(pin.id);
+    if (!Number.isFinite(numericId) || numericId <= 0) return;
     try {
       setBusyPinId(pin.id);
-      await api.patch(`/api/inspection/pins/${pin.id}`, {
+      await api.patch(`/api/inspection/pins/${numericId}`, {
         type: pin.type,
         note: pin.note,
         photo_url: pin.photo_url || '',
@@ -121,9 +123,14 @@ export default function VehicleExterior() {
   };
 
   const handleDeletePin = async (pinId: string) => {
+    const numericId = Number(pinId);
+    if (!Number.isFinite(numericId) || numericId <= 0) {
+      setPins((prev) => prev.filter((p) => p.id !== pinId));
+      return;
+    }
     try {
       setBusyPinId(pinId);
-      await api.delete(`/api/inspection/pins/${pinId}`);
+      await api.delete(`/api/inspection/pins/${numericId}`);
       setPins((prev) => prev.filter((p) => p.id !== pinId));
     } catch (error) {
       console.error('Failed to delete pin:', error);
@@ -370,7 +377,7 @@ export default function VehicleExterior() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleSavePin(pin)}
-                    disabled={busyPinId === pin.id}
+                    disabled={busyPinId === pin.id || !Number.isFinite(Number(pin.id))}
                     className="flex-1 bg-primary text-white py-2 rounded-lg text-xs font-bold uppercase tracking-wider disabled:opacity-60"
                   >
                     {busyPinId === pin.id ? 'Saving...' : 'Save'}

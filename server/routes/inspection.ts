@@ -35,8 +35,18 @@ router.post('/pins', requireAuth, async (req: Request, res: Response) => {
   const body = validate(pinSchema, req.body, res);
   if (!body) return;
   const db = await getDb();
+
+  // Accept either internal Jobs.id (UUID) or human-facing Jobs.reference (RA-xxxxxx).
+  let resolvedJobId = body.jobId ?? body.job_id ?? null;
+  if (resolvedJobId) {
+    const jobLookup = await db.request()
+      .input('ref', sql.NVarChar, resolvedJobId)
+      .query('SELECT TOP 1 id FROM Jobs WHERE id = @ref OR reference = @ref');
+    resolvedJobId = jobLookup.recordset[0]?.id ?? null;
+  }
+
   const result = await db.request()
-    .input('jobId',     sql.NVarChar, body.jobId ?? body.job_id ?? null)
+    .input('jobId',     sql.NVarChar, resolvedJobId)
     .input('vehicleId', sql.NVarChar, body.vehicleId ?? body.vehicle_id ?? null)
     .input('x',         sql.Float,    body.x)
     .input('y',         sql.Float,    body.y)
