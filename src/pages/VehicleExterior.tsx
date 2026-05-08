@@ -28,29 +28,38 @@ export default function VehicleExterior() {
   const [uploadingPinId, setUploadingPinId] = useState<string | null>(null);
 
   useEffect(() => {
-    api.get<Job>(`/api/jobs/${id}`)
-      .then((data) => {
-        setJob(data);
-        const existingPins: UiPin[] = (data.pins || []).map((p: InspectionPin) => ({
-          id: String(p.id ?? `${p.x}-${p.y}-${Math.random()}`),
-          x: p.x,
-          y: p.y,
-          type: p.type,
-          note: p.note || '',
-          photo_url: p.photo_url,
-        }));
-        setPins(existingPins);
-        const pinIds = existingPins
-          .map((p) => Number(p.id))
-          .filter((n) => Number.isFinite(n) && n > 0);
-        if (pinIds.length > 0) {
-          const photoResponse = await api.post<{ urls: Record<string, string> }>('/api/inspection/pins/photo-urls', { pinIds });
-          setPins((prev) => prev.map((pin) => ({
-            ...pin,
-            photo_view_url: photoResponse.urls[pin.id] || pin.photo_view_url,
-          })));
-        }
-      });
+    let cancelled = false;
+    const loadJobAndPhotos = async () => {
+      const data = await api.get<Job>(`/api/jobs/${id}`);
+      if (cancelled) return;
+      setJob(data);
+      const existingPins: UiPin[] = (data.pins || []).map((p: InspectionPin) => ({
+        id: String(p.id ?? `${p.x}-${p.y}-${Math.random()}`),
+        x: p.x,
+        y: p.y,
+        type: p.type,
+        note: p.note || '',
+        photo_url: p.photo_url,
+      }));
+      setPins(existingPins);
+      const pinIds = existingPins
+        .map((p) => Number(p.id))
+        .filter((n) => Number.isFinite(n) && n > 0);
+      if (pinIds.length > 0) {
+        const photoResponse = await api.post<{ urls: Record<string, string> }>('/api/inspection/pins/photo-urls', { pinIds });
+        if (cancelled) return;
+        setPins((prev) => prev.map((pin) => ({
+          ...pin,
+          photo_view_url: photoResponse.urls[pin.id] || pin.photo_view_url,
+        })));
+      }
+    };
+    loadJobAndPhotos().catch((error) => {
+      console.error('Failed to load job/pin photos:', error);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   const handleAddPin = async (e: MouseEvent<HTMLDivElement>) => {
