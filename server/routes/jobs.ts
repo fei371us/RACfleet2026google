@@ -55,6 +55,7 @@ async function getNextJobReferenceAndCreatedAt(db: sql.ConnectionPool) {
 function flattenRow(row: any, pins?: any[]) {
   return {
     ...row,
+    job_db_id:           row.id,
     id:                  row.reference,
     vehicle_name:        row.vehicle_name,
     vehicle_plate:       row.vehicle_plate,

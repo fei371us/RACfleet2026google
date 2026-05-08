@@ -85,7 +85,7 @@ export default function VehicleExterior() {
     try {
       setSaving(true);
       const saved = await api.post<{ id: number }>('/api/inspection/pins', {
-        job_id: id,
+        job_id: job.job_db_id || id,
         vehicle_id: job.vehicleId,
         x,
         y,

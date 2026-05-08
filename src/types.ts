@@ -59,6 +59,7 @@ export interface ChecklistItem {
 
 export interface Job {
   id: string;           // = reference (e.g. KF-1401), surfaced by flattenJob
+  job_db_id?: string;   // internal UUID in Jobs.id
   reference: string;
   type: string;         // 'SHUTTLER' | 'WORKSHOP'
   shuttlerSubType?: string; // SHUTTLER job sub-type (Delivery, Washing, etc.)

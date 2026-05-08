@@ -43,29 +43,39 @@ const exteriorCheckSchema = z.object({
 });
 
 router.post('/pins', requireAuth, async (req: Request, res: Response) => {
-  const body = validate(pinSchema, req.body, res);
-  if (!body) return;
-  const db = await getDb();
+  try {
+    const body = validate(pinSchema, req.body, res);
+    if (!body) return;
+    const db = await getDb();
 
-  // Accept either internal Jobs.id (UUID) or human-facing Jobs.reference (RA-xxxxxx).
-  let resolvedJobId = body.jobId ?? body.job_id ?? null;
-  if (resolvedJobId) {
-    const jobLookup = await db.request()
-      .input('ref', sql.NVarChar, resolvedJobId)
-      .query('SELECT TOP 1 id FROM Jobs WHERE id = @ref OR reference = @ref');
-    resolvedJobId = jobLookup.recordset[0]?.id ?? null;
+    // Accept either internal Jobs.id (UUID) or human-facing Jobs.reference (RA-xxxxxx).
+    const incomingJobRef = body.jobId ?? body.job_id ?? null;
+    let resolvedJobId = incomingJobRef;
+    if (incomingJobRef) {
+      const jobLookup = await db.request()
+        .input('ref', sql.NVarChar, incomingJobRef)
+        .query('SELECT TOP 1 id FROM Jobs WHERE id = @ref OR reference = @ref');
+      resolvedJobId = jobLookup.recordset[0]?.id ?? null;
+      if (!resolvedJobId) {
+        res.status(400).json({ error: `Invalid job_id: ${incomingJobRef}` });
+        return;
+      }
+    }
+
+    const result = await db.request()
+      .input('jobId',     sql.NVarChar, resolvedJobId)
+      .input('vehicleId', sql.NVarChar, body.vehicleId ?? body.vehicle_id ?? null)
+      .input('x',         sql.Float,    body.x)
+      .input('y',         sql.Float,    body.y)
+      .input('type',      sql.NVarChar, body.type.toUpperCase())
+      .input('note',      sql.NVarChar, body.note ?? null)
+      .input('photoUrl',  sql.NVarChar, body.photoUrl ?? body.photo_url ?? null)
+      .query('INSERT INTO InspectionPins (jobId, vehicleId, x, y, type, note, photoUrl) OUTPUT INSERTED.id VALUES (@jobId, @vehicleId, @x, @y, @type, @note, @photoUrl)');
+    res.status(201).json({ id: result.recordset[0].id });
+  } catch (error) {
+    console.error('[POST /api/inspection/pins] Failed to create pin:', error);
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to create pin' });
   }
-
-  const result = await db.request()
-    .input('jobId',     sql.NVarChar, resolvedJobId)
-    .input('vehicleId', sql.NVarChar, body.vehicleId ?? body.vehicle_id ?? null)
-    .input('x',         sql.Float,    body.x)
-    .input('y',         sql.Float,    body.y)
-    .input('type',      sql.NVarChar, body.type.toUpperCase())
-    .input('note',      sql.NVarChar, body.note ?? null)
-    .input('photoUrl',  sql.NVarChar, body.photoUrl ?? body.photo_url ?? null)
-    .query('INSERT INTO InspectionPins (jobId, vehicleId, x, y, type, note, photoUrl) OUTPUT INSERTED.id VALUES (@jobId, @vehicleId, @x, @y, @type, @note, @photoUrl)');
-  res.status(201).json({ id: result.recordset[0].id });
 });
 
 router.patch('/pins/:id', requireAuth, async (req: Request, res: Response) => {
