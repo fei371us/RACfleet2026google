@@ -168,14 +168,6 @@ export default function JobDetail() {
               <ChevronRight className="text-on-surface-variant/40 group-hover:text-primary group-hover:translate-x-1 transition-all" />
             </Link>
 
-            <Link to={`/driver/inspection/${id}`} className="flex items-center justify-between bg-surface-container-high p-6 rounded-[2rem] group hover:bg-surface-container transition-all">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm"><ShieldAlert size={20} /></div>
-                <div><h4 className="font-headline font-bold text-sm">Visual Damage Map</h4><p className="text-[10px] font-bold text-on-surface-variant/60 uppercase">Unit Status Verification</p></div>
-              </div>
-              <ChevronRight className="text-on-surface-variant/40 group-hover:text-primary group-hover:translate-x-1 transition-all" />
-            </Link>
-
             <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow">
               <h3 className="font-black text-[10px] uppercase tracking-[0.2em] text-on-surface-variant mb-6">Maintenance Checklist</h3>
               <div className="space-y-2">

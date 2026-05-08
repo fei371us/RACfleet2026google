@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { getDb, sql } from '../db/sql.js';
-import { requireAuth } from '../middleware/auth.js';
+import { AuthedRequest, requireAuth } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import {
   createPinPhotoReadUrl,
@@ -29,6 +29,17 @@ const photoFinalizeSchema = z.object({
 });
 const photoUrlsSchema = z.object({
   pinIds: z.array(z.number().int().positive()).max(200).default([]),
+});
+const exteriorCheckSchema = z.object({
+  checkedBy: z.string().min(1),
+  checkedSignature: z.string().min(1),
+  receivedBy: z.string().min(1),
+  receivedSignature: z.string().min(1),
+  gps: z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+    accuracy: z.number().optional(),
+  }),
 });
 
 router.post('/pins', requireAuth, async (req: Request, res: Response) => {
@@ -170,6 +181,47 @@ router.post('/pins/photo-urls', requireAuth, async (req: Request, res: Response)
     urls[String(row.id)] = isBlobStorageConfigured() ? await createPinPhotoReadUrl(raw) : raw;
   }
   res.json({ urls });
+});
+
+router.post('/jobs/:id/exterior-check', requireAuth, async (req: Request, res: Response) => {
+  const body = validate(exteriorCheckSchema, req.body, res);
+  if (!body) return;
+
+  const ref = req.params.id;
+  const db = await getDb();
+  const current = await db.request()
+    .input('ref', sql.NVarChar, ref)
+    .query('SELECT TOP 1 id, remarks FROM Jobs WHERE id = @ref OR reference = @ref');
+  if (!current.recordset[0]) {
+    res.status(404).json({ error: 'Job not found' });
+    return;
+  }
+
+  const marker = '[EXTERIOR_CHECK]';
+  const cleaned = String(current.recordset[0].remarks ?? '')
+    .split('\n')
+    .filter((line) => !line.trim().startsWith(marker))
+    .join('\n')
+    .trim();
+
+  const signedPayload = {
+    checkedBy: body.checkedBy,
+    checkedSignature: body.checkedSignature,
+    receivedBy: body.receivedBy,
+    receivedSignature: body.receivedSignature,
+    gps: body.gps,
+    submittedAt: new Date().toISOString(),
+    submittedByUserId: (req as AuthedRequest).user.id,
+  };
+  const encoded = Buffer.from(JSON.stringify(signedPayload), 'utf8').toString('base64url');
+  const nextRemarks = `${cleaned}${cleaned ? '\n' : ''}${marker}${encoded}`;
+
+  await db.request()
+    .input('jobId', sql.NVarChar, current.recordset[0].id)
+    .input('remarks', sql.NVarChar, nextRemarks)
+    .query('UPDATE Jobs SET remarks = @remarks WHERE id = @jobId');
+
+  res.json({ success: true, submittedAt: signedPayload.submittedAt });
 });
 
 router.delete('/pins/:id', requireAuth, async (req: Request, res: Response) => {

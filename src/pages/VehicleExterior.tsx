@@ -1,6 +1,6 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, PointerEvent, useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft, Camera, ChevronRight, Image as ImageIcon, Plus, Search, Truck } from 'lucide-react';
+import { ArrowLeft, Camera, Image as ImageIcon, Plus, Search, Truck } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Job, InspectionPin } from '../types';
 import { api } from '../lib/api';
@@ -26,6 +26,16 @@ export default function VehicleExterior() {
   const [saving, setSaving] = useState(false);
   const [busyPinId, setBusyPinId] = useState<string | null>(null);
   const [uploadingPinId, setUploadingPinId] = useState<string | null>(null);
+  const [checkedBy, setCheckedBy] = useState('');
+  const [receivedBy, setReceivedBy] = useState('');
+  const [checkedSignature, setCheckedSignature] = useState('');
+  const [receivedSignature, setReceivedSignature] = useState('');
+  const [drawingTarget, setDrawingTarget] = useState<'checked' | 'received' | null>(null);
+  const [submittingCheck, setSubmittingCheck] = useState(false);
+  const [submitMsg, setSubmitMsg] = useState('');
+  const [submitError, setSubmitError] = useState('');
+  const checkedCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const receivedCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -173,6 +183,111 @@ export default function VehicleExterior() {
       console.error('Failed to upload pin photo:', error);
     } finally {
       setUploadingPinId(null);
+    }
+  };
+
+  const getCanvasForTarget = (target: 'checked' | 'received') => (
+    target === 'checked' ? checkedCanvasRef.current : receivedCanvasRef.current
+  );
+
+  const drawLineTo = (target: 'checked' | 'received', e: PointerEvent<HTMLCanvasElement>, isStart = false) => {
+    const canvas = getCanvasForTarget(target);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    if (isStart) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      return;
+    }
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = '#0f172a';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+  };
+
+  const handleSignStart = (target: 'checked' | 'received', e: PointerEvent<HTMLCanvasElement>) => {
+    const canvas = getCanvasForTarget(target);
+    if (!canvas) return;
+    canvas.setPointerCapture(e.pointerId);
+    setDrawingTarget(target);
+    drawLineTo(target, e, true);
+  };
+
+  const handleSignMove = (target: 'checked' | 'received', e: PointerEvent<HTMLCanvasElement>) => {
+    if (drawingTarget !== target) return;
+    drawLineTo(target, e);
+  };
+
+  const handleSignEnd = (target: 'checked' | 'received') => {
+    if (drawingTarget !== target) return;
+    setDrawingTarget(null);
+    const canvas = getCanvasForTarget(target);
+    if (!canvas) return;
+    const dataUrl = canvas.toDataURL('image/png');
+    if (target === 'checked') setCheckedSignature(dataUrl);
+    else setReceivedSignature(dataUrl);
+  };
+
+  const clearSignature = (target: 'checked' | 'received') => {
+    const canvas = getCanvasForTarget(target);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (target === 'checked') setCheckedSignature('');
+    else setReceivedSignature('');
+  };
+
+  const getCurrentLocation = () => new Promise<{ latitude: number; longitude: number; accuracy?: number }>((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error('Geolocation is not supported on this device/browser.'));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        resolve({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+          accuracy: pos.coords.accuracy,
+        });
+      },
+      () => reject(new Error('Unable to get GPS location. Please enable location permission.')),
+      { enableHighAccuracy: true, timeout: 15000 }
+    );
+  });
+
+  const handleSubmitExteriorCheck = async () => {
+    setSubmitError('');
+    setSubmitMsg('');
+    if (!checkedBy.trim() || !receivedBy.trim()) {
+      setSubmitError('Please enter both Checked By and Received By.');
+      return;
+    }
+    if (!checkedSignature || !receivedSignature) {
+      setSubmitError('Please provide both signatures before submitting.');
+      return;
+    }
+    try {
+      setSubmittingCheck(true);
+      const gps = await getCurrentLocation();
+      await api.post(`/api/inspection/jobs/${id}/exterior-check`, {
+        checkedBy: checkedBy.trim(),
+        checkedSignature,
+        receivedBy: receivedBy.trim(),
+        receivedSignature,
+        gps,
+      });
+      setSubmitMsg('Submitted successfully with GPS location.');
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Failed to submit exterior check.');
+    } finally {
+      setSubmittingCheck(false);
     }
   };
 
@@ -401,16 +516,63 @@ export default function VehicleExterior() {
           </div>
         </section>
 
-        <div className="mt-12 flex flex-col items-center gap-4">
+        <section className="mt-12 bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/10 space-y-4">
+          <h3 className="font-headline font-bold text-lg">Handover Confirmation</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Checked By</label>
+              <input
+                value={checkedBy}
+                onChange={(e) => setCheckedBy(e.target.value)}
+                className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-xl p-3 text-sm"
+                placeholder="Name"
+              />
+              <canvas
+                ref={checkedCanvasRef}
+                width={500}
+                height={160}
+                onPointerDown={(e) => handleSignStart('checked', e)}
+                onPointerMove={(e) => handleSignMove('checked', e)}
+                onPointerUp={() => handleSignEnd('checked')}
+                onPointerLeave={() => handleSignEnd('checked')}
+                className="w-full h-36 rounded-xl bg-white border border-outline-variant/20 touch-none"
+              />
+              <button onClick={() => clearSignature('checked')} className="text-xs text-primary font-bold">Clear Signature</button>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Received By</label>
+              <input
+                value={receivedBy}
+                onChange={(e) => setReceivedBy(e.target.value)}
+                className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-xl p-3 text-sm"
+                placeholder="Name"
+              />
+              <canvas
+                ref={receivedCanvasRef}
+                width={500}
+                height={160}
+                onPointerDown={(e) => handleSignStart('received', e)}
+                onPointerMove={(e) => handleSignMove('received', e)}
+                onPointerUp={() => handleSignEnd('received')}
+                onPointerLeave={() => handleSignEnd('received')}
+                className="w-full h-36 rounded-xl bg-white border border-outline-variant/20 touch-none"
+              />
+              <button onClick={() => clearSignature('received')} className="text-xs text-primary font-bold">Clear Signature</button>
+            </div>
+          </div>
+
           <button
-            onClick={() => navigate(`/driver/inspection/${id}`)}
-            className="w-full md:w-80 bg-gradient-to-br from-primary to-primary-container text-white py-5 rounded-xl font-bold text-sm tracking-widest uppercase shadow-xl hover:shadow-primary/20 active:scale-95 transition-all group flex items-center justify-center gap-2"
+            onClick={handleSubmitExteriorCheck}
+            disabled={submittingCheck}
+            className="w-full bg-primary text-white py-3 rounded-xl font-bold text-xs uppercase tracking-widest disabled:opacity-60"
           >
-            Continue to Visual Damage Map
-            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            {submittingCheck ? 'Submitting with GPS...' : 'Submit Handover (Save GPS)'}
           </button>
+          {submitMsg && <p className="text-xs text-green-700 font-semibold">{submitMsg}</p>}
+          {submitError && <p className="text-xs text-error font-semibold">{submitError}</p>}
           <span className="text-xs font-medium text-on-surface-variant">{saving ? 'Saving pin...' : 'Pins are saved to job record.'}</span>
-        </div>
+        </section>
       </main>
     </div>
   );
