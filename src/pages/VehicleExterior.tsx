@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft, ChevronRight, Plus, Search, Truck } from 'lucide-react';
+import { ArrowLeft, Camera, ChevronRight, Image as ImageIcon, Plus, Search, Truck } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Job, InspectionPin } from '../types';
 import { api } from '../lib/api';
@@ -14,6 +14,7 @@ interface UiPin {
   type: PinType;
   note: string;
   photo_url?: string;
+  photo_view_url?: string;
 }
 
 export default function VehicleExterior() {
@@ -24,6 +25,7 @@ export default function VehicleExterior() {
   const [pinType, setPinType] = useState<PinType>('critical');
   const [saving, setSaving] = useState(false);
   const [busyPinId, setBusyPinId] = useState<string | null>(null);
+  const [uploadingPinId, setUploadingPinId] = useState<string | null>(null);
 
   useEffect(() => {
     api.get<Job>(`/api/jobs/${id}`)
@@ -38,6 +40,16 @@ export default function VehicleExterior() {
           photo_url: p.photo_url,
         }));
         setPins(existingPins);
+        const pinIds = existingPins
+          .map((p) => Number(p.id))
+          .filter((n) => Number.isFinite(n) && n > 0);
+        if (pinIds.length > 0) {
+          const photoResponse = await api.post<{ urls: Record<string, string> }>('/api/inspection/pins/photo-urls', { pinIds });
+          setPins((prev) => prev.map((pin) => ({
+            ...pin,
+            photo_view_url: photoResponse.urls[pin.id] || pin.photo_view_url,
+          })));
+        }
       });
   }, [id]);
 
@@ -53,20 +65,15 @@ export default function VehicleExterior() {
 
     try {
       setSaving(true);
-      const res = await fetch('/api/inspection/pins', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          job_id: id,
-          vehicle_id: job.vehicleId,
-          x,
-          y,
-          type: pinType,
-          note: '',
-          photo_url: '',
-        }),
+      const saved = await api.post<{ id: number }>('/api/inspection/pins', {
+        job_id: id,
+        vehicle_id: job.vehicleId,
+        x,
+        y,
+        type: pinType,
+        note: '',
+        photo_url: '',
       });
-      const saved = await res.json();
       setPins((prev) => prev.map((p) => (p.id === tempId ? { ...p, id: String(saved.id) } : p)));
     } catch (error) {
       setPins((prev) => prev.filter((p) => p.id !== tempId));
@@ -92,14 +99,10 @@ export default function VehicleExterior() {
   const handleSavePin = async (pin: UiPin) => {
     try {
       setBusyPinId(pin.id);
-      await fetch(`/api/inspection/pins/${pin.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: pin.type,
-          note: pin.note,
-          photo_url: pin.photo_url || '',
-        }),
+      await api.patch(`/api/inspection/pins/${pin.id}`, {
+        type: pin.type,
+        note: pin.note,
+        photo_url: pin.photo_url || '',
       });
     } catch (error) {
       console.error('Failed to save pin:', error);
@@ -111,12 +114,49 @@ export default function VehicleExterior() {
   const handleDeletePin = async (pinId: string) => {
     try {
       setBusyPinId(pinId);
-      await fetch(`/api/inspection/pins/${pinId}`, { method: 'DELETE' });
+      await api.delete(`/api/inspection/pins/${pinId}`);
       setPins((prev) => prev.filter((p) => p.id !== pinId));
     } catch (error) {
       console.error('Failed to delete pin:', error);
     } finally {
       setBusyPinId(null);
+    }
+  };
+
+  const handlePhotoPicked = async (pinId: string, file: File | null) => {
+    if (!file) return;
+    const numericId = Number(pinId);
+    if (!Number.isFinite(numericId) || numericId <= 0) return;
+    try {
+      setUploadingPinId(pinId);
+      const upload = await api.post<{ uploadUrl: string; blobPath: string }>(
+        `/api/inspection/pins/${pinId}/photo-upload-url`,
+        { fileName: file.name || `pin-${pinId}.jpg` }
+      );
+
+      const uploadResult = await fetch(upload.uploadUrl, {
+        method: 'PUT',
+        headers: {
+          'x-ms-blob-type': 'BlockBlob',
+          'Content-Type': file.type || 'image/jpeg',
+        },
+        body: file,
+      });
+      if (!uploadResult.ok) throw new Error('Upload to blob failed');
+
+      const finalized = await api.post<{ photo_url: string; photo_view_url: string }>(
+        `/api/inspection/pins/${pinId}/photo-finalize`,
+        { blobPath: upload.blobPath }
+      );
+      setPins((prev) => prev.map((p) => (
+        p.id === pinId
+          ? { ...p, photo_url: finalized.photo_url, photo_view_url: finalized.photo_view_url }
+          : p
+      )));
+    } catch (error) {
+      console.error('Failed to upload pin photo:', error);
+    } finally {
+      setUploadingPinId(null);
     }
   };
 
@@ -283,12 +323,40 @@ export default function VehicleExterior() {
                   className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-xl p-3 text-sm"
                 />
 
-                <input
-                  value={pin.photo_url || ''}
-                  onChange={(e) => handlePinFieldChange(pin.id, 'photo_url', e.target.value)}
-                  placeholder="Photo URL (optional)"
-                  className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-xl p-3 text-sm"
-                />
+                {pin.photo_view_url && (
+                  <img
+                    src={pin.photo_view_url}
+                    alt={`Pin ${index + 1} damage`}
+                    className="w-full h-40 object-cover rounded-xl border border-outline-variant/20"
+                  />
+                )}
+
+                <div className="grid grid-cols-2 gap-2">
+                  <label className="cursor-pointer bg-surface-container-high text-on-surface py-2 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+                    <Camera className="w-4 h-4" />
+                    Take Photo
+                    <input
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      className="hidden"
+                      onChange={(e) => handlePhotoPicked(pin.id, e.target.files?.[0] ?? null)}
+                    />
+                  </label>
+                  <label className="cursor-pointer bg-surface-container-high text-on-surface py-2 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+                    <ImageIcon className="w-4 h-4" />
+                    Photo Library
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => handlePhotoPicked(pin.id, e.target.files?.[0] ?? null)}
+                    />
+                  </label>
+                </div>
+                {uploadingPinId === pin.id && (
+                  <p className="text-xs text-on-surface-variant">Uploading photo...</p>
+                )}
 
                 <div className="flex gap-2">
                   <button

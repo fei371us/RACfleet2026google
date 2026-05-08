@@ -3,6 +3,12 @@ import { z } from 'zod';
 import { getDb, sql } from '../db/sql.js';
 import { requireAuth } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
+import {
+  createPinPhotoReadUrl,
+  createPinPhotoUploadUrl,
+  deletePinPhoto,
+  isBlobStorageConfigured,
+} from '../lib/blobStorage.js';
 
 const router = Router();
 
@@ -14,6 +20,15 @@ const pinSchema = z.object({
   type: z.string(),
   note: z.string().optional(),
   photo_url: z.string().optional(), photoUrl: z.string().optional(),
+});
+const photoUploadSchema = z.object({
+  fileName: z.string().min(1).max(240),
+});
+const photoFinalizeSchema = z.object({
+  blobPath: z.string().min(1),
+});
+const photoUrlsSchema = z.object({
+  pinIds: z.array(z.number().int().positive()).max(200).default([]),
 });
 
 router.post('/pins', requireAuth, async (req: Request, res: Response) => {
@@ -56,13 +71,112 @@ router.patch('/pins/:id', requireAuth, async (req: Request, res: Response) => {
   res.json(updated.recordset[0]);
 });
 
+router.post('/pins/:id/photo-upload-url', requireAuth, async (req: Request, res: Response) => {
+  if (!isBlobStorageConfigured()) {
+    res.status(503).json({ error: 'Blob storage is not configured on the server.' });
+    return;
+  }
+
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id) || id <= 0) {
+    res.status(400).json({ error: 'Invalid pin id' });
+    return;
+  }
+  const body = validate(photoUploadSchema, req.body, res);
+  if (!body) return;
+
+  const db = await getDb();
+  const existing = await db.request()
+    .input('id', sql.Int, id)
+    .query('SELECT id FROM InspectionPins WHERE id = @id');
+  if (!existing.recordset[0]) {
+    res.status(404).json({ error: 'Pin not found' });
+    return;
+  }
+
+  const upload = await createPinPhotoUploadUrl(id, body.fileName);
+  res.json(upload);
+});
+
+router.post('/pins/:id/photo-finalize', requireAuth, async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id) || id <= 0) {
+    res.status(400).json({ error: 'Invalid pin id' });
+    return;
+  }
+  const body = validate(photoFinalizeSchema, req.body, res);
+  if (!body) return;
+
+  const db = await getDb();
+  const existing = await db.request()
+    .input('id', sql.Int, id)
+    .query('SELECT photoUrl FROM InspectionPins WHERE id = @id');
+  if (!existing.recordset[0]) {
+    res.status(404).json({ error: 'Pin not found' });
+    return;
+  }
+
+  const previousPhoto = existing.recordset[0].photoUrl as string | null;
+  await db.request()
+    .input('id', sql.Int, id)
+    .input('photoUrl', sql.NVarChar, body.blobPath)
+    .query('UPDATE InspectionPins SET photoUrl = @photoUrl WHERE id = @id');
+
+  if (previousPhoto && previousPhoto !== body.blobPath && isBlobStorageConfigured()) {
+    await deletePinPhoto(previousPhoto).catch(() => {});
+  }
+
+  const photoViewUrl = isBlobStorageConfigured()
+    ? await createPinPhotoReadUrl(body.blobPath)
+    : body.blobPath;
+  res.json({ photo_url: body.blobPath, photo_view_url: photoViewUrl });
+});
+
+router.post('/pins/photo-urls', requireAuth, async (req: Request, res: Response) => {
+  const body = validate(photoUrlsSchema, req.body, res);
+  if (!body) return;
+  if (body.pinIds.length === 0) {
+    res.json({ urls: {} });
+    return;
+  }
+
+  const db = await getDb();
+  const request = db.request();
+  const placeholders: string[] = [];
+  body.pinIds.forEach((pinId, idx) => {
+    const k = `id${idx}`;
+    placeholders.push(`@${k}`);
+    request.input(k, sql.Int, pinId);
+  });
+
+  const rows = await request.query(
+    `SELECT id, photoUrl FROM InspectionPins WHERE id IN (${placeholders.join(',')})`
+  );
+
+  const urls: Record<string, string> = {};
+  for (const row of rows.recordset) {
+    const raw = (row.photoUrl as string | null) ?? '';
+    if (!raw) continue;
+    urls[String(row.id)] = isBlobStorageConfigured() ? await createPinPhotoReadUrl(raw) : raw;
+  }
+  res.json({ urls });
+});
+
 router.delete('/pins/:id', requireAuth, async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const db = await getDb();
+  const existing = await db.request()
+    .input('id', sql.Int, id)
+    .query('SELECT photoUrl FROM InspectionPins WHERE id = @id');
+  if (!existing.recordset[0]) { res.status(404).json({ error: 'Pin not found' }); return; }
   const result = await db.request()
     .input('id', sql.Int, id)
     .query('DELETE FROM InspectionPins WHERE id = @id');
   if (result.rowsAffected[0] === 0) { res.status(404).json({ error: 'Pin not found' }); return; }
+  const photoUrl = existing.recordset[0].photoUrl as string | null;
+  if (photoUrl && isBlobStorageConfigured()) {
+    await deletePinPhoto(photoUrl).catch(() => {});
+  }
   res.json({ success: true });
 });
 
