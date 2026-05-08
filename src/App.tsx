@@ -18,12 +18,11 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { UserRole } from './types';
 
 const NAV_ITEMS = [
-  { icon: LayoutGrid,  label: 'Dashboard', path: '/',          roles: [UserRole.ADMIN, UserRole.FLEET_CONTROL, UserRole.FLEET_CONTROL_SUPERVISOR] },
-  { icon: LayoutGrid,  label: 'Dashboard', path: '/driver',    roles: [UserRole.DRIVER] },
+  { icon: LayoutGrid,  label: 'Dashboard', path: '/',          roles: [UserRole.ADMIN, UserRole.FLEET_CONTROL, UserRole.FLEET_CONTROL_SUPERVISOR, UserRole.DRIVER] },
   { icon: ClipboardList, label: 'Requester', path: '/requester', roles: [UserRole.ADMIN, UserRole.REQUESTER] },
   { icon: Settings,    label: 'Workshop',  path: '/workshop',  roles: [UserRole.ADMIN, UserRole.WORKSHOP_ADVISER] },
   { icon: ShieldCheck, label: 'Control',   path: '/control',   roles: [UserRole.ADMIN, UserRole.FLEET_CONTROL, UserRole.FLEET_CONTROL_SUPERVISOR] },
-  { icon: Truck,       label: 'Driver',    path: '/driver',    roles: [UserRole.ADMIN] },
+  { icon: Truck,       label: 'Driver',    path: '/driver',    roles: [UserRole.ADMIN, UserRole.DRIVER] },
   { icon: Shield,      label: 'Admin',     path: '/admin',     roles: [UserRole.ADMIN] },
 ];
 
@@ -33,7 +32,7 @@ function BottomNav() {
   const visible = NAV_ITEMS.filter(item => !user || item.roles.includes(user.role as UserRole));
 
   return (
-    <nav className="fixed bottom-0 left-0 w-full z-50 rounded-t-2xl glass-panel border-t border-outline-variant/15 shadow-[0_-4px_24px_rgba(7,30,39,0.06)] grid grid-flow-col auto-cols-fr items-center gap-0.5 px-1 pb-6 pt-2.5">
+    <nav className="fixed bottom-0 left-0 w-full z-50 rounded-t-2xl glass-panel border-t border-outline-variant/15 shadow-[0_-4px_24px_rgba(7,30,39,0.06)] flex items-center gap-1 px-1.5 pb-6 pt-2.5 overflow-x-auto">
       {visible.map((item) => {
         const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
         return (
@@ -41,7 +40,7 @@ function BottomNav() {
             key={item.path}
             to={item.path}
             className={cn(
-              "flex min-w-0 flex-col items-center justify-center px-1 py-1.5 transition-all duration-200 active:scale-90 overflow-hidden",
+              "flex min-w-[76px] flex-1 flex-col items-center justify-center px-1 py-1.5 transition-all duration-200 active:scale-90 overflow-hidden",
               isActive ? "text-primary bg-surface-container-low rounded-xl" : "text-on-surface-variant/40"
             )}
           >
