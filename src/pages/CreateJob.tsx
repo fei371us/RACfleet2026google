@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Truck, MapPin, Calendar, X, ArrowRight, Settings, Navigation, CheckCircle2 } from 'lucide-react';
+import { Truck, Calendar, X, ArrowRight, Settings, Navigation, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { api } from '../lib/api';
@@ -30,7 +30,6 @@ export default function CreateJob() {
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     priority:            'STANDARD',
-    vehicle_id:          '',
     company:             '',
     contact_person:      '',
     contact_number:      '',
@@ -48,7 +47,8 @@ export default function CreateJob() {
   });
 
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
-  const vehiclePlate = vehicles.find(v => v.id === form.vehicle_id)?.plate ?? '';
+  const selectedVehicleNumber = form.vehicle_number_out || form.vehicle_number_in || '';
+  const selectedVehicleId = vehicles.find(v => v.plate === selectedVehicleNumber)?.id ?? '';
 
   useEffect(() => {
     let mounted = true;
@@ -69,8 +69,8 @@ export default function CreateJob() {
   }, []);
 
   const handleSubmit = async () => {
-    if (!form.vehicle_id || !form.company) {
-      setError('Please select a vehicle and enter a company name');
+    if (!form.company) {
+      setError('Please enter a company name');
       return;
     }
     if (jobType === 'SHUTTLER' && !form.shuttlerSubType) {
@@ -86,7 +86,7 @@ export default function CreateJob() {
         type:                 jobType,
         shuttlerSubType:      jobType === 'SHUTTLER' ? form.shuttlerSubType : undefined,
         priority:             form.priority,
-        vehicle_id:           form.vehicle_id,
+        vehicle_id:           selectedVehicleId || undefined,
         company:              form.company,
         contact_person:       form.sales_person || form.contact_person,
         contact_number:       form.contact_number,
@@ -258,31 +258,28 @@ export default function CreateJob() {
               </section>
             )}
 
-            {/* Vehicle */}
-            <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-4 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none"><Truck size={140} /></div>
-              <h2 className="font-headline font-bold text-2xl flex items-center gap-3 relative z-10">
-                <Truck className="text-primary" />
-                Vehicle
-              </h2>
-              <select value={form.vehicle_id} onChange={e => set('vehicle_id', e.target.value)} className={cn(FIELD, "appearance-none font-headline font-bold text-lg relative z-10")}>
-                <option value="">Choose Vehicle...</option>
-                {vehicles.map(v => <option key={v.id} value={v.id}>{v.name} ({v.plate})</option>)}
-              </select>
-            </section>
-
             {/* Vehicle Numbers & Sales Person */}
             <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
               <h2 className="font-headline font-bold text-2xl">Vehicle Details & Staff</h2>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Vehicle No (Out)</label>
-                  <input value={form.vehicle_number_out} onChange={e => set('vehicle_number_out', e.target.value)} placeholder="e.g. ABC-1234" className={FIELD} />
+                  <select value={form.vehicle_number_out} onChange={e => set('vehicle_number_out', e.target.value)} className={cn(FIELD, "appearance-none font-bold")}>
+                    <option value="">Select vehicle out...</option>
+                    {vehicles.map(v => <option key={`out-${v.id}`} value={v.plate}>{v.name} ({v.plate})</option>)}
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Vehicle No (Return)</label>
-                  <input value={form.vehicle_number_in} onChange={e => set('vehicle_number_in', e.target.value)} placeholder="e.g. ABC-1234" className={FIELD} />
+                  <select value={form.vehicle_number_in} onChange={e => set('vehicle_number_in', e.target.value)} className={cn(FIELD, "appearance-none font-bold")}>
+                    <option value="">Select vehicle return...</option>
+                    {vehicles.map(v => <option key={`in-${v.id}`} value={v.plate}>{v.name} ({v.plate})</option>)}
+                  </select>
                 </div>
+              </div>
+              <div className="space-y-2">
+                <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Vehicle Number (Auto)</label>
+                <input value={selectedVehicleNumber} readOnly placeholder="Auto-filled from Vehicle Out or Return" className={cn(FIELD, "text-on-surface-variant")} />
               </div>
               <div className="space-y-2">
                 <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Sales Person/Coordinator</label>
@@ -342,26 +339,6 @@ export default function CreateJob() {
               </div>
             </section>
 
-            {/* Shuttler route fields */}
-            {jobType === 'SHUTTLER' && (
-              <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
-                <h2 className="font-headline font-bold text-2xl flex items-center gap-3">
-                  <MapPin className="text-primary" />
-                  Route Details
-                </h2>
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Pickup Location</label>
-                    <input value={form.location} onChange={e => set('location', e.target.value)} placeholder="e.g. North Cargo Gate, Zone 7" className={FIELD} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="block font-label text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant ml-1">Destination</label>
-                    <input value={form.destination} onChange={e => set('destination', e.target.value)} placeholder="e.g. Central Distribution Center" className={FIELD} />
-                  </div>
-                </div>
-              </section>
-            )}
-
             {/* Workshop scope fields */}
             {jobType === 'WORKSHOP' && (
               <section className="bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow space-y-6">
@@ -403,7 +380,7 @@ export default function CreateJob() {
                   { label: 'Type',     value: jobType },
                   { label: 'Company',  value: form.company || '---' },
                   { label: 'Date',     value: form.job_date || '---' },
-                  { label: 'Vehicle',  value: vehiclePlate || '---' },
+                  { label: 'Vehicle',  value: selectedVehicleNumber || '---' },
                   { label: 'Priority', value: form.priority },
                 ].map(({ label, value }) => (
                   <div key={label} className="flex justify-between items-end border-b border-white/10 pb-3">
@@ -423,7 +400,7 @@ export default function CreateJob() {
             Discard
           </button>
           <button
-            disabled={!form.vehicle_id || !form.company || (jobType === 'SHUTTLER' && !form.shuttlerSubType) || submitting}
+            disabled={!form.company || (jobType === 'SHUTTLER' && !form.shuttlerSubType) || submitting}
             onClick={handleSubmit}
             className="flex-1 max-w-md gradient-btn py-5 rounded-2xl flex items-center justify-center gap-3 disabled:opacity-50"
           >

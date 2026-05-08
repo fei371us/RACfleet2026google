@@ -19,10 +19,11 @@ import { UserRole } from './types';
 
 const NAV_ITEMS = [
   { icon: LayoutGrid,  label: 'Dashboard', path: '/',          roles: [UserRole.ADMIN, UserRole.FLEET_CONTROL, UserRole.FLEET_CONTROL_SUPERVISOR] },
+  { icon: LayoutGrid,  label: 'Dashboard', path: '/driver',    roles: [UserRole.DRIVER] },
   { icon: ClipboardList, label: 'Requester', path: '/requester', roles: [UserRole.ADMIN, UserRole.REQUESTER] },
   { icon: Settings,    label: 'Workshop',  path: '/workshop',  roles: [UserRole.ADMIN, UserRole.WORKSHOP_ADVISER] },
   { icon: ShieldCheck, label: 'Control',   path: '/control',   roles: [UserRole.ADMIN, UserRole.FLEET_CONTROL, UserRole.FLEET_CONTROL_SUPERVISOR] },
-  { icon: Truck,       label: 'Driver',    path: '/driver',    roles: [UserRole.ADMIN, UserRole.DRIVER] },
+  { icon: Truck,       label: 'Driver',    path: '/driver',    roles: [UserRole.ADMIN] },
   { icon: Shield,      label: 'Admin',     path: '/admin',     roles: [UserRole.ADMIN] },
 ];
 

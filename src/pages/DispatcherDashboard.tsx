@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Truck, Clock, ShieldCheck, Map as MapIcon, Bell, Filter, MessageSquare, MoreVertical, TrendingUp, AlertTriangle, ChevronRight, Search, Wrench } from 'lucide-react';
+import { Truck, Map as MapIcon, Bell, Filter, MessageSquare, MoreVertical, TrendingUp, AlertTriangle, ChevronRight, Search, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Job, UserRole } from '../types';
 import { cn } from '../lib/utils';
@@ -32,7 +32,6 @@ export default function DispatcherDashboard() {
   }, []);
 
   const drivers = users.filter(u => u.role === UserRole.DRIVER);
-  const advisers = users.filter(u => u.role === UserRole.WORKSHOP_ADVISER);
   const countByType = (type: 'SHUTTLER' | 'WORKSHOP', status: 'ASSIGNED' | 'PENDING') =>
     jobs.filter(j => j.type === type && (j.status ?? '').toUpperCase() === status).length;
 
@@ -46,15 +45,11 @@ export default function DispatcherDashboard() {
       color: 'text-primary',
     },
     {
-      label: 'To Assign Jobs',
-      value: jobs.filter(j => (j.status ?? '').toUpperCase() === 'PENDING').length,
-      shuttler: countByType('SHUTTLER', 'PENDING'),
-      workshop: countByType('WORKSHOP', 'PENDING'),
-      icon: Clock,
+      label: 'Completed Jobs',
+      value: jobs.filter(j => (j.status ?? '').toUpperCase() === 'COMPLETED').length,
+      icon: CheckCircle2,
       color: 'text-on-surface',
     },
-    { label: 'Drivers Online', value: drivers.length, total: drivers.length, icon: ShieldCheck, pulse: true, color: 'text-on-surface' },
-    { label: 'Workshop Adviser Online', value: advisers.length, total: advisers.length, icon: Wrench, pulse: true, color: 'text-on-surface' },
   ];
 
   const uniqueVehicles = Array.from(new Set(jobs.map(j => j.vehicle_name))).sort();
@@ -108,7 +103,7 @@ export default function DispatcherDashboard() {
 
       <main className="max-w-7xl mx-auto px-6 space-y-8">
         {/* Summary Metrics */}
-        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
