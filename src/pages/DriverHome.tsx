@@ -227,21 +227,6 @@ export default function DriverHome() {
             ))}
           </div>
 
-          {/* Navigation Snapshot */}
-          <Link to="/map" className="relative block h-32 rounded-[2rem] overflow-hidden bg-surface-container-highest group">
-            <div 
-              className="absolute inset-0 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
-              style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1569336415962-a4bd4f79c3f2?auto=format&fit=crop&q=80&w=600")', backgroundSize: 'cover', backgroundPosition: 'center' }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-on-surface/80 to-transparent" />
-            <div className="absolute bottom-4 left-6">
-              <p className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em] mb-1">Route Status</p>
-              <h4 className="text-white font-headline font-bold text-lg">Live Map Overview</h4>
-            </div>
-            <div className="absolute top-4 right-4 bg-primary p-2 rounded-full shadow-lg text-white">
-              <Navigation size={20} />
-            </div>
-          </Link>
         </section>
       </main>
     </div>

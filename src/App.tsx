@@ -33,7 +33,7 @@ function BottomNav() {
   const visible = NAV_ITEMS.filter(item => !user || item.roles.includes(user.role as UserRole));
 
   return (
-    <nav className="fixed bottom-0 left-0 w-full z-50 rounded-t-2xl glass-panel border-t border-outline-variant/15 shadow-[0_-4px_24px_rgba(7,30,39,0.06)] flex justify-around items-center px-4 pb-6 pt-3">
+    <nav className="fixed bottom-0 left-0 w-full z-50 rounded-t-2xl glass-panel border-t border-outline-variant/15 shadow-[0_-4px_24px_rgba(7,30,39,0.06)] grid grid-flow-col auto-cols-fr items-center gap-1 px-2 pb-6 pt-3">
       {visible.map((item) => {
         const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
         return (
@@ -41,12 +41,12 @@ function BottomNav() {
             key={item.path}
             to={item.path}
             className={cn(
-              "flex flex-col items-center justify-center px-4 py-2 transition-all duration-200 active:scale-90",
+              "flex min-w-0 flex-col items-center justify-center px-2 py-2 transition-all duration-200 active:scale-90",
               isActive ? "text-primary bg-surface-container-low rounded-xl" : "text-on-surface-variant/40"
             )}
           >
             <item.icon size={24} className="mb-1" />
-            <span className="font-body text-[10px] font-semibold uppercase tracking-widest">{item.label}</span>
+            <span className="font-body text-[10px] font-semibold uppercase tracking-widest truncate">{item.label}</span>
           </Link>
         );
       })}
