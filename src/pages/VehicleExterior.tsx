@@ -17,6 +17,13 @@ interface UiPin {
   photo_view_url?: string;
 }
 
+interface ExteriorCheckPayload {
+  checkedBy: string;
+  checkedSignature: string;
+  receivedBy: string;
+  receivedSignature: string;
+}
+
 export default function VehicleExterior() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -36,6 +43,45 @@ export default function VehicleExterior() {
   const [submitError, setSubmitError] = useState('');
   const checkedCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const receivedCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const hydratedExteriorCheckRef = useRef(false);
+
+  const drawSignatureImage = (canvas: HTMLCanvasElement | null, dataUrl: string) => {
+    if (!canvas || !dataUrl) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const img = new Image();
+    img.onload = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+    img.src = dataUrl;
+  };
+
+  const parseExteriorCheckFromRemarks = (remarks?: string): ExteriorCheckPayload | null => {
+    const marker = '[EXTERIOR_CHECK]';
+    if (!remarks || !remarks.includes(marker)) return null;
+    const line = remarks
+      .split('\n')
+      .find((entry) => entry.trim().startsWith(marker));
+    if (!line) return null;
+    const encoded = line.trim().slice(marker.length);
+    if (!encoded) return null;
+    try {
+      const base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
+      const json = atob(padded);
+      const parsed = JSON.parse(json) as Partial<ExteriorCheckPayload>;
+      if (!parsed.checkedBy || !parsed.receivedBy) return null;
+      return {
+        checkedBy: parsed.checkedBy,
+        checkedSignature: parsed.checkedSignature ?? '',
+        receivedBy: parsed.receivedBy,
+        receivedSignature: parsed.receivedSignature ?? '',
+      };
+    } catch {
+      return null;
+    }
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -49,9 +95,17 @@ export default function VehicleExterior() {
         y: p.y,
         type: p.type,
         note: p.note || '',
-        photo_url: p.photo_url,
+        photo_url: p.photo_url ?? p.photoUrl,
       }));
       setPins(existingPins);
+      const existingExteriorCheck = parseExteriorCheckFromRemarks(data.remarks);
+      if (existingExteriorCheck) {
+        hydratedExteriorCheckRef.current = true;
+        setCheckedBy(existingExteriorCheck.checkedBy);
+        setReceivedBy(existingExteriorCheck.receivedBy);
+        setCheckedSignature(existingExteriorCheck.checkedSignature);
+        setReceivedSignature(existingExteriorCheck.receivedSignature);
+      }
       const pinIds = existingPins
         .map((p) => Number(p.id))
         .filter((n) => Number.isFinite(n) && n > 0);
@@ -71,6 +125,16 @@ export default function VehicleExterior() {
       cancelled = true;
     };
   }, [id]);
+
+  useEffect(() => {
+    if (!hydratedExteriorCheckRef.current) return;
+    drawSignatureImage(checkedCanvasRef.current, checkedSignature);
+  }, [checkedSignature]);
+
+  useEffect(() => {
+    if (!hydratedExteriorCheckRef.current) return;
+    drawSignatureImage(receivedCanvasRef.current, receivedSignature);
+  }, [receivedSignature]);
 
   const handleAddPin = async (e: MouseEvent<HTMLDivElement>) => {
     if (!job || !id) return;
