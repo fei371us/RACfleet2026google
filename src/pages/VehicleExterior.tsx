@@ -46,6 +46,7 @@ export default function VehicleExterior() {
   const [submittingCheck, setSubmittingCheck] = useState(false);
   const [submitMsg, setSubmitMsg] = useState('');
   const [submitError, setSubmitError] = useState('');
+  const [photoError, setPhotoError] = useState('');
   const [signedGps, setSignedGps] = useState<{ latitude: number; longitude: number; accuracy?: number } | null>(null);
   const [currentGps, setCurrentGps] = useState<{ latitude: number; longitude: number; accuracy?: number } | null>(null);
   const [gpsError, setGpsError] = useState('');
@@ -234,7 +235,15 @@ export default function VehicleExterior() {
     if (!file) return;
     const numericId = Number(pinId);
     if (!Number.isFinite(numericId) || numericId <= 0) return;
+    const asDataUrl = () =>
+      new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ''));
+        reader.onerror = () => reject(new Error('Failed to read image file.'));
+        reader.readAsDataURL(file);
+      });
     try {
+      setPhotoError('');
       setUploadingPinId(pinId);
       const upload = await api.post<{ uploadUrl: string; blobPath: string }>(
         `/api/inspection/pins/${pinId}/photo-upload-url`,
@@ -261,7 +270,20 @@ export default function VehicleExterior() {
           : p
       )));
     } catch (error) {
-      console.error('Failed to upload pin photo:', error);
+      // Fallback: persist image directly into SQL as data URL so reopen still works.
+      try {
+        const dataUrl = await asDataUrl();
+        await api.patch(`/api/inspection/pins/${numericId}`, { photo_url: dataUrl });
+        setPins((prev) => prev.map((p) => (
+          p.id === pinId
+            ? { ...p, photo_url: dataUrl, photo_view_url: dataUrl }
+            : p
+        )));
+        setPhotoError('Blob upload failed; saved photo in database fallback.');
+      } catch (fallbackErr) {
+        console.error('Failed to upload/store pin photo:', error, fallbackErr);
+        setPhotoError('Photo save failed. Please try again.');
+      }
     } finally {
       setUploadingPinId(null);
     }
@@ -587,6 +609,7 @@ export default function VehicleExterior() {
                 {uploadingPinId === pin.id && (
                   <p className="text-xs text-on-surface-variant">Uploading photo...</p>
                 )}
+                {photoError && <p className="text-xs text-error">{photoError}</p>}
 
                 <div className="flex gap-2">
                   <button
