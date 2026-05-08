@@ -41,7 +41,7 @@ export async function createPinPhotoUploadUrl(pinId: number, fileName: string) {
 
 export async function createPinPhotoReadUrl(photoPathOrUrl: string) {
   if (!photoPathOrUrl) return '';
-  if (/^https?:\/\//i.test(photoPathOrUrl)) return photoPathOrUrl;
+  if (/^https?:\/\//i.test(photoPathOrUrl) || /^data:image\//i.test(photoPathOrUrl)) return photoPathOrUrl;
 
   const container = getContainerClient();
   const blob = container.getBlockBlobClient(photoPathOrUrl);
@@ -53,7 +53,7 @@ export async function createPinPhotoReadUrl(photoPathOrUrl: string) {
 }
 
 export async function deletePinPhoto(photoPathOrUrl: string | null | undefined) {
-  if (!photoPathOrUrl || /^https?:\/\//i.test(photoPathOrUrl)) return;
+  if (!photoPathOrUrl || /^https?:\/\//i.test(photoPathOrUrl) || /^data:image\//i.test(photoPathOrUrl)) return;
   const container = getContainerClient();
   const blob = container.getBlockBlobClient(photoPathOrUrl);
   await blob.deleteIfExists();

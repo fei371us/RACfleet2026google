@@ -47,6 +47,8 @@ export default function VehicleExterior() {
   const [submitMsg, setSubmitMsg] = useState('');
   const [submitError, setSubmitError] = useState('');
   const [signedGps, setSignedGps] = useState<{ latitude: number; longitude: number; accuracy?: number } | null>(null);
+  const [currentGps, setCurrentGps] = useState<{ latitude: number; longitude: number; accuracy?: number } | null>(null);
+  const [gpsError, setGpsError] = useState('');
   const checkedCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const receivedCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const hydratedExteriorCheckRef = useRef(false);
@@ -341,6 +343,22 @@ export default function VehicleExterior() {
     );
   });
 
+  useEffect(() => {
+    let cancelled = false;
+    getCurrentLocation()
+      .then((gps) => {
+        if (cancelled) return;
+        setCurrentGps(gps);
+      })
+      .catch((error) => {
+        if (cancelled) return;
+        setGpsError(error instanceof Error ? error.message : 'Unable to read current location.');
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const handleSubmitExteriorCheck = async () => {
     setSubmitError('');
     setSubmitMsg('');
@@ -363,6 +381,7 @@ export default function VehicleExterior() {
         gps,
       });
       setSignedGps(gps);
+      setCurrentGps(gps);
       setSubmitMsg('Submitted successfully with GPS location.');
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Failed to submit exterior check.');
@@ -620,21 +639,21 @@ export default function VehicleExterior() {
               <button onClick={() => clearSignature('checked')} className="text-xs text-primary font-bold">Clear Signature</button>
               <div className="space-y-2">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Signed Location</p>
-                {signedGps ? (
+                {(signedGps || currentGps) ? (
                   <>
                     <iframe
                       title="Checked by signed location map"
                       className="w-full h-36 rounded-xl border border-outline-variant/20"
                       loading="lazy"
-                      src={`https://www.google.com/maps?q=${signedGps.latitude},${signedGps.longitude}&z=16&output=embed`}
+                      src={`https://www.google.com/maps?q=${(signedGps || currentGps)!.latitude},${(signedGps || currentGps)!.longitude}&z=16&output=embed`}
                     />
                     <p className="text-[10px] text-on-surface-variant">
-                      {signedGps.latitude.toFixed(6)}, {signedGps.longitude.toFixed(6)}
-                      {typeof signedGps.accuracy === 'number' ? ` (±${Math.round(signedGps.accuracy)}m)` : ''}
+                      {(signedGps || currentGps)!.latitude.toFixed(6)}, {(signedGps || currentGps)!.longitude.toFixed(6)}
+                      {typeof (signedGps || currentGps)!.accuracy === 'number' ? ` (±${Math.round((signedGps || currentGps)!.accuracy!)}m)` : ''}
                     </p>
                   </>
                 ) : (
-                  <p className="text-[10px] text-on-surface-variant">Location will appear after submit.</p>
+                  <p className="text-[10px] text-on-surface-variant">{gpsError || 'Reading current location...'}</p>
                 )}
               </div>
             </div>
@@ -660,21 +679,21 @@ export default function VehicleExterior() {
               <button onClick={() => clearSignature('received')} className="text-xs text-primary font-bold">Clear Signature</button>
               <div className="space-y-2">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Signed Location</p>
-                {signedGps ? (
+                {(signedGps || currentGps) ? (
                   <>
                     <iframe
                       title="Received by signed location map"
                       className="w-full h-36 rounded-xl border border-outline-variant/20"
                       loading="lazy"
-                      src={`https://www.google.com/maps?q=${signedGps.latitude},${signedGps.longitude}&z=16&output=embed`}
+                      src={`https://www.google.com/maps?q=${(signedGps || currentGps)!.latitude},${(signedGps || currentGps)!.longitude}&z=16&output=embed`}
                     />
                     <p className="text-[10px] text-on-surface-variant">
-                      {signedGps.latitude.toFixed(6)}, {signedGps.longitude.toFixed(6)}
-                      {typeof signedGps.accuracy === 'number' ? ` (±${Math.round(signedGps.accuracy)}m)` : ''}
+                      {(signedGps || currentGps)!.latitude.toFixed(6)}, {(signedGps || currentGps)!.longitude.toFixed(6)}
+                      {typeof (signedGps || currentGps)!.accuracy === 'number' ? ` (±${Math.round((signedGps || currentGps)!.accuracy!)}m)` : ''}
                     </p>
                   </>
                 ) : (
-                  <p className="text-[10px] text-on-surface-variant">Location will appear after submit.</p>
+                  <p className="text-[10px] text-on-surface-variant">{gpsError || 'Reading current location...'}</p>
                 )}
               </div>
             </div>
