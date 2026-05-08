@@ -22,6 +22,11 @@ interface ExteriorCheckPayload {
   checkedSignature: string;
   receivedBy: string;
   receivedSignature: string;
+  gps?: {
+    latitude: number;
+    longitude: number;
+    accuracy?: number;
+  };
 }
 
 export default function VehicleExterior() {
@@ -41,6 +46,7 @@ export default function VehicleExterior() {
   const [submittingCheck, setSubmittingCheck] = useState(false);
   const [submitMsg, setSubmitMsg] = useState('');
   const [submitError, setSubmitError] = useState('');
+  const [signedGps, setSignedGps] = useState<{ latitude: number; longitude: number; accuracy?: number } | null>(null);
   const checkedCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const receivedCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const hydratedExteriorCheckRef = useRef(false);
@@ -77,6 +83,14 @@ export default function VehicleExterior() {
         checkedSignature: parsed.checkedSignature ?? '',
         receivedBy: parsed.receivedBy,
         receivedSignature: parsed.receivedSignature ?? '',
+        gps:
+          parsed.gps && typeof parsed.gps.latitude === 'number' && typeof parsed.gps.longitude === 'number'
+            ? {
+                latitude: parsed.gps.latitude,
+                longitude: parsed.gps.longitude,
+                accuracy: typeof parsed.gps.accuracy === 'number' ? parsed.gps.accuracy : undefined,
+              }
+            : undefined,
       };
     } catch {
       return null;
@@ -105,6 +119,7 @@ export default function VehicleExterior() {
         setReceivedBy(existingExteriorCheck.receivedBy);
         setCheckedSignature(existingExteriorCheck.checkedSignature);
         setReceivedSignature(existingExteriorCheck.receivedSignature);
+        if (existingExteriorCheck.gps) setSignedGps(existingExteriorCheck.gps);
       }
       const pinIds = existingPins
         .map((p) => Number(p.id))
@@ -347,6 +362,7 @@ export default function VehicleExterior() {
         receivedSignature,
         gps,
       });
+      setSignedGps(gps);
       setSubmitMsg('Submitted successfully with GPS location.');
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Failed to submit exterior check.');
@@ -602,6 +618,25 @@ export default function VehicleExterior() {
                 className="w-full h-36 rounded-xl bg-white border border-outline-variant/20 touch-none"
               />
               <button onClick={() => clearSignature('checked')} className="text-xs text-primary font-bold">Clear Signature</button>
+              <div className="space-y-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Signed Location</p>
+                {signedGps ? (
+                  <>
+                    <iframe
+                      title="Checked by signed location map"
+                      className="w-full h-36 rounded-xl border border-outline-variant/20"
+                      loading="lazy"
+                      src={`https://www.google.com/maps?q=${signedGps.latitude},${signedGps.longitude}&z=16&output=embed`}
+                    />
+                    <p className="text-[10px] text-on-surface-variant">
+                      {signedGps.latitude.toFixed(6)}, {signedGps.longitude.toFixed(6)}
+                      {typeof signedGps.accuracy === 'number' ? ` (±${Math.round(signedGps.accuracy)}m)` : ''}
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-[10px] text-on-surface-variant">Location will appear after submit.</p>
+                )}
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -623,6 +658,25 @@ export default function VehicleExterior() {
                 className="w-full h-36 rounded-xl bg-white border border-outline-variant/20 touch-none"
               />
               <button onClick={() => clearSignature('received')} className="text-xs text-primary font-bold">Clear Signature</button>
+              <div className="space-y-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Signed Location</p>
+                {signedGps ? (
+                  <>
+                    <iframe
+                      title="Received by signed location map"
+                      className="w-full h-36 rounded-xl border border-outline-variant/20"
+                      loading="lazy"
+                      src={`https://www.google.com/maps?q=${signedGps.latitude},${signedGps.longitude}&z=16&output=embed`}
+                    />
+                    <p className="text-[10px] text-on-surface-variant">
+                      {signedGps.latitude.toFixed(6)}, {signedGps.longitude.toFixed(6)}
+                      {typeof signedGps.accuracy === 'number' ? ` (±${Math.round(signedGps.accuracy)}m)` : ''}
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-[10px] text-on-surface-variant">Location will appear after submit.</p>
+                )}
+              </div>
             </div>
           </div>
 
