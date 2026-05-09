@@ -188,7 +188,13 @@ router.post('/pins/photo-urls', requireAuth, async (req: Request, res: Response)
   for (const row of rows.recordset) {
     const raw = (row.photoUrl as string | null) ?? '';
     if (!raw) continue;
-    urls[String(row.id)] = isBlobStorageConfigured() ? await createPinPhotoReadUrl(raw) : raw;
+    try {
+      urls[String(row.id)] = isBlobStorageConfigured() ? await createPinPhotoReadUrl(raw) : raw;
+    } catch {
+      // Keep the flow resilient: if SAS generation fails for one record,
+      // fall back to stored raw value instead of failing the whole response.
+      urls[String(row.id)] = raw;
+    }
   }
   res.json({ urls });
 });

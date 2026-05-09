@@ -649,16 +649,19 @@ export default function VehicleExterior() {
                 className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-xl p-3 text-sm"
                 placeholder="Name"
               />
-              <canvas
-                ref={checkedCanvasRef}
-                width={500}
-                height={160}
-                onPointerDown={(e) => handleSignStart('checked', e)}
-                onPointerMove={(e) => handleSignMove('checked', e)}
-                onPointerUp={() => handleSignEnd('checked')}
-                onPointerLeave={() => handleSignEnd('checked')}
-                className="w-full h-36 rounded-xl bg-white border border-outline-variant/20 touch-none"
-              />
+              <div className="flex items-stretch gap-3">
+                <div className="w-6 shrink-0" />
+                <canvas
+                  ref={checkedCanvasRef}
+                  width={420}
+                  height={120}
+                  onPointerDown={(e) => handleSignStart('checked', e)}
+                  onPointerMove={(e) => handleSignMove('checked', e)}
+                  onPointerUp={() => handleSignEnd('checked')}
+                  onPointerLeave={() => handleSignEnd('checked')}
+                  className="w-full h-28 rounded-xl bg-white border border-outline-variant/20 touch-none"
+                />
+              </div>
               <button onClick={() => clearSignature('checked')} className="text-xs text-primary font-bold">Clear Signature</button>
               <div className="space-y-2">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Signed Location</p>
@@ -689,16 +692,19 @@ export default function VehicleExterior() {
                 className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-xl p-3 text-sm"
                 placeholder="Name"
               />
-              <canvas
-                ref={receivedCanvasRef}
-                width={500}
-                height={160}
-                onPointerDown={(e) => handleSignStart('received', e)}
-                onPointerMove={(e) => handleSignMove('received', e)}
-                onPointerUp={() => handleSignEnd('received')}
-                onPointerLeave={() => handleSignEnd('received')}
-                className="w-full h-36 rounded-xl bg-white border border-outline-variant/20 touch-none"
-              />
+              <div className="flex items-stretch gap-3">
+                <div className="w-6 shrink-0" />
+                <canvas
+                  ref={receivedCanvasRef}
+                  width={420}
+                  height={120}
+                  onPointerDown={(e) => handleSignStart('received', e)}
+                  onPointerMove={(e) => handleSignMove('received', e)}
+                  onPointerUp={() => handleSignEnd('received')}
+                  onPointerLeave={() => handleSignEnd('received')}
+                  className="w-full h-28 rounded-xl bg-white border border-outline-variant/20 touch-none"
+                />
+              </div>
               <button onClick={() => clearSignature('received')} className="text-xs text-primary font-bold">Clear Signature</button>
               <div className="space-y-2">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Signed Location</p>
