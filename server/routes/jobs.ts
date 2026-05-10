@@ -6,6 +6,26 @@ import { requireRole, UserRole } from '../middleware/rbac.js';
 import { validate } from '../middleware/validate.js';
 
 const router = Router();
+let ensureDriverMetricsColumnsPromise: Promise<void> | null = null;
+
+async function ensureDriverMetricsColumns(db: sql.ConnectionPool) {
+  if (!ensureDriverMetricsColumnsPromise) {
+    ensureDriverMetricsColumnsPromise = db.request().query(`
+      IF COL_LENGTH('Jobs', 'petrolOut') IS NULL
+        ALTER TABLE Jobs ADD petrolOut NVARCHAR(100) NULL;
+      IF COL_LENGTH('Jobs', 'petrolIn') IS NULL
+        ALTER TABLE Jobs ADD petrolIn NVARCHAR(100) NULL;
+      IF COL_LENGTH('Jobs', 'mileageOut') IS NULL
+        ALTER TABLE Jobs ADD mileageOut NVARCHAR(100) NULL;
+      IF COL_LENGTH('Jobs', 'mileageIn') IS NULL
+        ALTER TABLE Jobs ADD mileageIn NVARCHAR(100) NULL;
+    `).then(() => undefined).catch((e) => {
+      ensureDriverMetricsColumnsPromise = null;
+      throw e;
+    });
+  }
+  await ensureDriverMetricsColumnsPromise;
+}
 
 const JOB_SELECT = `
   SELECT
@@ -72,6 +92,10 @@ function flattenRow(row: any, pins?: any[]) {
     shuttler_sub_type:   row.shuttlerSubType,
     vehicle_number_out:  row.vehicleNumberOut,
     vehicle_number_in:   row.vehicleNumberIn,
+    petrol_out:          row.petrolOut,
+    petrol_in:           row.petrolIn,
+    mileage_out:         row.mileageOut,
+    mileage_in:          row.mileageIn,
     job_time:            row.jobTime,
     contact_person:      row.contactPerson,
     contact_number:      row.contactNumber,
@@ -218,8 +242,9 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
 
 // PATCH /api/jobs/:id
 router.patch('/:id', requireAuth, async (req: Request, res: Response) => {
-  const { status, eta, driverNote, driver_note, vehicleNumberIn, vehicle_number_in } = req.body;
+  const { status, eta, driverNote, driver_note, vehicleNumberIn, vehicle_number_in, petrol_out, petrol_in, mileage_out, mileage_in } = req.body;
   const db = await getDb();
+  await ensureDriverMetricsColumns(db);
   const updates: string[] = [];
   const request = db.request().input('ref', sql.NVarChar, req.params.id);
   if (status)                { updates.push('status = @status');        request.input('status', sql.NVarChar, status.toUpperCase()); }
@@ -228,6 +253,10 @@ router.patch('/:id', requireAuth, async (req: Request, res: Response) => {
   if (note !== undefined)    { updates.push('driverNote = @dn');        request.input('dn',     sql.NVarChar, note); }
   const vin = vehicleNumberIn ?? vehicle_number_in;
   if (vin)                   { updates.push('vehicleNumberIn = @vin');  request.input('vin',    sql.NVarChar, vin); }
+  if (petrol_out !== undefined)  { updates.push('petrolOut = @pout');   request.input('pout',   sql.NVarChar, petrol_out); }
+  if (petrol_in !== undefined)   { updates.push('petrolIn = @pin');     request.input('pin',    sql.NVarChar, petrol_in); }
+  if (mileage_out !== undefined) { updates.push('mileageOut = @mout');  request.input('mout',   sql.NVarChar, mileage_out); }
+  if (mileage_in !== undefined)  { updates.push('mileageIn = @min');    request.input('min',    sql.NVarChar, mileage_in); }
   if (updates.length > 0)
     await request.query(`UPDATE Jobs SET ${updates.join(', ')} WHERE id = @ref OR reference = @ref`);
   res.json({ success: true });
@@ -268,12 +297,17 @@ router.post('/:id/assign', requireAuth,
 router.post('/:id/complete', requireAuth,
   requireRole(UserRole.DRIVER, UserRole.WORKSHOP_ADVISER, UserRole.ADMIN),
   async (req: Request, res: Response) => {
-    const { workPerformed, vehicleNumberIn, driverNote, driver_note } = req.body;
+    const { workPerformed, vehicleNumberIn, driverNote, driver_note, petrol_out, petrol_in, mileage_out, mileage_in } = req.body;
     const db = await getDb();
+    await ensureDriverMetricsColumns(db);
     const updates: string[] = ["status = 'COMPLETED'"];
     const request = db.request().input('ref', sql.NVarChar, req.params.id);
     if (workPerformed)          { updates.push('workPerformed = @wp');    request.input('wp',  sql.NVarChar, workPerformed); }
     if (vehicleNumberIn)        { updates.push('vehicleNumberIn = @vin'); request.input('vin', sql.NVarChar, vehicleNumberIn); }
+    if (petrol_out !== undefined)  { updates.push('petrolOut = @pout');   request.input('pout', sql.NVarChar, petrol_out); }
+    if (petrol_in !== undefined)   { updates.push('petrolIn = @pin');     request.input('pin',  sql.NVarChar, petrol_in); }
+    if (mileage_out !== undefined) { updates.push('mileageOut = @mout');  request.input('mout', sql.NVarChar, mileage_out); }
+    if (mileage_in !== undefined)  { updates.push('mileageIn = @min');    request.input('min',  sql.NVarChar, mileage_in); }
     const note = driverNote ?? driver_note;
     if (note !== undefined)     { updates.push('driverNote = @dn');       request.input('dn',  sql.NVarChar, note); }
     await request.query(`UPDATE Jobs SET ${updates.join(', ')} WHERE id = @ref OR reference = @ref`);

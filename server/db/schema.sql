@@ -60,6 +60,10 @@ IF OBJECT_ID('Jobs', 'U') IS NULL
     workScope         NVARCHAR(MAX) NULL,
     vehicleNumberOut  NVARCHAR(100) NULL,
     vehicleNumberIn   NVARCHAR(100) NULL,
+    petrolOut         NVARCHAR(100) NULL,
+    petrolIn          NVARCHAR(100) NULL,
+    mileageOut        NVARCHAR(100) NULL,
+    mileageIn         NVARCHAR(100) NULL,
     driverNote        NVARCHAR(MAX) NULL,
     workPerformed     NVARCHAR(MAX) NULL,
     instructions      NVARCHAR(MAX) NULL,
@@ -68,6 +72,18 @@ IF OBJECT_ID('Jobs', 'U') IS NULL
     checklist         NVARCHAR(MAX) NULL,
     createdAt         DATETIME2     NOT NULL DEFAULT GETUTCDATE()
   );
+
+IF COL_LENGTH('Jobs', 'petrolOut') IS NULL
+  ALTER TABLE Jobs ADD petrolOut NVARCHAR(100) NULL;
+
+IF COL_LENGTH('Jobs', 'petrolIn') IS NULL
+  ALTER TABLE Jobs ADD petrolIn NVARCHAR(100) NULL;
+
+IF COL_LENGTH('Jobs', 'mileageOut') IS NULL
+  ALTER TABLE Jobs ADD mileageOut NVARCHAR(100) NULL;
+
+IF COL_LENGTH('Jobs', 'mileageIn') IS NULL
+  ALTER TABLE Jobs ADD mileageIn NVARCHAR(100) NULL;
 
 
 IF OBJECT_ID('dbo.JobReferenceSeq', 'SO') IS NULL

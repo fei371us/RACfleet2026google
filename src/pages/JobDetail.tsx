@@ -19,6 +19,10 @@ export default function JobDetail() {
   const [checklist, setChecklist]         = useState<ChecklistItem[]>(DEFAULT_CHECKLIST);
   const [workPerformed, setWorkPerformed] = useState('');
   const [vehicleNumberIn, setVehicleIn]  = useState('');
+  const [petrolOut, setPetrolOut]        = useState('');
+  const [petrolIn, setPetrolIn]          = useState('');
+  const [mileageOut, setMileageOut]      = useState('');
+  const [mileageIn, setMileageIn]        = useState('');
   const [saving, setSaving]               = useState(false);
   const [completing, setCompleting]       = useState(false);
 
@@ -28,6 +32,10 @@ export default function JobDetail() {
       setJob(data);
       if (Array.isArray(data.checklist) && data.checklist.length > 0) setChecklist(data.checklist);
       if (data.vehicle_number_in) setVehicleIn(data.vehicle_number_in);
+      if (data.petrol_out) setPetrolOut(data.petrol_out);
+      if (data.petrol_in) setPetrolIn(data.petrol_in);
+      if (data.mileage_out) setMileageOut(data.mileage_out);
+      if (data.mileage_in) setMileageIn(data.mileage_in);
       if (data.workPerformed)     setWorkPerformed(data.workPerformed);
     });
   }, [id]);
@@ -42,7 +50,13 @@ export default function JobDetail() {
     setSaving(true);
     try {
       await Promise.all([
-        api.patch(`/api/jobs/${id}`, { vehicle_number_in: vehicleNumberIn }),
+        api.patch(`/api/jobs/${id}`, {
+          vehicle_number_in: vehicleNumberIn,
+          petrol_out: petrolOut,
+          petrol_in: petrolIn,
+          mileage_out: mileageOut,
+          mileage_in: mileageIn,
+        }),
         api.patch(`/api/jobs/${id}/checklist`, { checklist }),
       ]);
     } finally {
@@ -53,7 +67,14 @@ export default function JobDetail() {
   const handleComplete = async () => {
     setCompleting(true);
     try {
-      await api.post(`/api/jobs/${id}/complete`, { workPerformed, vehicleNumberIn });
+      await api.post(`/api/jobs/${id}/complete`, {
+        workPerformed,
+        vehicleNumberIn,
+        petrol_out: petrolOut,
+        petrol_in: petrolIn,
+        mileage_out: mileageOut,
+        mileage_in: mileageIn,
+      });
       navigate(-1);
     } finally {
       setCompleting(false);
@@ -123,6 +144,42 @@ export default function JobDetail() {
                     value={vehicleNumberIn}
                     onChange={e => setVehicleIn(e.target.value)}
                     placeholder="Enter on return"
+                    className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
+                  />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-outline uppercase mb-1">Petrol Out</p>
+                  <input
+                    value={petrolOut}
+                    onChange={e => setPetrolOut(e.target.value)}
+                    placeholder="e.g. 3/4"
+                    className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
+                  />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-outline uppercase mb-1">Petrol In</p>
+                  <input
+                    value={petrolIn}
+                    onChange={e => setPetrolIn(e.target.value)}
+                    placeholder="e.g. 1/2"
+                    className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
+                  />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-outline uppercase mb-1">Mileage Out</p>
+                  <input
+                    value={mileageOut}
+                    onChange={e => setMileageOut(e.target.value)}
+                    placeholder="e.g. 128450"
+                    className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
+                  />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-outline uppercase mb-1">Mileage In</p>
+                  <input
+                    value={mileageIn}
+                    onChange={e => setMileageIn(e.target.value)}
+                    placeholder="e.g. 128512"
                     className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
                   />
                 </div>

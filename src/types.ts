@@ -80,6 +80,10 @@ export interface Job {
   shuttler_sub_type?: string;
   vehicle_number_out?: string;
   vehicle_number_in?: string;
+  petrol_out?: string;
+  petrol_in?: string;
+  mileage_out?: string;
+  mileage_in?: string;
   job_time?: string;
   contact_person?: string;
   contact_number?: string;
