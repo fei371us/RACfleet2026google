@@ -1,14 +1,24 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Shield, UserPlus, Trash2, Key, User, ShieldCheck, Mail, ChevronRight, X, AlertCircle } from 'lucide-react';
-import { User as UserType, UserRole } from '../types';
+import { Shield, UserPlus, Trash2, Key, User, CarFront, Pencil, X } from 'lucide-react';
+import { User as UserType, UserRole, Vehicle } from '../types';
 import { cn } from '../lib/utils';
 import { api } from '../lib/api';
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [vehiclesLoading, setVehiclesLoading] = useState(true);
+  const [vehicleSaving, setVehicleSaving] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [vehicleForm, setVehicleForm] = useState({
+    id: '',
+    name: '',
+    plate: '',
+    status: 'active',
+  });
+  const [vehicleError, setVehicleError] = useState('');
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -22,7 +32,70 @@ export default function AdminDashboard() {
         setUsers(data);
         setLoading(false);
       });
+    api.get<Vehicle[]>('/api/vehicles')
+      .then(data => {
+        setVehicles(data);
+        setVehiclesLoading(false);
+      });
   }, []);
+
+  const resetVehicleForm = () => {
+    setVehicleForm({ id: '', name: '', plate: '', status: 'active' });
+    setVehicleError('');
+  };
+
+  const handleSaveVehicle = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!vehicleForm.name.trim() || !vehicleForm.plate.trim()) {
+      setVehicleError('Vehicle name and vehicle no are required.');
+      return;
+    }
+    try {
+      setVehicleSaving(true);
+      setVehicleError('');
+      if (vehicleForm.id) {
+        const updated = await api.patch<Vehicle>(`/api/vehicles/${vehicleForm.id}`, {
+          name: vehicleForm.name.trim(),
+          plate: vehicleForm.plate.trim(),
+          status: vehicleForm.status,
+        });
+        setVehicles(prev => prev.map(v => v.id === updated.id ? updated : v));
+      } else {
+        const created = await api.post<Vehicle>('/api/vehicles', {
+          name: vehicleForm.name.trim(),
+          plate: vehicleForm.plate.trim(),
+          status: vehicleForm.status,
+        });
+        setVehicles(prev => [...prev, created]);
+      }
+      resetVehicleForm();
+    } catch (error) {
+      setVehicleError(error instanceof Error ? error.message : 'Failed to save vehicle');
+    } finally {
+      setVehicleSaving(false);
+    }
+  };
+
+  const handleEditVehicle = (v: Vehicle) => {
+    setVehicleForm({
+      id: v.id,
+      name: v.name ?? '',
+      plate: v.plate ?? '',
+      status: v.status ?? 'active',
+    });
+    setVehicleError('');
+  };
+
+  const handleDeleteVehicle = async (id: string) => {
+    if (!confirm('Delete this vehicle number from master table?')) return;
+    try {
+      await api.delete(`/api/vehicles/${id}`);
+      setVehicles(prev => prev.filter(v => v.id !== id));
+      if (vehicleForm.id === id) resetVehicleForm();
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Failed to delete vehicle');
+    }
+  };
 
   const handleCreateUser = async (e: FormEvent) => {
     e.preventDefault();
@@ -130,6 +203,97 @@ export default function AdminDashboard() {
                             <Trash2 size={16} />
                          </button>
                        </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="mt-8 bg-surface-container-lowest rounded-[2.5rem] p-8 kinetic-shadow">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-headline font-black text-xl tracking-tight flex items-center gap-2">
+              <CarFront size={20} className="text-primary" />
+              Vehicle No Master
+            </h2>
+            {vehicleForm.id && (
+              <button
+                onClick={resetVehicleForm}
+                className="text-xs font-black uppercase tracking-wider text-on-surface-variant hover:text-primary"
+              >
+                Cancel Edit
+              </button>
+            )}
+          </div>
+
+          <form onSubmit={handleSaveVehicle} className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+            <input
+              value={vehicleForm.name}
+              onChange={(e) => setVehicleForm({ ...vehicleForm, name: e.target.value })}
+              placeholder="Vehicle Name"
+              className="bg-surface-container-highest rounded-xl px-4 py-3 text-sm font-bold border-none"
+            />
+            <input
+              value={vehicleForm.plate}
+              onChange={(e) => setVehicleForm({ ...vehicleForm, plate: e.target.value })}
+              placeholder="Vehicle No / Plate"
+              className="bg-surface-container-highest rounded-xl px-4 py-3 text-sm font-bold border-none"
+            />
+            <select
+              value={vehicleForm.status}
+              onChange={(e) => setVehicleForm({ ...vehicleForm, status: e.target.value })}
+              className="bg-surface-container-highest rounded-xl px-4 py-3 text-sm font-bold border-none"
+            >
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="maintenance">Maintenance</option>
+            </select>
+            <button
+              type="submit"
+              disabled={vehicleSaving}
+              className="gradient-btn rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest disabled:opacity-60"
+            >
+              {vehicleSaving ? 'Saving...' : (vehicleForm.id ? 'Update Vehicle' : 'Add Vehicle')}
+            </button>
+          </form>
+          {vehicleError && <p className="text-error text-xs font-bold mb-4">{vehicleError}</p>}
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-outline-variant/10">
+                  <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-outline">Vehicle Name</th>
+                  <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-outline">Vehicle No</th>
+                  <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-outline">Status</th>
+                  <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-outline text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-outline-variant/5">
+                {vehiclesLoading ? (
+                  <tr><td className="px-4 py-5 text-sm text-outline" colSpan={4}>Loading vehicles...</td></tr>
+                ) : vehicles.length === 0 ? (
+                  <tr><td className="px-4 py-5 text-sm text-outline" colSpan={4}>No vehicle master records yet.</td></tr>
+                ) : vehicles.map(v => (
+                  <tr key={v.id} className="hover:bg-surface-bright transition-colors">
+                    <td className="px-4 py-4 text-sm font-bold">{v.name}</td>
+                    <td className="px-4 py-4 text-sm font-mono font-bold">{v.plate}</td>
+                    <td className="px-4 py-4 text-xs uppercase font-black tracking-wider text-on-surface-variant">{v.status}</td>
+                    <td className="px-4 py-4">
+                      <div className="flex justify-end gap-2">
+                        <button
+                          onClick={() => handleEditVehicle(v)}
+                          className="p-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-primary"
+                        >
+                          <Pencil size={14} />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteVehicle(v.id)}
+                          className="p-2 rounded-lg bg-error/10 text-error hover:bg-error hover:text-white"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
