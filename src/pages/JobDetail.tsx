@@ -147,41 +147,47 @@ export default function JobDetail() {
                     className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
                   />
                 </div>
-                <div>
-                  <p className="text-[10px] font-bold text-outline uppercase mb-1">Petrol Out</p>
-                  <input
-                    value={petrolOut}
-                    onChange={e => setPetrolOut(e.target.value)}
-                    placeholder="e.g. 3/4"
-                    className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
-                  />
+                <div className="col-span-2 grid grid-cols-2 gap-3">
+                  <div>
+                    <p className="text-[10px] font-bold text-outline uppercase mb-1">Petrol Out</p>
+                    <select
+                      value={petrolOut}
+                      onChange={e => setPetrolOut(e.target.value)}
+                      className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
+                    >
+                      {['0', '1/4', '1/2', '3/4', 'FULL'].map(v => <option key={`pout-${v}`} value={v}>{v}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-outline uppercase mb-1">Petrol In</p>
+                    <select
+                      value={petrolIn}
+                      onChange={e => setPetrolIn(e.target.value)}
+                      className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
+                    >
+                      {['0', '1/4', '1/2', '3/4', 'FULL'].map(v => <option key={`pin-${v}`} value={v}>{v}</option>)}
+                    </select>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-[10px] font-bold text-outline uppercase mb-1">Petrol In</p>
-                  <input
-                    value={petrolIn}
-                    onChange={e => setPetrolIn(e.target.value)}
-                    placeholder="e.g. 1/2"
-                    className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
-                  />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-outline uppercase mb-1">Mileage Out</p>
-                  <input
-                    value={mileageOut}
-                    onChange={e => setMileageOut(e.target.value)}
-                    placeholder="e.g. 128450"
-                    className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
-                  />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-outline uppercase mb-1">Mileage In</p>
-                  <input
-                    value={mileageIn}
-                    onChange={e => setMileageIn(e.target.value)}
-                    placeholder="e.g. 128512"
-                    className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
-                  />
+                <div className="col-span-2 grid grid-cols-2 gap-3">
+                  <div>
+                    <p className="text-[10px] font-bold text-outline uppercase mb-1">Mileage Out</p>
+                    <input
+                      value={mileageOut}
+                      onChange={e => setMileageOut(e.target.value)}
+                      placeholder="e.g. 128450"
+                      className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-outline uppercase mb-1">Mileage In</p>
+                    <input
+                      value={mileageIn}
+                      onChange={e => setMileageIn(e.target.value)}
+                      placeholder="e.g. 128512"
+                      className="w-full bg-surface-container-highest/60 rounded-xl px-3 py-2 text-sm font-bold border-none focus:ring-1 ring-primary/20"
+                    />
+                  </div>
                 </div>
               </div>
             </section>
